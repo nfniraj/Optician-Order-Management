@@ -1,0 +1,9 @@
+--name       "JpegCamera"
+--readme     README.md
+--title      "JpegCamera Documentation"
+--output     ./doc
+src/jpeg_camera.coffee
+src/snapshot.coffee
+src/stats.coffee
+-
+LICENSE.md

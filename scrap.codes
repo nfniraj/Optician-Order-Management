@@ -1,0 +1,35 @@
+scrap codes
+
+
+////taken from show_customers.php.. below code is used to place from date and to date in the search window.
+
+		  <div class="row">
+				 <div class="col-md-5">
+					<div class="form-group">	
+						<label>From date</label>
+
+						<div class="input-group">
+						  <div class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						  </div>
+						  <input type="text" name="fromdate" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+						</div>
+						<!-- /.input group -->
+					</div>	
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">	
+						<label>To date</label>
+						<div class="input-group">
+						  <div class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						  </div>
+						  <input type="text" name="todate" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+						</div>
+						<!-- /.input group -->
+					</div>	
+				</div>
+			  </div>
+--------------------------------------------------------------------------------------------------------------------------------------
+
+			  
