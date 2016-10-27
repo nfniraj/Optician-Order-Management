@@ -312,58 +312,73 @@ if (isset($_POST['submit'])) {
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <!--<div class="user-panel">
-                      <div class="pull-left image">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <div class="pull-left info">
-                        <p>Alexander Pierce</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                      </div>
-                    </div>-->
-                    <!-- search form -->
-                    <!--<form action="#" method="get" class="sidebar-form">
-                      <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
-                            <span class="input-group-btn">
-                              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                              </button>
-                            </span>
-                      </div>
-                    </form>-->
-                    <!-- /.search form -->
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                        <section class="sidebar">
+
                     <ul class="sidebar-menu">
                         <li class="header">OPERATIONS</li>
                         <li class="treeview">
-                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a></li>
-                        <li class="treeview">
-                            <a href="new_customer.php"><i class="fa fa-circle-o text-red"></i>Add New Customer</a>
-                            <!--<a href="#">
-                              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                              <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                              </span>
-                            </a>
-                            <ul class="treeview-menu">
-                              <li><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                              <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-                            </ul>-->
+                            <a href="new_customer.php">
+                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
                         </li>
                         <li class="treeview active">
-                            <a href="#"><i class="fa fa-circle-o text-orange"></i>New Order</a>
+                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
                         </li>
                         <li class="treeview">
-                            <a href="#"><i class="fa fa-circle-o text-green"></i>Inventory</a>
+                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
+                        </li>
+                        <li class="treeview">
+                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
                         </li>
 
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>STOCK</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
+                                <li>
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                                <li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                            </ul>
+                        </li>
+                        </li>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>REPORTING</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                      
 
-                        <li class="header">STOCK</li>
-                        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>New Supplier</span></a></li>
-                        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Supplier Purchase</span></a></li>
-                        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Outstanding</span></a></li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -571,7 +586,6 @@ if (isset($_POST['submit'])) {
 
                                                             $('#producttype').on('change', function () {
                                                                 var producttype_id = $(this).val();
-                                                                alert(producttype_id);
                                                                 $.ajax({
                                                                     url: "get_product_details.php",
                                                                     method: "POST",
@@ -589,7 +603,6 @@ if (isset($_POST['submit'])) {
                                                              
                                                             $('#productbrand').on('change', function () {
                                                                 var productbrand_id = $(this).val();
-                                                                alert(productbrand_id);
                                                                 $.ajax({
                                                                     url: "get_product_details.php",
                                                                     method: "POST",
@@ -605,7 +618,6 @@ if (isset($_POST['submit'])) {
 
                                                             $('#productmodel').on('change', function () {
                                                                 var productmodel_id = $(this).val();
-                                                                alert(productmodel_id);
                                                                 $.ajax({
                                                                     url: "get_product_details.php",
                                                                     method: "POST",

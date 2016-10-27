@@ -1,355 +1,325 @@
 <?php
-//session_start(); // Starting Session
-// Define $username and $password
-//include('./includes/config.php');
-//$producttype=$_POST['producttypeID'];
+include 'dbconfig.php';
+$prodid = $_GET['id'];
 
-// To protect MySQL injection for Security purpose
-//$producttype = stripslashes($producttype);
 
-//$customername = mysql_real_escape_string($producttype);
+//check if user is coming from show inventory page
+if ($prodid) {
+    $sql = "SELECT product_master.Product_ID,product_master.Product_Type,product_master.Product_Model, product_master.Product_Brand, product_master.Product_Detail, inventory.Qty from product_master inner join inventory on product_master.Product_ID=inventory.Product_ID where product_master.Product_ID = '$prodid'";
+    $result = '';
+    $result = mysql_query($sql, $conn);
+    while ($row = mysql_fetch_array($result)) {
+        $type = $row['Product_Type'];
+        $model = $row['Product_Model'];
+        $brand = $row['Product_Brand'];
+        $detail = $row['Product_Detail'];
+        $qty = $row['Qty'];
+    }
+}
 
-$dbhost = 'localhost';
-$dbuser = 'optic';
-$dbpass = 'optic';
-$conn = mysql_connect($dbhost, $dbuser, $dbpass);
-            
-            if(! $conn ) {
-               die('Could not connect: ' . mysql_error());
-            }
-function fill_product_type ($conn)		
-{
-	$output = '';
-	$sql = "SELECT distinct Product_Type from Product_Master";
-	mysql_select_db('optic_db');
-	$retval = mysql_query( $sql, $conn );
-	while ($row = mysql_fetch_array($retval))
-		{
-			$output .= '<option value="'.$row["Product_Type"].'">'.$row["Product_Type"].'</option>';
-		}
-		return $output;	
-}	
-	
-function fill_product_brand ($conn)		
-{
-	//$producttype=$_POST['producttypeID'];
-	$output = '';
-	$sql = "SELECT distinct Product_Brand from Product_Master";
-	mysql_select_db('optic_db');
-	$retval = mysql_query( $sql, $conn );
-	while ($row = mysql_fetch_array($retval))
-		{
-			$output .= '<option value="'.$row["Product_Brand"].'">'.$row["Product_Brand"].'</option>';
-		}
-		return $output;	
+//update inventory
+if (isset($_POST['submit'])) {
+    $qty1 = $_POST['quantity'];
+    $prodid = $_POST['prodid'];
+    echo 'dude'.$qty1;
+    echo 'product'.$prodid;
+
+    $sql1 = "UPDATE `optic_db`.`inventory` SET `Qty` = '$qty1' WHERE `inventory`.`Product_ID` = '$prodid'";
+
+    $result1 = mysql_query($sql1, $conn);
+
+    if (!$result1) {
+        die('Could not enter data: ' . mysql_error());
+    }
+    echo '<script language="javascript">';
+    echo 'alert("Record successfully updated!!")';
+    echo '</script>';
+   header('Location: show_inventory.php');
 }
-function fill_product_model ($conn)		
-{
-	//$producttype=$_POST['producttypeID'];
-	$output = '';
-	$sql = "SELECT distinct Product_Model from Product_Master";
-	mysql_select_db('optic_db');
-	$retval = mysql_query( $sql, $conn );
-	while ($row = mysql_fetch_array($retval))
-		{
-			$output .= '<option value="'.$row["Product_Model"].'">'.$row["Product_Model"].'</option>';
-		}
-		return $output;	
-}
-function fill_product_detail ($conn)		
-{
-	//$producttype=$_POST['producttypeID'];
-	$output = '';
-	$sql = "SELECT distinct Product_Detail from Product_Master";
-	mysql_select_db('optic_db');
-	$retval = mysql_query( $sql, $conn );
-	while ($row = mysql_fetch_array($retval))
-		{
-			$output .= '<option value="'.$row["Product_Detail"].'">'.$row["Product_Detail"].'</option>';
-		}
-		return $output;	
-}
-			
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Ambaji Optics</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="plugins/select2/select2.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Ambaji Optics</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="plugins/select2/select2.min.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+             folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
 
-</head>
-<!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
-<!-- the fixed layout is not compatible with sidebar-mini -->
-<body class="hold-transition skin-blue fixed sidebar-mini">
-<!-- Site wrapper -->
-<div class="wrapper">
+    </head>
+    <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
+    <!-- the fixed layout is not compatible with sidebar-mini -->
+    <body class="hold-transition skin-blue fixed sidebar-mini">
+        <!-- Site wrapper -->
+        <div class="wrapper">
 
-  <header class="main-header">
-    <!-- Logo -->
-    <a href="#" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Ambaji</b>Optics</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <!--<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>-->
+            <header class="main-header">
+                <!-- Logo -->
+                <a href="#" class="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><b>A</b>LT</span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg"><b>Ambaji</b>Optics</span>
+                </a>
+                <!-- Header Navbar: style can be found in header.less -->
+                <nav class="navbar navbar-static-top">
+                    <!-- Sidebar toggle button-->
+                    <!--<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </a>-->
 
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-         
-         
-          
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Ambaji Optics</span>
-            </a>
-           
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" >Logout</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <!-- Messages: style can be found in dropdown.less-->
 
-  <!-- =============================================== -->
 
-  <!-- Left side column. contains the sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <!--<div class="user-panel">
-        <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>-->
-      <!-- search form -->
-      <!--<form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>-->
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-        <li class="header">ORDERS</li>
-        <li class="treeview active">
-		<a href="index.html"><i class="fa fa-circle-o text-red"></i>Add New Customer</a>
-          <!--<a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>-->
-        </li>
-        <li class="treeview">
-		<a href="#"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-        </li>
-        <li class="treeview">
-		<a href="#"><i class="fa fa-circle-o text-green"></i>Inventory</a>
-        </li>
-      
-      
-        <li class="header">STOCK</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>New Supplier</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Supplier Purchase</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Outstanding</span></a></li>
-      </ul>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
 
-  <!-- =============================================== -->
+                            <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                    <span class="hidden-xs">Ambaji Optics</span>
+                                </a>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Inventory 
-        <small>Update Inventory</small>
-      </h1>
-      <ol class="breadcrumb">
-        <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Layout</a></li>
-        <li class="active">Fixed</li>-->
-      </ol>
-    </section>
+                            </li>
+                            <!-- Control Sidebar Toggle Button -->
+                            <li>
+                                <a href="logout.php" >Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
 
-    <!-- Main content -->
-    <section class="content">
-	<div class="box-body">
-     
-		<div class="col-md-8">
-			<div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">New Order</h3>
+            <!-- =============================================== -->
+
+            <!-- Left side column. contains the sidebar -->
+            <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+
+                    <ul class="sidebar-menu">
+                        <li class="header">OPERATIONS</li>
+                        <li class="treeview">
+                            <a href="new_customer.php">
+                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
+                        </li>
+                        <li class="treeview active">
+                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
+                        </li>
+                        <li class="treeview">
+                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
+                        </li>
+                        <li class="treeview">
+                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
+                        </li>
+
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>STOCK</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
+                                <li>
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                                <li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                            </ul>
+                        </li>
+                        </li>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>REPORTING</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- =============================================== -->
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Inventory 
+                        <small>Update Inventory</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                      <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                      <li><a href="#">Layout</a></li>
+                      <li class="active">Fixed</li>-->
+                    </ol>
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box-body">
+
+                        <div class="col-md-8">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">New Order</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="update_inventory.php" method="post" id="main">
+                                    <div class="box-body">
+
+
+                                        <div class="form-group">
+                                            <label>Product Type</label>
+                                            <select class="form-control select2" id="producttype" name="producttype">
+                                                <option value="<?php echo $type; ?>" selected><?php echo $type; ?></option>
+
+                                            </select>
+                                        </div>
+                                        <div class="product-brand">
+                                            <label>Product Brand</label>
+                                            <select class="form-control select2" id="productbrand" name="productbrand">
+                                                <option value="<?php echo $brand; ?>" selected><?php echo $brand; ?></option>   	
+                                            </select>
+                                        </div>
+                                        <div class="product-model">
+                                            <label>Product Model</label>
+                                            <select class="form-control select2" id="productmodel" name="productmodel">
+                                                <option value="<?php echo $model; ?>" selected><?php echo $model; ?></option>
+                                            </select>
+                                        </div>
+                                        <div class="product-detail">
+                                            <label>Details</label>
+                                            <select class="form-control select2" id="productdetail" name="productdetail">
+                                                <option value="<?php echo $detail; ?>" selected><?php echo $detail; ?></option> 
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="prodid" value="<?php echo $prodid;?>">
+                                            <label>Quantity</label>
+                                            <input type="text" class="form-control" id="quantity" name="quantity" value="<?php echo $qty; ?>">
+                                        </div>
+
+                                    </div>
+
+
+                            </div>
+
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-default">Cancel</button>
+                                <button type="submit" name ="submit" class="btn btn-info pull-right">Submit</button>
+                            </div>
+
+                            </form>
+                        </div>
+                    </div>  
+                </section>
+                <!-- /.content -->
             </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" action="update_inventory_action.php" method="post" id="main">
-              <div class="box-body">
-              
-				<div class="form-group">
-                  <label>Product Type</label>
-				  <select class="form-control select2" id="producttype" name="producttype">
-					<option value="">Select Product Type</option>
-					<?php echo fill_product_type ($conn);?>	
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Product Brand</label>
-				  <select class="form-control select2" id="productbrand" name="productbrand">
-						<option value="">Select Brand</option>
-						<?php echo fill_product_brand ($conn);?>	
-				  </select>
-                </div>
-				<div class="form-group">
-                  <label>Product Model</label>
-					<select class="form-control select2" id="productmodel" name="productmodel">
-						<option value="">Select Model</option>
-						<?php echo fill_product_model ($conn);?>
-				  </select>
-                </div>
-				<div class="form-group">
-                  <label>Details</label>
-                  <select class="form-control select2" id="details" name="details">
-						<option value="">Product Detail</option>
-						<?php echo fill_product_detail ($conn);?>
-				  </select>
-                </div>
-				<div class="form-group">
-				  <label>Quantity</label>
-				  <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
-                </div>
-               
-                </div>
-				
-				
+            <!-- /.content-wrapper -->
+
+            <!--<footer class="main-footer">
+              <div class="pull-right hidden-xs">
+                <b>Version</b> 2.3.6
               </div>
-			 
-              <!-- /.box-body -->
+              <strong>Copyright &copy; 2016 <a href="#">Niraj Yadav</a>.</strong> All rights
+              reserved.
+            </footer>-->
 
-              <div class="box-footer">
-			    <button type="submit" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-info pull-right">Submit</button>
-              </div>
-			  
-            </form>
-          </div>
-		</div>  
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+            <!-- Control Sidebar -->
 
-  <!--<footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.3.6
-    </div>
-    <strong>Copyright &copy; 2016 <a href="#">Niraj Yadav</a>.</strong> All rights
-    reserved.
-  </footer>-->
+            <!-- /.control-sidebar -->
+            <!-- Add the sidebar's background. This div must be placed
+                 immediately after the control sidebar -->
+            <div class="control-sidebar-bg"></div>
+        </div>
+        <!-- ./wrapper -->
 
-  <!-- Control Sidebar -->
-  
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
-</div>
-<!-- ./wrapper -->
+        <!-- jQuery 2.2.3 -->
+        <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <!-- Bootstrap 3.3.6 -->
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="plugins/fastclick/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="dist/js/app.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="dist/js/demo.js"></script>
+        <script>
+            $(document).ready(function () {
 
-<!-- jQuery 2.2.3 -->
-<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<script>
-	$(document).ready(function(){
-		$('#producttype').change(function(){
-			var producttype_id = $(this).val();
-			$.ajax({
-				url:"get_product_brand.php",
-				method:"POST",
-				data:{producttype_id:producttype_id},
-				success:function(data)
-				{
-					$('#productbrand').html(data);
-				}
-				
-			});
-		});
-	});
-</script>
-<script>
-	 $(function () {
-    //Initialize Select2 Elements
-    $(".select2").select2();
-		//iCheck for checkbox and radio inputs
-    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue'
-		});
-	});
-</script>
+            });
+        </script>
+        <script>
+            $(function () {
+                //Initialize Select2 Elements
+                $(".select2").select2();
+                //iCheck for checkbox and radio inputs
+                $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                    checkboxClass: 'icheckbox_minimal-blue',
+                    radioClass: 'iradio_minimal-blue'
+                });
+            });
+        </script>
 
 
-</body>
+    </body>
 </html>

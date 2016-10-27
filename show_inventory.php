@@ -6,7 +6,7 @@ include 'dbconfig.php';
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Search Customers - Ambaji Optics</title>
+        <title>View Inventory - Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -94,7 +94,7 @@ include 'dbconfig.php';
                                 <li>
                                     <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
                                     <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
                                 <li>
@@ -139,7 +139,7 @@ include 'dbconfig.php';
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Customers
+                        View Inventory
                         <small>..</small>
                     </h1>
                     <ol class="breadcrumb">
@@ -158,14 +158,7 @@ include 'dbconfig.php';
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
-                                        </div>
-                                        <div class="col-xs-1">
-                                            OR
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
+                                            <input type="text" class="form-control" name="input" placeholder="Type your search term here">
                                         </div>
 
                                     </div>
@@ -173,7 +166,7 @@ include 'dbconfig.php';
                                     <div class="row">
                                         <div class="col-md-1">
                                             <div class="box-footer" align="center">
-                                                <button type="submit" name="submit" class="btn btn-primary">Search Customers</button>
+                                                <button type="submit" name="submit" class="btn btn-primary">View Inventory</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -193,7 +186,7 @@ include 'dbconfig.php';
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                      
+
                                                         <th width="10%">Product ID</th>
                                                         <th width="10%">Product</th>
                                                         <th width="30%">Model</th>
@@ -226,7 +219,16 @@ include 'dbconfig.php';
 //                                                    } else {
 //                                                        
 //                                                    }
-                                        $sql = "select product_master.Product_ID,`product_master`.Product_Type,`product_master`.`Product_Model`, `product_master`.`product_brand`, `product_master`.`Product_Detail`, `inventory`.Qty from `product_master` join `inventory` on `product_master`.Product_ID=`inventory`.Product_ID";
+                                                     //if search term is entered below sql query will be used       
+                                                    if (isset($_POST['submit'])) {
+                                                        $input = $_POST['input'];
+                                                        $sql = "select product_master.Product_ID,`product_master`.Product_Type,`product_master`.`Product_Model`, `product_master`.`product_brand`, `product_master`.`Product_Detail`, `inventory`.Qty from `product_master` join `inventory` on `product_master`.Product_ID=`inventory`.Product_ID where product_master.Product_Type LIKE '%" . $input . "%' or  product_master.Product_Brand LIKE '%" . $input . "%' or product_master.Product_Model LIKE '%" . $input . "%' or product_master.Product_Detail LIKE '%" . $input . "%' ";
+                                                    } 
+                                                    //if user search term is not enterd below sql query will be used
+                                                    else {
+                                                        $sql = "select product_master.Product_ID,`product_master`.Product_Type,`product_master`.`Product_Model`, `product_master`.`product_brand`, `product_master`.`Product_Detail`, `inventory`.Qty from `product_master` join `inventory` on `product_master`.Product_ID=`inventory`.Product_ID";
+                                                    }
+
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
 
@@ -246,18 +248,18 @@ include 'dbconfig.php';
                                                     <td> 
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-                                                        <?php
-                                                        echo ('<a href="update_inventory.php?id=' . $row['Product_ID'] . '">' . "Update Inventory" . '</a>');
-                                                        ?>
+    <?php
+    echo ('<a href="update_inventory.php?id=' . $row['Product_ID'] . '">' . "Update Inventory" . '</a>');
+    ?>
                                                             </small>
                                                         </span>
-                                                        
+
                                                     </td>
-                                                                <?php
-                                                                //echo "<td>" . $row['nooforders'] . "</td>";
-                                                                echo "</tr>";
-                                                            }
-                                                            ?>
+    <?php
+    //echo "<td>" . $row['nooforders'] . "</td>";
+    echo "</tr>";
+}
+?>
 
                                                 </tbody>	
                                                 <tfoot>
