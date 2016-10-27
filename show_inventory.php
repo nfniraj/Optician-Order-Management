@@ -193,11 +193,14 @@ include 'dbconfig.php';
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th width="20%">Customer Name</th>
-                                                        <th width="10%">DOB</th>
-                                                        <th width="15%">Mobile No</th>
-                                                        <th width="30%">Address</th>
-                                                        <th width="20%">Action</th>
+                                                      
+                                                        <th width="10%">Product ID</th>
+                                                        <th width="10%">Product</th>
+                                                        <th width="30%">Model</th>
+                                                        <th width="20%">Brand</th>
+                                                        <th width="20%">Detail</th>
+                                                        <th width="5%">Quantity</th>
+                                                        <th width="5%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody link="white">
@@ -205,54 +208,50 @@ include 'dbconfig.php';
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    if ((!empty($_POST['customername'])) or ( !empty($_POST['mobileno'])) or ( !empty($_POST['fromdate'])) or ( !empty($_POST['todate']))) {
-                                                        //Show filtered list when form fields are filled in
-                                                        $customername = $_POST['customername'];
-                                                        $mobileno = $_POST['mobileno'];
-                                                        //$fromdate = $_POST['fromdate'];
-                                                        //$todate = $_POST['todate'];
-                                                        //To protect MySQL injection for Security purpose
-                                                        $customername = stripslashes($customername);
-                                                        $mobileno = stripslashes($mobileno);
-                                                        //$fromdate = stripslashes($fromdate);
-                                                        //$todate = stripslashes($todate);
-                                                        //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
-                                                        //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
-
-                                                        $sql = "SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno . "%'";
-                                                    } else {
-                                                        $sql = "SELECT * FROM customer";
-                                                    }
-
+//                                                    if ((!empty($_POST['customername'])) or ( !empty($_POST['mobileno'])) or ( !empty($_POST['fromdate'])) or ( !empty($_POST['todate']))) {
+//                                                        //Show filtered list when form fields are filled in
+//                                                        $customername = $_POST['customername'];
+//                                                        $mobileno = $_POST['mobileno'];
+//                                                        //$fromdate = $_POST['fromdate'];
+//                                                        //$todate = $_POST['todate'];
+//                                                        //To protect MySQL injection for Security purpose
+//                                                        $customername = stripslashes($customername);
+//                                                        $mobileno = stripslashes($mobileno);
+//                                                        //$fromdate = stripslashes($fromdate);
+//                                                        //$todate = stripslashes($todate);
+//                                                        //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
+//                                                        //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
+//
+//                                                        $sql = "SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno . "%'";
+//                                                    } else {
+//                                                        
+//                                                    }
+                                        $sql = "select product_master.Product_ID,`product_master`.Product_Type,`product_master`.`Product_Model`, `product_master`.`product_brand`, `product_master`.`Product_Detail`, `inventory`.Qty from `product_master` join `inventory` on `product_master`.Product_ID=`inventory`.Product_ID";
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
 
-                                                        $id = $row['Customer_ID'];
+                                                        $id = $row['Product_ID'];
 
                                                         echo "<tr>";
                                                         //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                         //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="edit_customer.php?id=' . $id . '">' . $row['Customer_Name'] . '</a>' . "</td>");
+                                                        echo ("<td>" . '<a href="update_inventory.php?id=' . $id . '">' . $row['Product_ID'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Customer_DOB'] . "</td>";
-                                                        echo "<td>" . $row['Customer_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Customer_Address'] . "</td>";
+                                                        echo "<td>" . $row['Product_Type'] . "</td>";
+                                                        echo "<td>" . $row['Product_Model'] . "</td>";
+                                                        echo "<td>" . $row['product_brand'] . "</td>";
+                                                        echo "<td>" . $row['Product_Detail'] . "</td>";
+                                                        echo "<td>" . $row['Qty'] . "</td>";
                                                         ?>
                                                     <td> 
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
                                                         <?php
-                                                        echo ('<a href="new_order.php?id=' . $row['Customer_ID'] . '">' . "New Order" . '</a>');
+                                                        echo ('<a href="update_inventory.php?id=' . $row['Product_ID'] . '">' . "Update Inventory" . '</a>');
                                                         ?>
                                                             </small>
                                                         </span>
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="customer_order_view.php?id=' . $row['Customer_ID'] . '">' . "View Orders" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
+                                                        
                                                     </td>
                                                                 <?php
                                                                 //echo "<td>" . $row['nooforders'] . "</td>";
@@ -263,10 +262,12 @@ include 'dbconfig.php';
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
-                                                        <th>Customer Name</th>
-                                                        <th>DOB</th>
-                                                        <th>Mobile No</th>
-                                                        <th>Address</th>
+                                                        <th>Product ID</th>
+                                                        <th>Product</th>
+                                                        <th>Model</th>
+                                                        <th>Brand</th>
+                                                        <th>Detail</th>
+                                                        <th>Quantity</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </tfoot>
