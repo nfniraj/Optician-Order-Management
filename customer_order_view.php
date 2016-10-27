@@ -259,13 +259,23 @@ $customerid = $_GET['id'];
                                                             echo "<td>" . $orderid . "</td>";
                                                             ?>
                                                         <td> 
+                                                            |
                                                             <span class="pull-l-container">
                                                                 <small class="label pull-middle bg-white">
                                                             <?php
-                                                            echo ('<a href="edit_order.php?id=' . $row['Order_ID'] . '">' . "Edit Orders" . '</a>');
+                                                            echo ('<a href="edit_order.php?id=' . $row['Order_ID'] . '">' . "Edit Order" . '</a>');
                                                             ?>
                                                                 </small>
                                                             </span>
+                                                            |
+                                                            <span class="pull-l-container">
+                                                                <small class="label pull-middle bg-white">
+                                                            <?php
+                                                            echo ('<a href="cancel_order.php?id=' . $row['Order_ID'] . '">' . "Cancel Order" . '</a>');
+                                                            ?>
+                                                                </small>
+                                                            </span>
+                                                            |
                                                         </td>
                                                         </td>
         <?php

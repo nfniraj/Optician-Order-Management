@@ -1,13 +1,14 @@
 <?php
 include 'dbconfig.php';
-$supid = $_GET['id'];
+$suppid = $_GET['id'];
+//$customerid = 1;
 ?>
 
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Show Suppliers - Ambaji Optics</title>
+        <title>Supplier Purchases- Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -22,6 +23,12 @@ $supid = $_GET['id'];
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -40,14 +47,8 @@ $supid = $_GET['id'];
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
 
-
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-                            <!-- Messages: style can be found in dropdown.less-->
-
-                            <!-- User Account: style can be found in dropdown.less -->
-
-                            <!-- Control Sidebar Toggle Button -->
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -61,7 +62,7 @@ $supid = $_GET['id'];
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
+               <section class="sidebar">
 
                     <ul class="sidebar-menu">
                         <li class="header">OPERATIONS</li>
@@ -92,14 +93,13 @@ $supid = $_GET['id'];
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>New Product</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                    <a href="show_product.php"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
                             </ul>
                         </li>
                         </li>
@@ -126,7 +126,6 @@ $supid = $_GET['id'];
                                 </li>
                             </ul>
                         </li>
-                        </li>
 
                     </ul>
                 </section>
@@ -141,7 +140,7 @@ $supid = $_GET['id'];
                 <section class="content-header">
                     <h1>
                         Search 
-                        <small>Suppliers</small>
+                        <small>Supplier Purchase</small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -161,22 +160,16 @@ $supid = $_GET['id'];
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="suppname" placeholder="Type Supplier name here">
-                                        </div>
-                                        <div class="col-xs-1">
-                                            OR
+                                            <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
                                         </div>
 
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
-                                        </div>
 
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show Suppliers</button>
+                                                <button type="submit" name="submit" class="btn btn-primary">Show all Orders for the Customer</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -195,10 +188,15 @@ $supid = $_GET['id'];
                                         <div class="box-body table-responsive no-padding">
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
-                                                    <tr >
-                                                        <th width="18%" >Supplier Name</th>
-                                                        <th width="13%">Mobile</th>
-                                                        <th width="25%">Address</th>
+                                                    <tr>
+                                                         <th width="10%">Purchase ID</th>
+                                                        <th width="20%">Supplier ID</th>
+                                                        <th width="15%">Order Type</th>
+                                                        <th width="15%">Purchase Date</th>
+                                                        <th width="20%">Quantity</th>
+                                                        <th width="20%">Total</th>
+                                                        <th width="20%">Advance</th>
+                                                        <th width="20%">Outstanding</th>
                                                         <th width="20%">Action</th>
                                                     </tr>
                                                 </thead>
@@ -207,74 +205,100 @@ $supid = $_GET['id'];
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM supplier_master";
-                                                    if ($supid > 0) {
-                                                        $sql = "SELECT * FROM `supplier_master`  WHERE Supplier_ID='$supid'";
-                                                    }
-                                                    if ((!empty($_POST['suppname'])) or ( !empty($_POST['mobileno']))) {
+                                                    $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` order by customer.Customer_ID Desc LIMIT 10 ";
+                                                    if ((!empty($_POST['customername']))) {
                                                         //Show filtered list when form fields are filled in
-                                                        $suppname = $_POST['suppname'];
-                                                        $mobileno = $_POST['mobileno'];
+                                                        $customername = $_POST['customername'];
 
-                                                        $sql = "SELECT * FROM supplier_master WHERE Supplier_Name LIKE '%" . $suppname . "%' AND Supplier_Mobile_No LIKE '%" . $mobileno . "%'";
+                                                        //To protect MySQL injection for Security purpose
+                                                        $customername = stripslashes($customername);
+
+                                                        //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
+                                                        //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
+                                                        //$sql="SELECT * FROM order WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
+                                                        $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_Name like '%" . $customername . "%'";
+                                                    } else {
+                                                        if ((!empty($_GET['id']))) {
+                                                            $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_ID='$customerid'";
+                                                        }
                                                     }
+                                                    
 
+
+                                                    $result = '';
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
-                                                        $id = $row['Supplier_ID'];
-                                                        $supname = $row['Supplier_Name'];
-                                                        echo "<tr>";
-                                                        //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
-                                                        //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . $row['Supplier_Name'] . '</a>' . "</td>");
-                                                        //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Address'] . "</td>";
-                                                        ?>
-                                                    <td> 
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="update_supplier.php?id=' . $id . '">' . "Update Supplier" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="supplier_purchase_detail.php?id=' . $id . '">' . "Add Purchase" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                    </td>
+                                                        $prid = $row['Product_ID'];
+                                                        $orid = $row['Order_ID'];
+                                                        //get product type from product id
+                                                        $product_id = "SELECT * FROM `product_master` inner join `optic_db`.`order` ON `product_master`.`Product_ID` = order.Product_ID where `product_master`.`product_id` = '$prid'";
+                                                        $prid_res = mysql_query($product_id, $conn);
+                                                        if (!$prid_res) {
+                                                            die('Could not enter data: ' . mysql_error());
+                                                        }
+                                                        while ($row1 = mysql_fetch_array($prid_res)) {
+                                                            $productid = $row1['Product_Type'];
+                                                        }
+                                                        //end get product type
+                                                        //get order total amount
+                                                        $order_id = "SELECT * FROM `order_billing` inner join `optic_db`.`order` ON `order_billing`.`Order_ID` = Order.Order_ID where `Order_billing`.`order_id` = '$orid'";
+                                                        $orid_res = mysql_query($order_id, $conn);
+                                                        if (!$orid_res) {
+                                                            die('Could not enter data: ' . mysql_error());
+                                                        }
+                                                        while ($row2 = mysql_fetch_array($orid_res)) {
+                                                            $orderid = $row2['Order_Bill_Total'];
 
+                                                            //end order total amount
 
-
-                                                    <?php
-                                                }
-                                                ?>
-<!--<td> 
-<span class="pull-l-container">
-<small class="label pull-middle bg-green">
-
-</small>
-</span>
-<span class="pull-l-container">
-<small class="label pull-middle bg-blue">View Orders</small>
-</span>
-<span class="pull-l-container">
-<small class="label pull-middle bg-orange">New Order</small>
-</span>
-</td>-->
-
-
+                                                            $id = $row['Supplier_ID'];
+                                                            echo "<tr>";
+                                                            //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
+                                                            echo "<td>" . $row['Supplier_ID'] . "</td>";
+                                                            echo ("<td>" . '<a href="view_order.php?id=' . $id . '">' . $row['Order_ID'] . '</a>' . "</td>");
+                                                            //echo "<td>" . $row['Customer_Name'] . "</td>";
+                                                            echo "<td>" . $suppid . "</td>";
+                                                            echo "<td>" . $row['DOP'] . "</td>";
+                                                            echo "<td>" . $row['Total'] . "</td>";
+                                                            ?>
+                                                        <td> 
+                                                            |
+                                                            <span class="pull-l-container">
+                                                                <small class="label pull-middle bg-white">
+                                                            <?php
+                                                            echo ('<a href="edit_order.php?id=' . $row['Order_ID'] . '">' . "Edit Order" . '</a>');
+                                                            ?>
+                                                                </small>
+                                                            </span>
+                                                            |
+                                                            <span class="pull-l-container">
+                                                                <small class="label pull-middle bg-white">
+                                                            <?php
+                                                            echo ('<a href="cancel_purchase.php?id=' . $row['Order_ID'] . '">' . "Cancel Order" . '</a>');
+                                                            ?>
+                                                                </small>
+                                                            </span>
+                                                            |
+                                                        </td>
+                                                        </td>
+        <?php
+        //echo "<td>" . $row['nooforders'] . "</td>";
+        echo "</tr>";
+    }
+}
+?>
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
-                                                        <th>Supplier Name</th>
-                                                        <th>Mobile</th>
-                                                        <th>Address</th>
-                                                        <th>Action</th>
+                                                       <th width="10%">Purchase ID</th>
+                                                        <th width="20%">Supplier ID</th>
+                                                        <th width="15%">Order Type</th>
+                                                        <th width="15%">Purchase Date</th>
+                                                        <th width="20%">Quantity</th>
+                                                        <th width="20%">Total</th>
+                                                        <th width="20%">Advance</th>
+                                                        <th width="20%">Outstanding</th>
+                                                        <th width="20%">Action</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>

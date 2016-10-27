@@ -1,7 +1,7 @@
 <?php
 include 'dbconfig.php';
-$customerid = $_GET['id'];
-//$customerid = '1';
+$suppid = $_GET['id'];
+$suppid = '1';
 
 //functions to populate product type, model, brand and detail
 function fill_product_type($conn) {
@@ -58,24 +58,10 @@ if (isset($_POST['submit'])) {
     $modelno = $_POST['productmodel'];
     $details = $_POST['productdetail'];
     $quantity = $_POST['quantity'];
-    $customerid = $_POST['customerid'];
+    $suppid = $_POST['suppid'];
+    $dop = $_POST['dop'];
+    $ppi = $_POST['ppi'];
 
-    //Get Eye number details
-    $rdsph = $_POST['rdsph'];
-    $rdcyl = $_POST['rdcyl'];
-    $rdaxis = $_POST['rdaxis'];
-
-    $rnsph = $_POST['rnsph'];
-    $rncyl = $_POST['rncyl'];
-    $rnaxis = $_POST['rnaxis'];
-
-    $ldsph = $_POST['ldsph'];
-    $ldcyl = $_POST['ldcyl'];
-    $ldaxis = $_POST['ldaxis'];
-
-    $lnsph = $_POST['lnsph'];
-    $lncyl = $_POST['lncyl'];
-    $lnaxis = $_POST['lnaxis'];
 
     //Get billing fields
     $total = $_POST['total'];
@@ -85,14 +71,14 @@ if (isset($_POST['submit'])) {
 
 
     // To protect MySQL injection for Security purpose
-    $customerid = stripslashes($customerid);
+
     $producttype = stripslashes($producttype);
     $productbrand = stripslashes($productbrand);
     $modelno = stripslashes($modelno);
     $details = stripslashes($details);
     $quantity = stripslashes($quantity);
+    $dop = stripslashes($dop);
 
-    $customerid = mysql_real_escape_string($customerid);
     $producttype = mysql_real_escape_string($producttype);
     $productbrand = mysql_real_escape_string($productbrand);
     $modelno = mysql_real_escape_string($modelno);
@@ -120,127 +106,32 @@ if (isset($_POST['submit'])) {
             die('Invalid query: ' . mysql_error());
         }
         while ($row = mysql_fetch_array($productid)) {
-            $output = $row["Product_ID"];
+            $prodid = $row["Product_ID"];
             $output_prd_name = $row["Product_Type"];
         }
-        echo '  name of matching product ' . $output_prd_name . $output;
 
         //find inventory for the matching productid		
-        $searchinventory = "select * from Inventory where Product_ID = '$output'";
+        $searchinventory = "update `inventory` set qty = qty + '$quantity' where Product_ID = '$prodid'";
         $result = mysql_query($searchinventory, $conn);
         if (!$result) {
             die('Invalid query: ' . mysql_error());
         }
-        $output2 = '';
-        while ($row2 = mysql_fetch_array($result)) {
-            $output2 = $row2["Qty"];
-        }
-        echo ' qty of product found' . $output2;
-        if ($output2 > 0) {
 
-            //Insert into Order
-            $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`) VALUES (NULL, '$customerid', NULL, '', '$output','','$quantity')";
 
-            mysql_select_db('optic_db');
-            $insert_into_order_res = mysql_query($insert_into_order, $conn);
+        //Insert into Supplier Purchase Detail
 
-            if (!$insert_into_order_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'Inserted into Order';
-            $orderid_op = '';
-            $getorderid = "SELECT MAX(Order_ID) as or1 FROM `order`";
-            $getorderid_res = mysql_query($getorderid, $conn);
-            if (!$getorderid_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            while ($orderid = mysql_fetch_array($getorderid_res)) {
-                //current Order ID
-                $orderid_op = $orderid["or1"];
-            }
-            echo '  Last order ID fetched.';
-            //Insert into Order GL detail
-            $insert_into_gl_detail = "INSERT INTO `optic_db`.`order_gl_detail` (`Order_GL_Detail_ID`, `Order_ID`, `gl_re_dist_sph`, `gl_re_dist_cyl`, `gl_re_dist_axis`, `gl_re_near_sph`, `gl_re_near_cyl`, `gl_re_near_axis`, `gl_le_dist_sph`, `gl_le_dist_cyl`, `gl_le_dist_axis`, `gl_le_near_sph`, `gl_le_near_cyl`, `gl_le_near_axis`) VALUES (NULL, '$orderid_op', '$rdsph', '$rdcyl', '$rdaxis', '$rnsph', '$rncyl', '$rnaxis', '$ldsph', '$ldcyl', '$ldaxis', '$lnsph', '$lncyl', '$lnaxis')";
+        $supp_purhcase = "INSERT INTO `optic_db`.`supplier_purchase_detail` (`Purchase_ID`, `Supplier_ID`, `Product_ID`, `DOP`, `Qty`, `PPI`, `Total`, `Advance`, `Discount`, `Balance`) VALUES (NULL, '$suppid', '$prodid', '$dop', '$quantity', '$ppi', '$total', '$advance', '$discount', '$balance')";
 
-            $insert_into_GL_res = mysql_query($insert_into_gl_detail, $conn);
+        $supp_purhcase_res = mysql_query($supp_purhcase, $conn);
 
-            if (!$insert_into_GL_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'GL updated';
-            //Get latest GL Detail ID
-            $order_gl = '';
-            $getglid = "SELECT max(Order_GL_Detail_ID) as gl1 FROM `order_gl_detail`";
-            $getglid_res = mysql_query($getglid, $conn);
-            if (!$getglid_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            while ($glid = mysql_fetch_array($getglid_res)) {
-                //current Order ID
-                $order_gl = $glid["gl1"];
-            }
-            //Insert GL ID into Order ID
-            $reinsert_gl_into_order = "UPDATE `optic_db`.`order` SET `Order_GL_Detail_ID` = '$order_gl' WHERE `order`.`Order_ID` = $orderid_op";
-
-            $reinsert_gl_into_order_res = mysql_query($reinsert_gl_into_order, $conn);
-
-            if (!$reinsert_gl_into_order_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'GL ID back to Order';
-            //End Insert GL ID into Order ID
-            //Insert into Billing
-
-            $insert_bill = "INSERT INTO `optic_db`.`order_billing` (`Order_Bill_ID`, `Order_Bill_Date`, `Order_Bill_Total`, `Order_Bill_Advance`, `Order_Bill_Balance`, `Order_Discount`, `Order_Id`) VALUES (NULL, NULL, '$total', '$advance', '$balance', '$discount', '$orderid_op')";
-
-            $insert_bill_res = mysql_query($insert_bill, $conn);
-
-            if (!$insert_bill_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            //Get latest Bill ID
-            $order_bill = '';
-            $getbillid = "SELECT max(Order_Bill_ID) as bl1 FROM order_billing";
-            $getbillid_res = mysql_query($getbillid, $conn);
-            if (!$getbillid_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            while ($blid = mysql_fetch_array($getbillid_res)) {
-                //current Order ID
-                $order_bill = $blid["bl1"];
-            }
-            echo 'Billing inserted';
-
-            //Insert GL ID into Order ID
-            $reinsert_bill_into_order = "UPDATE `optic_db`.`order` SET `Order_Bill_ID` = '$order_bill' WHERE `order`.`Order_ID` = $orderid_op";
-
-            $reinsert_bill_into_order_res = mysql_query($reinsert_bill_into_order, $conn);
-
-            if (!$reinsert_bill_into_order_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'Billing updated in order';
-            //End Insert into Billing
-            //Reduce stock logic
-            $updateinventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty`- '$quantity' WHERE `inventory`.`Product_ID` = '$output'";
-            $updateinventory_res = mysql_query($updateinventory, $conn);
-            if (!$updateinventory_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo '<script language="javascript">';
-            echo 'alert("Super! Order successfully added :) \nRedirecting you to check orders page.")';
-            echo '</script>';
-            header("Location: customer_order_view.php");
-            //End stock
+        if (!$supp_purhcase_res) {
+            die('Could not enter data: ' . mysql_error());
         } else {
+
             echo '<script language="javascript">';
-            echo 'alert("Sorry, Item not available in inventory! \n\nTry to add inventory for the product or select other product.")';
+            echo 'alert("Purchase added for Supplier")';
             echo '</script>';
         }
-    } else {
-        echo '<script language="javascript">';
-        echo 'alert("The product you are looking for does not exist. \n\nPlease select correct combination of product.")';
-        echo '</script>';
     }
 }
 ?>
@@ -249,7 +140,7 @@ if (isset($_POST['submit'])) {
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>New Order - Ambaji Optics</title>
+        <title>Supplier Purchase - Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -313,7 +204,7 @@ if (isset($_POST['submit'])) {
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                        <section class="sidebar">
+                <section class="sidebar">
 
                     <ul class="sidebar-menu">
                         <li class="header">OPERATIONS</li>
@@ -344,8 +235,7 @@ if (isset($_POST['submit'])) {
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                       
                                 <li>
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
@@ -378,7 +268,7 @@ if (isset($_POST['submit'])) {
                                 </li>
                             </ul>
                         </li>
-                      
+
 
                     </ul>
                 </section>
@@ -392,8 +282,8 @@ if (isset($_POST['submit'])) {
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Order 
-                        <small>Add New Order</small>
+                        Supplier Purchase 
+                        <small>..</small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -409,112 +299,69 @@ if (isset($_POST['submit'])) {
                         <div class="col-md-8">
                             <div class="box box-primary">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">New Order</h3>
+                                    <h3 class="box-title">Add Purchase</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="new_order.php" method="post" id="main">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" id="main">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label>Customer ID</label>
-                                            <input type="text" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid ?>">
+                                            <label>Supplier ID</label>
+                                            <input type="text" class="form-control" id="suppid" name="suppid" value="<?php echo $suppid ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Product Type</label>
                                             <select class="form-control select2" id="producttype" name="producttype">
                                                 <option value="">Select Product Type</option>
-                                                <?php echo fill_product_type($conn); ?>	
+<?php echo fill_product_type($conn); ?>	
                                             </select>
                                         </div>
                                         <div class="product-brand">
                                             <label>Product Brand</label>
                                             <select class="form-control select2" id="productbrand" name="productbrand">
                                                 <option value="">Select Brand</option>
-                                                <?php echo fill_product_brand($conn); ?>	
+<?php echo fill_product_brand($conn); ?>	
                                             </select>
                                         </div>
                                         <div class="product-model">
                                             <label>Product Model</label>
                                             <select class="form-control select2" id="productmodel" name="productmodel">
                                                 <option value="">Select Model</option>
-                                                <?php echo fill_product_model($conn); ?>
+<?php echo fill_product_model($conn); ?>
                                             </select>
                                         </div>
                                         <div class="product-detail">
                                             <label>Details</label>
                                             <select class="form-control select2" id="productdetail" name="productdetail">
                                                 <option value="">Product Detail</option>
-                                                <?php echo fill_product_detail($conn); ?>
+<?php echo fill_product_detail($conn); ?>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Date of Purchase</label>
+                                            <input type="text" class="form-control" id="dop" name="dop" placeholder="DD/MM/YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Quantity</label>
                                             <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
                                         </div>
 
+
+
                                     </div>
-                                    <hr>
+
                                     <div class="box-body">
-                                        <strong>Number details</strong> (*Leave Blank if not required)
+
                                         <hr>
                                         <div class="form-group">
-                                            <table class="table table-bordered">
-                                                <tbody>
-                                                    <tr>
-                                                        <th style='text-align:center' colspan="4" >Right Eye</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td style='text-align:center'>SPH</td>
-                                                        <td style='text-align:center'>CYL</td>
-                                                        <td style='text-align:center'>Axis</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dist.</td>
-                                                        <td><input type="text" class="form-control" id="rdsph" name="rdsph"></td>
-                                                        <td><input type="text" class="form-control" id="rdcyl" name="rdcyl"></td>
-                                                        <td><input type="text" class="form-control" id="rdaxis" name="rdaxis"></td>	
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Near</td>
-                                                        <td><input type="text" class="form-control" id="rnsph" name="rnsph"></td>
-                                                        <td><input type="text" class="form-control" id="rncyl" name="rncyl"></td>
-                                                        <td><input type="text" class="form-control" id="rnaxis" name="rnaxis"></td>	
-                                                    </tr>    
-                                                </tbody>
-                                            </table>
 
-                                            <table class="table table-bordered">
-                                                <tbody>
-                                                    <tr>
-                                                        <th style='text-align:center' colspan="4" >Left Eye</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td style='text-align:center'>SPH</td>
-                                                        <td style='text-align:center'>CYL</td>
-                                                        <td style='text-align:center'>Axis</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dist.</td>
-                                                        <td><input type="text" class="form-control" id="ldsph"  name="ldsph"></td>
-                                                        <td><input type="text" class="form-control" id="ldcyl"  name="ldcyl"></td>
-                                                        <td><input type="text" class="form-control" id="ldaxis" name="ldaxis"></td>	
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Near</td>
-                                                        <td><input type="text" class="form-control" id="lnsph" name="lnsph"></td>
-                                                        <td><input type="text" class="form-control" id="lncyl" name="lncyl"></td>
-                                                        <td><input type="text" class="form-control" id="lnaxis" name="lnaxis"></td>	
-                                                    </tr>    
-                                                </tbody>
-                                            </table>
-
-
-                                            <hr>
                                             <div class="box-body">
                                                 <strong>Billing Details</strong>
                                                 <hr>
+                                                <div class="form-group">
+                                                    <label>Price Per Item</label>
+                                                    <input type="text" class="form-control" id="ppi" name="ppi" placeholder="Price Per Item">
+                                                </div>
                                                 <div class="form-group">
                                                     <label>Total</label>
                                                     <input type="text" class="form-control" id="total" name="total" placeholder="Total">
@@ -528,7 +375,7 @@ if (isset($_POST['submit'])) {
                                                     <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount" onblur='Calculate();'>
                                                 </div>
                                                 <div class="Balance">
-                                                    <label>Balance</label>
+                                                    <label>Outstanding</label>
                                                     <input type="text" class="form-control" id="balance" name="balance" placeholder="Balance">
                                                 </div>
                                             </div>
@@ -593,15 +440,15 @@ if (isset($_POST['submit'])) {
                                                                     data: {producttype_id: producttype_id},
                                                                     success: function (data)
                                                                     {
-                                                                        $('#productbrand').html(data);                                                               
+                                                                        $('#productbrand').html(data);
                                                                         $(".product-brand").show();
-                                                                       
+
                                                                     }
                                                                 });
 
 
                                                             });
-                                                             
+
                                                             $('#productbrand').on('change', function () {
                                                                 var productbrand_id = $(this).val();
                                                                 $.ajax({
@@ -631,9 +478,19 @@ if (isset($_POST['submit'])) {
 
                                                                 });
                                                             });
+
+
+                                                            $("#dop").keyup(function () {
+                                                                if ($(this).val().length == 2) {
+                                                                    $(this).val($(this).val() + "/");
+                                                                } else if ($(this).val().length == 5) {
+                                                                    $(this).val($(this).val() + "/");
+                                                                }
+                                                            });
+
                                                         });
         </script>
-      
+
         <script>
             $(function () {
                 //Initialize Select2 Elements
