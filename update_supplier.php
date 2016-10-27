@@ -9,7 +9,7 @@
 		$address = $_POST['address'];
 
 		
-		$sql="UPDATE `optic_db`.`supplier_master` SET `Supplier_Name` = '$suppname', `Supplier_Address` = '$address', `Supplier_Mobile_No` = '".$mobileno."' WHERE `Supplier_ID` = '$suppid'";
+		$sql="UPDATE `optic_db`.`supplier_master` SET `Supplier_Name` = '$suppname', `Supplier_Address` = '$address', `Supplier_Mobile_No` = '$mobileno' WHERE `Supplier_ID` = '$suppid'";
 			
         $result1 = mysql_query( $sql, $conn );
             
@@ -18,7 +18,8 @@
 		}
 		echo '<script language="javascript">';
 		echo 'alert("Record successfully updated!!")';
-		echo '</script>';		
+		echo '</script>';	
+                header('location:show_suppliers.php');
 	}
 	else
 	{
@@ -28,7 +29,7 @@
 					{
 						$suppname = $row['Supplier_Name'];
 						$mobileno = $row['Supplier_Mobile_No'];
-						$address = $dob = $row['Supplier_Address'];
+						$address =  $row['Supplier_Address'];
 					}
 	}
 ?>
@@ -36,7 +37,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Ambaji Optics</title>
+  <title>Update Supplier - Ambaji Optics</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -98,7 +99,7 @@
           </li>
           <!-- Control Sidebar Toggle Button -->
           <li>
-            <a href="#" >Logout</a>
+            <a href="logout" >Logout</a>
           </li>
         </ul>
       </div>
@@ -111,57 +112,74 @@
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <!--<div class="user-panel">
-        <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>-->
-      <!-- search form -->
-      <!--<form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>-->
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-        <li class="header">ORDERS</li>
-        <li class="treeview active">
-		<a href="index.html"><i class="fa fa-circle-o text-red"></i>Add New Customer</a>
-          <!--<a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>-->
-        </li>
-        <li class="treeview">
-		<a href="#"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-        </li>
-        <li class="treeview">
-		<a href="#"><i class="fa fa-circle-o text-green"></i>Inventory</a>
-        </li>
-      
-      
-        <li class="header">STOCK</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>New Supplier</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Supplier Purchase</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Outstanding</span></a></li>
-      </ul>
-    </section>
+
+                    <ul class="sidebar-menu">
+                        <li class="header">OPERATIONS</li>
+                        <li class="treeview">
+                            <a href="new_customer.php">
+                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
+                        </li>
+                        <li class="treeview active">
+                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
+                        </li>
+                        <li class="treeview">
+                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
+                        </li>
+                        <li class="treeview">
+                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
+                        </li>
+
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>STOCK</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
+                                <li>
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                            </ul>
+                        </li>
+                        </li>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-laptop"></i>
+                                <span>REPORTING</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        </li>
+
+                    </ul>
+                </section>
     <!-- /.sidebar -->
   </aside>
 
@@ -173,7 +191,7 @@
     <section class="content-header">
       <h1>
         Supplier
-        <small>Edit Supplier</small>
+        <small>Update Supplier</small>
       </h1>
       <ol class="breadcrumb">
         <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -189,11 +207,11 @@
 		<div class="col-md-8">
 			<div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Edit Supplier</h3>
+              <h3 class="box-title">Update Supplier</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" action="edit_supplier.php" method="post">
+            <form role="form" action="<?php $_SERVER['PHP_SELF']?>" method="post">
               <div class="box-body">
                 <div class="form-group">
                   <label>Supplier Name</label>
@@ -214,7 +232,7 @@
 
               <div class="box-footer">
 			    <!--<button type="submit" class="btn btn-default">Cancel</button>-->
-                <button type="submit" name="submit" class="btn btn-info">Update Customer Record</button>
+                <button type="submit" name="submit" class="btn btn-info">Update Supplier Record</button>
 
               </div>
             </form>

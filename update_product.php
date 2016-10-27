@@ -1,13 +1,42 @@
 <?php
 include 'dbconfig.php';
-$supid = $_GET['id'];
-?>
+$prodid = $_GET['id'];
+//$suppid = 2;
+if (isset($_POST['submit'])) {
+    $newprod = $_POST['prodid'];
+    $newtype = $_POST['newtype'];
+    $newmodel = $_POST['newmodel'];
+    $newbrand = $_POST['newbrand'];
+    $newdetail = $_POST['newdetail'];
 
+
+    $sql = "UPDATE `optic_db`.`product_master` SET `Product_Type` = '$newtype', `Product_Model` = '$newmodel', `Product_Brand` = '$newbrand',`Product_Detail` = '$newdetail' WHERE `Product_ID` = '$newprod'";
+
+    $result1 = mysql_query($sql, $conn);
+
+    if (!$result1) {
+        die('Could not enter data: ' . mysql_error());
+    }
+    echo '<script language="javascript">';
+    echo 'alert("Record successfully updated!!")';
+    echo '</script>';
+    //header('location:view_products.php');
+} else {
+    $sql = "select * from product_master where Product_ID = '$prodid'";
+    $result = mysql_query($sql, $conn);
+    while ($row = mysql_fetch_array($result)) {
+        $type = $row['Product_Type'];
+        $model = $row['Product_Model'];
+        $brand = $row['Product_Brand'];
+        $detail = $row['Product_Detail'];
+    }
+}
+?>
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Show Suppliers - Ambaji Optics</title>
+        <title>Update Product - Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -22,6 +51,12 @@ $supid = $_GET['id'];
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -39,17 +74,31 @@ $supid = $_GET['id'];
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
-
+                    <!-- Sidebar toggle button-->
+                    <!--<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </a>-->
 
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             <!-- Messages: style can be found in dropdown.less-->
 
-                            <!-- User Account: style can be found in dropdown.less -->
 
+
+                            <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown user user-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                    <span class="hidden-xs">Ambaji Optics</span>
+                                </a>
+
+                            </li>
                             <!-- Control Sidebar Toggle Button -->
                             <li>
-                                <a href="logout.php" >Logout</a>
+                                <a href="logout" >Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -140,8 +189,8 @@ $supid = $_GET['id'];
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Search 
-                        <small>Suppliers</small>
+                        Product
+                        <small>Update Product</small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -152,124 +201,51 @@ $supid = $_GET['id'];
 
                 <!-- Main content -->
                 <section class="content">
-                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main">
-                        <div class="box-body">
+                    <div class="box-body">
+
+                        <div class="col-md-8">
                             <div class="box box-primary">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Search</h3>
+                                    <h3 class="box-title">Update Product</h3>
                                 </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="suppname" placeholder="Type Supplier name here">
+                                <!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Product ID</label>
+                                            <input type="text" class="form-control select2" id="prodid" name="prodid" value="<?php echo $prodid; ?>">
+                                        </div> 
+                                        <div class="form-group">
+                                            <label>Product Type</label>
+                                            <input type="text" class="form-control select2" id="newtype" name="newtype" value="<?php echo $type; ?>">
+                                        </div> 
+                                        <div class="form-group">
+                                            <label>Product Brand</label>
+                                            <input type="text" class="form-control select2" id="newbrand" name="newbrand" value="<?php echo $brand; ?>">
                                         </div>
-                                        <div class="col-xs-1">
-                                            OR
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
+                                        <div class="form-group">
+                                            <label>Product Model</label>
+                                            <input type="text" class="form-control select2" id="newmodel" name="newmodel" value="<?php echo $model; ?>">
+                                        </div> 
+                                        <div class="form-group">
+                                            <label>Product Detail</label>
+                                            <input type="text" class="form-control select2" id="newdetail" name="newdetail" value="<?php echo $detail; ?>">
                                         </div>
 
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show Suppliers</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.box-body -->
                             </div>
+                            <!-- /.box-body -->
 
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="box">
-                                        <div class="box-header">
-                                            <h3 class="box-title">Search results..</h3>
-                                        </div>
-                                        <!-- /.box-header -->
-                                        <div class="box-body table-responsive no-padding">
-                                            <table id="example2" class="table table-bordered table-hover">
-                                                <thead>
-                                                    <tr >
-                                                        <th width="18%" >Supplier Name</th>
-                                                        <th width="13%">Mobile</th>
-                                                        <th width="25%">Address</th>
-                                                        <th width="20%">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody link="white">
+                            <div class="box-footer">
+                                <!--<button type="submit" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" name="submit" class="btn btn-info">Update Supplier Record</button>
 
-                                                    <?php
-                                                    //form is empty show all customers code
-                                                    //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM supplier_master";
-                                                    if ($supid > 0) {
-                                                        $sql = "SELECT * FROM `supplier_master`  WHERE Supplier_ID='$supid'";
-
-                                                    }
-                                                    if ((!empty($_POST['suppname'])) or ( !empty($_POST['mobileno']))) {
-                                                        //Show filtered list when form fields are filled in
-                                                        $suppname = $_POST['suppname'];
-                                                        $mobileno = $_POST['mobileno'];
-
-                                                        $sql = "SELECT * FROM supplier_master WHERE Supplier_Name LIKE '%" . $suppname . "%' AND Supplier_Mobile_No LIKE '%" . $mobileno . "%'";
-                                                    }
-
-                                                    $result = mysql_query($sql, $conn);
-                                                    while ($row = mysql_fetch_array($result)) {
-                                                        $id = $row['Supplier_ID'];
-                                                        $supname = $row['Supplier_Name'];
-                                                        echo "<tr>";
-                                                        //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
-                                                        //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . $row['Supplier_Name'] . '</a>' . "</td>");
-                                                        //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Address'] . "</td>";
-                                                         echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . "Update Supplier" . '</a>' . "</td>");
-                                                        echo "</tr>";
-                                                    }
-                                                    ?>
-                <!--<td> 
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-green">
-                                
-                                </small>
-                        </span>
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-blue">View Orders</small>
-                        </span>
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-orange">New Order</small>
-                        </span>
-                </td>-->
-
-
-                                                </tbody>	
-                                                <tfoot>
-                                                    <tr>
-                                                        <th>Supplier Name</th>
-                                                        <th>Mobile</th>
-                                                        <th>Address</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                        <!-- /.box-body -->
-                                    </div>
-                                    <!-- /.box -->
-                                </div>
-                                <!-- /.col -->
                             </div>
-                            <!-- /.row -->
-
-                        </div>  
+                            </form>
+                        </div>
+                    </div>  
                 </section>
                 <!-- /.content -->
             </div>
@@ -304,24 +280,5 @@ $supid = $_GET['id'];
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
-        <!-- Select2 -->
-        <script src="plugins/select2/select2.full.min.js"></script>
-        <!-- InputMask -->
-        <script src="plugins/input-mask/jquery.inputmask.js"></script>
-        <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-        <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
-        <script>
-            $(function () {
-                //Initialize Select2 Elements
-                $(".select2").select2();
-
-                //Datemask dd/mm/yyyy
-                $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-                //Datemask2 mm/dd/yyyy
-                $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-                //Money Euro
-                $("[data-mask]").inputmask();
-            });
-        </script>
     </body>
 </html>

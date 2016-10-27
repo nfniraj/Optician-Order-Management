@@ -1,13 +1,12 @@
 <?php
 include 'dbconfig.php';
-$supid = $_GET['id'];
 ?>
 
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Show Suppliers - Ambaji Optics</title>
+        <title>View Products- Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -92,14 +91,13 @@ $supid = $_GET['id'];
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+                                
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
                             </ul>
                         </li>
                         </li>
@@ -140,13 +138,11 @@ $supid = $_GET['id'];
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Search 
-                        <small>Suppliers</small>
+                        View Inventory
+                        <small>..</small>
                     </h1>
                     <ol class="breadcrumb">
-                      <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                      <li><a href="#">Layout</a></li>
-                      <li class="active">Fixed</li>-->
+
                     </ol>
                 </section>
 
@@ -161,22 +157,15 @@ $supid = $_GET['id'];
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="suppname" placeholder="Type Supplier name here">
-                                        </div>
-                                        <div class="col-xs-1">
-                                            OR
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
+                                            <input type="text" class="form-control" name="input" placeholder="Type your search term here">
                                         </div>
 
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show Suppliers</button>
+                                        <div class="col-md-1">
+                                            <div class="box-footer" align="center">
+                                                <button type="submit" name="submit" class="btn btn-primary">View Inventory</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -195,11 +184,14 @@ $supid = $_GET['id'];
                                         <div class="box-body table-responsive no-padding">
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
-                                                    <tr >
-                                                        <th width="18%" >Supplier Name</th>
-                                                        <th width="13%">Mobile</th>
-                                                        <th width="25%">Address</th>
-                                                        <th width="20%">Action</th>
+                                                    <tr>
+
+                                                        <th width="10%">Product ID</th>
+                                                        <th width="10%">Product</th>
+                                                        <th width="30%">Model</th>
+                                                        <th width="20%">Brand</th>
+                                                        <th width="20%">Detail</th>
+                                                        <th width="5%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody link="white">
@@ -207,55 +199,75 @@ $supid = $_GET['id'];
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM supplier_master";
-                                                    if ($supid > 0) {
-                                                        $sql = "SELECT * FROM `supplier_master`  WHERE Supplier_ID='$supid'";
+//                                                    if ((!empty($_POST['customername'])) or ( !empty($_POST['mobileno'])) or ( !empty($_POST['fromdate'])) or ( !empty($_POST['todate']))) {
+//                                                        //Show filtered list when form fields are filled in
+//                                                        $customername = $_POST['customername'];
+//                                                        $mobileno = $_POST['mobileno'];
+//                                                        //$fromdate = $_POST['fromdate'];
+//                                                        //$todate = $_POST['todate'];
+//                                                        //To protect MySQL injection for Security purpose
+//                                                        $customername = stripslashes($customername);
+//                                                        $mobileno = stripslashes($mobileno);
+//                                                        //$fromdate = stripslashes($fromdate);
+//                                                        //$todate = stripslashes($todate);
+//                                                        //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
+//                                                        //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
+//
+//                                                        $sql = "SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno . "%'";
+//                                                    } else {
+//                                                        
+//                                                    }
+                                                    
+                                                    //if search term is entered below sql query will be used     
 
+                                                    if (isset($_POST['submit'])) {
+                                                        $input = $_POST['input'];
+                                                        $sql = "SELECT * FROM `product_master` where product_master.Product_Type LIKE '%" . $input . "%' or  product_master.Product_Brand LIKE '%" . $input . "%' or product_master.Product_Model LIKE '%" . $input . "%' or product_master.Product_Detail LIKE '%" . $input . "%' ";
                                                     }
-                                                    if ((!empty($_POST['suppname'])) or ( !empty($_POST['mobileno']))) {
-                                                        //Show filtered list when form fields are filled in
-                                                        $suppname = $_POST['suppname'];
-                                                        $mobileno = $_POST['mobileno'];
-
-                                                        $sql = "SELECT * FROM supplier_master WHERE Supplier_Name LIKE '%" . $suppname . "%' AND Supplier_Mobile_No LIKE '%" . $mobileno . "%'";
+                                                    else
+                                                    {
+                                                        $sql = "SELECT * FROM `product_master` order by Product_ID DESC";
                                                     }
 
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
-                                                        $id = $row['Supplier_ID'];
-                                                        $supname = $row['Supplier_Name'];
+
+                                                        $id = $row['Product_ID'];
+
                                                         echo "<tr>";
                                                         //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                         //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . $row['Supplier_Name'] . '</a>' . "</td>");
+                                                        echo ("<td>" . '<a href="update_product.php?id=' . $id . '">' . $row['Product_ID'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Address'] . "</td>";
-                                                         echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . "Update Supplier" . '</a>' . "</td>");
-                                                        echo "</tr>";
-                                                    }
-                                                    ?>
-                <!--<td> 
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-green">
-                                
-                                </small>
-                        </span>
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-blue">View Orders</small>
-                        </span>
-                        <span class="pull-l-container">
-                                <small class="label pull-middle bg-orange">New Order</small>
-                        </span>
-                </td>-->
+                                                        echo "<td>" . $row['Product_Type'] . "</td>";
+                                                        echo "<td>" . $row['Product_Model'] . "</td>";
+                                                        echo "<td>" . $row['Product_Brand'] . "</td>";
+                                                        echo "<td>" . $row['Product_Detail'] . "</td>";
+                                                        ?>
+                                                    <td> 
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
 
+                                                    </td>
+                                                    <?php
+                                                    //echo "<td>" . $row['nooforders'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                                ?>
 
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
-                                                        <th>Supplier Name</th>
-                                                        <th>Mobile</th>
-                                                        <th>Address</th>
+                                                        <th>Product ID</th>
+                                                        <th>Product</th>
+                                                        <th>Model</th>
+                                                        <th>Brand</th>
+                                                        <th>Detail</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </tfoot>

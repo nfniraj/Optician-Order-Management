@@ -8,7 +8,7 @@ $newbrand = $_POST['newbrand'];
 $newdetail = $_POST['newdetail'];
 
 $oldtype = $_POST['oldtype'];
-$newmodel = $_POST['oldmodel'];
+$oldmodel = $_POST['oldmodel'];
 $oldbrand = $_POST['oldbrand'];
 $olddetail = $_POST['olddetail'];
 
@@ -22,7 +22,7 @@ if ($newmodel != '')
 {
     $model =$newmodel;
 }else{
-    $model=$newmodel;
+    $model=$oldmodel;
 }
 if ($newbrand != '')
 {

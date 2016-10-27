@@ -91,14 +91,13 @@ include 'dbconfig.php';
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
+
                                 <li>
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>New Product</span></a></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-orange"></i> <span>View All Products</span></a></li>
                             </ul>
                         </li>
                         </li>
@@ -240,9 +239,9 @@ include 'dbconfig.php';
                                                     <td> 
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-                                                        <?php
-                                                        echo ('<a href="new_order.php?id=' . $row['Customer_ID'] . '">' . "New Order" . '</a>');
-                                                        ?>
+                                                                <?php
+                                                                echo ('<a href="new_order.php?id=' . $row['Customer_ID'] . '">' . "New Order" . '</a>');
+                                                                ?>
                                                             </small>
                                                         </span>
                                                         <span class="pull-l-container">
@@ -253,11 +252,11 @@ include 'dbconfig.php';
                                                             </small>
                                                         </span>
                                                     </td>
-                                                                <?php
-                                                                //echo "<td>" . $row['nooforders'] . "</td>";
-                                                                echo "</tr>";
-                                                            }
-                                                            ?>
+                                                    <?php
+                                                    //echo "<td>" . $row['nooforders'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                                ?>
 
                                                 </tbody>	
                                                 <tfoot>
