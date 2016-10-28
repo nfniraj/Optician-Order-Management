@@ -1,14 +1,12 @@
 <?php
 include 'dbconfig.php';
-$customerid = $_GET['id'];
-//$customerid = 1;
 ?>
 
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Customer Orders - Ambaji Optics</title>
+        <title>Search Customers - Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -23,12 +21,6 @@ $customerid = $_GET['id'];
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -47,8 +39,14 @@ $customerid = $_GET['id'];
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
 
+
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
+                            <!-- Messages: style can be found in dropdown.less-->
+
+                            <!-- User Account: style can be found in dropdown.less -->
+
+                            <!-- Control Sidebar Toggle Button -->
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -93,13 +91,14 @@ $customerid = $_GET['id'];
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-
+                                  <li>
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-green active"></i> <span>View Supplier Purchase</span></li>
                                 <li>
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>
                                     <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>New Product</span></a></li>
                                 <li>
-                                    <a href="show_product.php"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-orange"></i> <span>View All Products</span></a></li>
                             </ul>
                         </li>
                         </li>
@@ -139,13 +138,11 @@ $customerid = $_GET['id'];
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Search 
-                        <small>Customers or Orders</small>
+                        Customers
+                        <small>..</small>
                     </h1>
                     <ol class="breadcrumb">
-                      <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                      <li><a href="#">Layout</a></li>
-                      <li class="active">Fixed</li>-->
+
                     </ol>
                 </section>
 
@@ -162,13 +159,20 @@ $customerid = $_GET['id'];
                                         <div class="col-xs-5">
                                             <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
                                         </div>
-                                     
+                                        <div class="col-xs-1">
+                                            OR
+                                        </div>
+
+                                        <div class="col-xs-4">
+                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
+                                        </div>
+
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show all Orders for the Customer</button>
+                                        <div class="col-md-1">
+                                            <div class="box-footer" align="center">
+                                                <button type="submit" name="submit" class="btn btn-primary">Search Customers</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -189,11 +193,9 @@ $customerid = $_GET['id'];
                                                 <thead>
                                                     <tr>
                                                         <th width="20%">Customer Name</th>
-                                                        <th width="10%">Order ID</th>
-                                                        <th width="15%">Order Type</th>
-                                                        <th width="10%">Order Status</th>
-                                                        <th width="10%">Order  Date</th>
-                                                        <th width="8%">Quantity</th>
+                                                        <th width="10%">DOB</th>
+                                                        <th width="15%">Mobile No</th>
+                                                        <th width="30%">Address</th>
                                                         <th width="20%">Action</th>
                                                     </tr>
                                                 </thead>
@@ -202,99 +204,68 @@ $customerid = $_GET['id'];
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` order by customer.Customer_ID Desc LIMIT 10 ";
-                                                    if ((!empty($_POST['customername']))) {
+                                                    if ((!empty($_POST['customername'])) or ( !empty($_POST['mobileno'])) or ( !empty($_POST['fromdate'])) or ( !empty($_POST['todate']))) {
                                                         //Show filtered list when form fields are filled in
                                                         $customername = $_POST['customername'];
-
+                                                        $mobileno = $_POST['mobileno'];
+                                                        //$fromdate = $_POST['fromdate'];
+                                                        //$todate = $_POST['todate'];
                                                         //To protect MySQL injection for Security purpose
                                                         $customername = stripslashes($customername);
-
+                                                        $mobileno = stripslashes($mobileno);
+                                                        //$fromdate = stripslashes($fromdate);
+                                                        //$todate = stripslashes($todate);
                                                         //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
                                                         //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
-                                                        //$sql="SELECT * FROM order WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
-                                                        $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_Name like '%" . $customername . "%'";
+
+                                                        $sql = "SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno . "%'";
                                                     } else {
-                                                        if ((!empty($_GET['id']))) {
-                                                            $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_ID='$customerid'";
-                                                        }
+                                                        $sql = "SELECT * FROM customer";
                                                     }
 
-
-
-                                                    $result = '';
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
-                                                        $prid = $row['Product_ID'];
-                                                        $orid = $row['Order_ID'];
-                                                        $orderstatus = $row['Order_Status'];
-                                                        //get product type from product id
-                                                        $product_id = "SELECT * FROM `product_master` inner join `optic_db`.`order` ON `product_master`.`Product_ID` = order.Product_ID where `product_master`.`product_id` = '$prid'";
-                                                        $prid_res = mysql_query($product_id, $conn);
-                                                        if (!$prid_res) {
-                                                            die('Could not enter data: ' . mysql_error());
-                                                        }
-                                                        while ($row1 = mysql_fetch_array($prid_res)) {
-                                                            $productid = $row1['Product_Type'];
-                                                        }
-                                                        //end get product type
-                                                        //get order total amount
-                                                        $order_id = "SELECT * FROM `order_billing` inner join `optic_db`.`order` ON `order_billing`.`Order_ID` = Order.Order_ID where `Order_billing`.`order_id` = '$orid'";
-                                                        $orid_res = mysql_query($order_id, $conn);
-                                                        if (!$orid_res) {
-                                                            die('Could not enter data: ' . mysql_error());
-                                                        }
-                                                        while ($row2 = mysql_fetch_array($orid_res)) {
-                                                            $orderid = $row2['Order_Bill_Total'];
 
-                                                            //end order total amount
+                                                        $id = $row['Customer_ID'];
 
-                                                            $id = $row['Order_ID'];
-                                                            echo "<tr>";
-                                                            //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
-                                                            echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                            echo ("<td>" . '<a href="view_order.php?id=' . $id . '">' . $row['Order_ID'] . '</a>' . "</td>");
-                                                            //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                            echo "<td>" . $productid . "</td>";
-                                                            echo "<td>" . $orderstatus . "</td>";
-                                                            echo "<td>" . $row['Order_DT'] . "</td>";
-                                                            echo "<td>" . $orderid . "</td>";
-                                                            ?>
-                                                        <td> 
-                                                            |
-                                                            <span class="pull-l-container">
-                                                                <small class="label pull-middle bg-white">
-                                                                    <?php
-                                                                    echo ('<a href="edit_order.php?id=' . $row['Order_ID'] . '">' . "Edit Order" . '</a>');
-                                                                    ?>
-                                                                </small>
-                                                            </span>
-                                                            |
-                                                            <span class="pull-l-container">
-                                                                <small class="label pull-middle bg-white">
-                                                                    <?php
-                                                                    echo ('<a href="cancel_order.php?id=' . $row['Order_ID'] . '">' . "Cancel Order" . '</a>');
-                                                                    ?>
-                                                                </small>
-                                                            </span>
-                                                            |
-                                                        </td>
-                                                        </td>
-                                                        <?php
-                                                        //echo "<td>" . $row['nooforders'] . "</td>";
-                                                        echo "</tr>";
-                                                    }
+                                                        echo "<tr>";
+                                                        //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
+                                                        //echo "<td>" . $row['Customer_ID'] . "</td>";
+                                                        echo ("<td>" . '<a href="edit_customer.php?id=' . $id . '">' . $row['Customer_Name'] . '</a>' . "</td>");
+                                                        //echo "<td>" . $row['Customer_Name'] . "</td>";
+                                                        echo "<td>" . $row['Customer_DOB'] . "</td>";
+                                                        echo "<td>" . $row['Customer_Mobile_No'] . "</td>";
+                                                        echo "<td>" . $row['Customer_Address'] . "</td>";
+                                                        ?>
+                                                    <td> 
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="new_order.php?id=' . $row['Customer_ID'] . '">' . "New Order" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="customer_order_view.php?id=' . $row['Customer_ID'] . '">' . "View Orders" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                    </td>
+                                                    <?php
+                                                    //echo "<td>" . $row['nooforders'] . "</td>";
+                                                    echo "</tr>";
                                                 }
                                                 ?>
+
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
                                                         <th>Customer Name</th>
-                                                        <th>Order ID</th>
-                                                        <th>Order Type</th>
-                                                        <th>Order Status</th>
-                                                        <th>Order  Date</th>
-                                                        <th>Quantity</th>
+                                                        <th>DOB</th>
+                                                        <th>Mobile No</th>
+                                                        <th>Address</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </tfoot>
@@ -353,7 +324,6 @@ $customerid = $_GET['id'];
             $(function () {
                 //Initialize Select2 Elements
                 $(".select2").select2();
-
                 //Datemask dd/mm/yyyy
                 $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
                 //Datemask2 mm/dd/yyyy
