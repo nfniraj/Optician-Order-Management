@@ -62,7 +62,7 @@ $suppid = $_GET['id'];
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-               <section class="sidebar">
+                <section class="sidebar">
 
                     <ul class="sidebar-menu">
                         <li class="header">OPERATIONS</li>
@@ -160,7 +160,7 @@ $suppid = $_GET['id'];
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
+                                            <input type="text" class="form-control" name="suppname" placeholder="Type Supplier name here">
                                         </div>
 
 
@@ -169,7 +169,7 @@ $suppid = $_GET['id'];
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show all Orders for the Customer</button>
+                                                <button type="submit" name="submit" class="btn btn-primary">Show all Purchases for the Supplier</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -189,15 +189,17 @@ $suppid = $_GET['id'];
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                         <th width="10%">Purchase ID</th>
-                                                        <th width="20%">Supplier ID</th>
-                                                        <th width="15%">Order Type</th>
-                                                        <th width="15%">Purchase Date</th>
-                                                        <th width="20%">Quantity</th>
-                                                        <th width="20%">Total</th>
-                                                        <th width="20%">Advance</th>
-                                                        <th width="20%">Outstanding</th>
-                                                        <th width="20%">Action</th>
+                                                        <th>Supplier Name</th>
+                                                        <th>Product Type</th>
+                                                        <th>Product Model</th>
+                                                        <th>Product Brand</th>
+                                                        <th>Product Detail</th>
+                                                        <th>Purchase Date</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                                        <th>Advance</th>
+                                                        <th>Outstanding</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody link="white">
@@ -205,100 +207,117 @@ $suppid = $_GET['id'];
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` order by customer.Customer_ID Desc LIMIT 10 ";
-                                                    if ((!empty($_POST['customername']))) {
+                                                    $sql = "SELECT supplier_master.Supplier_Name, product_master.Product_Type, product_master.Product_Model, product_master.Product_Brand, product_master.Product_Detail,supplier_purchase_detail.Purchase_ID, supplier_purchase_detail.DOP, supplier_purchase_detail.Qty, supplier_purchase_detail.Total, supplier_purchase_detail.Advance, supplier_purchase_detail.Balance
+FROM supplier_purchase_detail
+JOIN supplier_master
+ON supplier_master.Supplier_ID = supplier_purchase_detail.Supplier_ID
+JOIN product_master
+ON product_master.Product_ID = supplier_purchase_detail.Product_ID
+order by supplier_purchase_detail.Purchase_ID desc limit 10 ";
+                                                    if ((!empty($_POST['suppname']))) {
                                                         //Show filtered list when form fields are filled in
-                                                        $customername = $_POST['customername'];
+                                                        $suppname = $_POST['suppname'];
 
                                                         //To protect MySQL injection for Security purpose
-                                                        $customername = stripslashes($customername);
+                                                        $suppname = stripslashes($suppname);
 
                                                         //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
                                                         //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
                                                         //$sql="SELECT * FROM order WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
-                                                        $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_Name like '%" . $customername . "%'";
+                                                        $sql = "SELECT supplier_master.Supplier_Name, product_master.Product_Type, product_master.Product_Model, product_master.Product_Brand, product_master.Product_Detail, supplier_purchase_detail.Purchase_ID, supplier_purchase_detail.DOP, supplier_purchase_detail.Qty, supplier_purchase_detail.Total, supplier_purchase_detail.Advance, supplier_purchase_detail.Balance
+FROM supplier_purchase_detail
+JOIN supplier_master
+ON supplier_master.Supplier_ID = supplier_purchase_detail.Supplier_ID
+JOIN product_master
+ON product_master.Product_ID = supplier_purchase_detail.Product_ID
+WHERE supplier_master.Supplier_Name like '%" . $suppname . "%'";
                                                     } else {
                                                         if ((!empty($_GET['id']))) {
-                                                            $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_ID='$customerid'";
+                                                            $sql = "SELECT supplier_master.Supplier_Name, product_master.Product_Type, product_master.Product_Model, product_master.Product_Brand, product_master.Product_Detail, supplier_purchase_detail.* FROM supplier_purchase_detail
+JOIN supplier_master
+ON supplier_master.Supplier_ID = supplier_purchase_detail.Supplier_ID
+JOIN product_master
+ON product_master.Product_ID = supplier_purchase_detail.Product_ID
+WHERE supplier_purchase_detail.Purchase_ID = '$suppid'";
                                                         }
                                                     }
-                                                    
+
 
 
                                                     $result = '';
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
-                                                        $prid = $row['Product_ID'];
-                                                        $orid = $row['Order_ID'];
-                                                        //get product type from product id
-                                                        $product_id = "SELECT * FROM `product_master` inner join `optic_db`.`order` ON `product_master`.`Product_ID` = order.Product_ID where `product_master`.`product_id` = '$prid'";
-                                                        $prid_res = mysql_query($product_id, $conn);
-                                                        if (!$prid_res) {
-                                                            die('Could not enter data: ' . mysql_error());
-                                                        }
-                                                        while ($row1 = mysql_fetch_array($prid_res)) {
-                                                            $productid = $row1['Product_Type'];
-                                                        }
-                                                        //end get product type
-                                                        //get order total amount
-                                                        $order_id = "SELECT * FROM `order_billing` inner join `optic_db`.`order` ON `order_billing`.`Order_ID` = Order.Order_ID where `Order_billing`.`order_id` = '$orid'";
-                                                        $orid_res = mysql_query($order_id, $conn);
-                                                        if (!$orid_res) {
-                                                            die('Could not enter data: ' . mysql_error());
-                                                        }
-                                                        while ($row2 = mysql_fetch_array($orid_res)) {
-                                                            $orderid = $row2['Order_Bill_Total'];
+                                                        $suppname = $row['Supplier_Name'];
+                                                        $type = $row['Product_Type'];
+                                                        $model = $row['Product_Model'];
+                                                        $brand = $row['Product_Brand'];
+                                                        $detail = $row['Product_Detail'];
+                                                        $dop = $row['DOP'];
+                                                        $qty = $row['Qty'];
+                                                        $total = $row['Total'];
+                                                        $advance = $row['Advance'];
+                                                        $balance = $row['Balance'];
+                                                        $purchaseid = $row['Purchase_ID'];
+                                                    
+                                                        // $suppid = $row['Supplier_ID'];
+                                                        //  $purchaseid = $row['Purchase_ID'];
 
-                                                            //end order total amount
-
-                                                            $id = $row['Supplier_ID'];
-                                                            echo "<tr>";
-                                                            //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
-                                                            echo "<td>" . $row['Supplier_ID'] . "</td>";
-                                                            echo ("<td>" . '<a href="view_order.php?id=' . $id . '">' . $row['Order_ID'] . '</a>' . "</td>");
-                                                            //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                            echo "<td>" . $suppid . "</td>";
-                                                            echo "<td>" . $row['DOP'] . "</td>";
-                                                            echo "<td>" . $row['Total'] . "</td>";
-                                                            ?>
-                                                        <td> 
-                                                            |
-                                                            <span class="pull-l-container">
-                                                                <small class="label pull-middle bg-white">
-                                                            <?php
-                                                            echo ('<a href="edit_order.php?id=' . $row['Order_ID'] . '">' . "Edit Order" . '</a>');
-                                                            ?>
-                                                                </small>
-                                                            </span>
-                                                            |
-                                                            <span class="pull-l-container">
-                                                                <small class="label pull-middle bg-white">
-                                                            <?php
-                                                            echo ('<a href="cancel_purchase.php?id=' . $row['Order_ID'] . '">' . "Cancel Order" . '</a>');
-                                                            ?>
-                                                                </small>
-                                                            </span>
-                                                            |
-                                                        </td>
-                                                        </td>
-        <?php
-        //echo "<td>" . $row['nooforders'] . "</td>";
-        echo "</tr>";
-    }
-}
-?>
+                                                        echo "<tr>";
+                                                        //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
+                                                        echo "<td>" . $row['Supplier_Name'] . "</td>";
+                                                        //echo ("<td>" . '<a href="view_purchase.php?id=' . $id . '">' . $row['Purchase_ID'] . '</a>' . "</td>");
+                                                        //echo "<td>" . $row['Customer_Name'] . "</td>";
+                                                        //echo "<td>" . $suppid . "</td>";
+                                                        echo "<td>" . $type . "</td>";
+                                                        echo "<td>" . $model . "</td>";
+                                                        echo "<td>" . $brand . "</td>";
+                                                        echo "<td>" . $detail . "</td>";
+                                                        echo "<td>" . $dop . "</td>";
+                                                        echo "<td>" . $qty . "</td>";
+                                                        echo "<td>" . $total . "</td>";
+                                                        echo "<td>" . $advance . "</td>";
+                                                        echo "<td>" . $balance . "</td>";
+                                                        ?>
+                                                    <td> 
+                                                        |
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="edit_purchase.php?id=' . $purchaseid . '">' . "Edit Purhcase" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                        |
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                
+                                                                <?php
+                                                                echo ('<a href="cancel_purchase.php?id=' . $purchaseid . '">' . "Cancel Purchase" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                        |
+                                                    </td>
+                                                    </td>
+                                                    <?php
+                                                    //echo "<td>" . $row['nooforders'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                                ?>
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
-                                                       <th width="10%">Purchase ID</th>
-                                                        <th width="20%">Supplier ID</th>
-                                                        <th width="15%">Order Type</th>
-                                                        <th width="15%">Purchase Date</th>
-                                                        <th width="20%">Quantity</th>
-                                                        <th width="20%">Total</th>
-                                                        <th width="20%">Advance</th>
-                                                        <th width="20%">Outstanding</th>
-                                                        <th width="20%">Action</th>
+                                                        <th>Supplier Name</th>
+                                                        <th>Product Type</th>
+                                                        <th>Product Model</th>
+                                                        <th>Product Brand</th>
+                                                        <th>Product Detail</th>
+                                                        <th>Purchase Date</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                                        <th>Advance</th>
+                                                        <th>Outstanding</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>

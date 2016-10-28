@@ -1,61 +1,44 @@
 <?php
 include 'dbconfig.php';
-$orderid = $_GET['id'];
+$purchaseid = $_GET['id'];
 //$orderid = '15';
 
-//get product id of the order
-$get_prodid = "SELECT * FROM `order` WHERE Order_ID = '$orderid'";
-
-$get_prodid_res = mysql_query($get_prodid, $conn);
-if (!$get_prodid_res)
+//get qty of the purchase
+$get_qty = "select * from `supplier_purchase_detail` where Purchase_ID = '$purchaseid'";
+$get_qty_res = mysql_query($get_qty, $conn);
+if (!$get_qty_res)
     {
      die('Query failed: ' . mysql_error());
     }
-while ($row1 = mysql_fetch_array($get_prodid_res)) {
-$prodid = $row1["Product_ID"];
-$orderqty = $row1["Order_Quantity"];
-$billid = $row1["Order_Bill_ID"];
-$glid = $row1["Order_GL_Detail_ID"];
+    
+while ($row = mysql_fetch_array($get_qty_res)) {
+$qty = $row["Qty"];
+$prodid = $row["Product_ID"];
+
 }
 
+
 // return the Quantity to inventory 
-$ret_inventory = "UPDATE inventory set Qty = Qty + '$orderqty' where inventory.Product_ID = '$prodid'";
+
+$ret_inventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty` + '$qty' where `inventory`.`product_id` = '$prodid'";
 $ret_inventory_res = mysql_query($ret_inventory, $conn);
 if (!$ret_inventory_res)
     {
      die('Query failed: ' . mysql_error());
     }
 
-//delete bill id
-$del_bill_id = "delete from `order_billing` where Order_ID = '$orderid'";
-$del_bill_id_res = mysql_query($del_bill_id, $conn);
-if (!$del_bill_id_res)
+//delete from supplier purchase master
+$del_purchase = "DELETE FROM `optic_db`.`supplier_purchase_detail` WHERE `supplier_purchase_detail`.`Purchase_ID` ='$purchaseid'";
+
+$del_purchase_res = mysql_query($del_purchase, $conn);
+if (!$del_purchase_res)
     {
      die('Query failed: ' . mysql_error());
     }
+     echo "<script type='text/javascript'>alert('Purchase Cancel Successfull');</script>";
 
-
-//delete glid
-$del_glid_id = "delete from `order_gl_detail` where Order_ID = '$orderid'";
-$del_glid_id_res = mysql_query($del_glid_id, $conn);
-if (!$del_glid_id_res)
-    {
-     die('Query failed: ' . mysql_error());
-    }
-
-
-//delete order entry
-$del_order = "delete from `order` where Order_ID = '$orderid'";
-$del_order_res = mysql_query($del_order, $conn);
-if (!$del_order_res)
-    {
-     die('Query failed: ' . mysql_error());
-    }
-    echo "<script type='text/javascript'>alert('Order Cancel Successfull');</script>";
-    ?>
-    <script type="text/javascript">
-        window.location.href = 'customer_order_view.php';
+?>
+  
+   <script type="text/javascript">
+        window.location.href = 'supplier_purchase_view.php';
     </script>
-
-   // sleep(20);
-  //  header('Location:customer_order_view.php');

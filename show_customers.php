@@ -91,7 +91,8 @@ include 'dbconfig.php';
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-
+                                  <li>
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-green active"></i> <span>View Supplier Purchase</span></li>
                                 <li>
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
                                 <li>

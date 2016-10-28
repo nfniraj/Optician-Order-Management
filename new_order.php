@@ -51,6 +51,14 @@ function fill_product_detail($conn) {
     return $output;
 }
 
+//get customer name
+
+$get_customer_name ="select * from `customer` where Customer_ID ='$customerid'";
+$get_customer_name_res = mysql_query($get_customer_name, $conn);
+    while ($row = mysql_fetch_array($get_customer_name_res)) {
+        $customername = $row["Customer_Name"];
+    }
+
 //check if submit is pressed
 if (isset($_POST['submit'])) {
     $producttype = $_POST['producttype'];
@@ -59,6 +67,10 @@ if (isset($_POST['submit'])) {
     $details = $_POST['productdetail'];
     $quantity = $_POST['quantity'];
     $customerid = $_POST['customerid'];
+    $orderstatus = $_POST['orderstatus'];
+    $orderdate = $_POST['orderdate'];
+    $deliverydate = $_POST['deliverydate'];
+    $comment = $_POST['comment'];
 
     //Get Eye number details
     $rdsph = $_POST['rdsph'];
@@ -137,9 +149,9 @@ if (isset($_POST['submit'])) {
         }
         echo ' qty of product found' . $output2;
         if ($output2 > 0) {
-
+            echo 'dude customer id is'. $customerid;
             //Insert into Order
-            $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`) VALUES (NULL, '$customerid', NULL, '', '$output','','$quantity')";
+            $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`,`Order_Status`,`Delivery_Date`,`Comment`) VALUES (NULL, '$customerid', '$orderdate', '', '$output','','$quantity','$orderstatus','$deliverydate','$comment')";
 
             mysql_select_db('optic_db');
             $insert_into_order_res = mysql_query($insert_into_order, $conn);
@@ -228,7 +240,9 @@ if (isset($_POST['submit'])) {
                 die('Could not enter data: ' . mysql_error());
             }
             echo '<script language="javascript">';
-            echo 'alert("Super! Order successfully added :) \nRedirecting you to check orders page.")';
+            echo 'alert("Super! Order successfully added! \nRedirecting you to check orders page.")';
+     
+            echo  'windows.location = "customer_order_view.php"';
             echo '</script>';
             header("Location: customer_order_view.php");
             //End stock
@@ -420,6 +434,11 @@ if (isset($_POST['submit'])) {
                                             <input type="text" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid ?>">
                                         </div>
                                         <div class="form-group">
+                                            <label>Customer Name</label>
+                                            <input type="text" class="form-control" id="customername" name="customername" value="<?php echo $customername ?>">
+                                        </div>
+                                        
+                                        <div class="form-group">
                                             <label>Product Type</label>
                                             <select class="form-control select2" id="producttype" name="producttype">
                                                 <option value="">Select Product Type</option>
@@ -451,6 +470,27 @@ if (isset($_POST['submit'])) {
                                             <label>Quantity</label>
                                             <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Order Status</label>
+                                            <select class="form-control select2" id="orderstatus" name="orderstatus">
+                                                <option value="">Select Order status</option>
+                                                <option value="active">Active</option>
+                                                <option value="fulfilled">Fulfilled</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Order Date</label>
+                                            <input type="text" class="form-control" id="orderdate" name="orderdate" placeholder="Order Date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Delivery Date</label>
+                                            <input type="text" class="form-control" id="deliverydate" name="deliverydate" placeholder="Delivery Date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Comment</label>
+                                            <input type="text" class="form-control" id="comment" name="comment" placeholder="Any specific comment related to the order">
+                                        </div>
+                                             
 
                                     </div>
                                     <hr>
