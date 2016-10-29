@@ -112,7 +112,7 @@ include 'dbconfig.php';
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>

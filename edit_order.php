@@ -149,7 +149,7 @@ if( $check_output > 0){
 		
 		//Insert into Billing
 		
-		$insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Oder_Bill_Balance`='$balance', `Order_Discount`='$discount' where `Order_Id`='$orderid'";
+		$insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Order_Bill_Balance`='$balance', `Order_Discount`='$discount' where `Order_Id`='$orderid'";
 		
 		$insert_bill_res = mysql_query( $insert_bill, $conn );
 		
@@ -229,9 +229,9 @@ else
 					{
 						$total = $row2['Order_Bill_Total'];
 						$advance = $row2['Order_Bill_Advance'];
-						$balance = $row2['Oder_Bill_Balance'];
+						$balance = $row2['Order_Bill_Balance'];
 						$discount = $row2['Order_Discount'];
-					}
+					}   
 		//end order details
 		
 		//fetch order details

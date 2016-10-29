@@ -138,7 +138,7 @@ include 'dbconfig.php';
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        View Inventory
+                        View Products
                         <small>..</small>
                     </h1>
                     <ol class="breadcrumb">
@@ -188,10 +188,10 @@ include 'dbconfig.php';
 
                                                         <th width="10%">Product ID</th>
                                                         <th width="10%">Product</th>
-                                                        <th width="30%">Model</th>
+                                                        <th width="20%">Model</th>
                                                         <th width="20%">Brand</th>
                                                         <th width="20%">Detail</th>
-                                                        <th width="5%">Action</th>
+                                                        <th width="25%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody link="white">
@@ -249,6 +249,13 @@ include 'dbconfig.php';
                                                             <small class="label pull-middle bg-white">
                                                                 <?php
                                                                 echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="delete_product.php?id=' . $row['Product_ID'] . '">' . "Delete Product" . '</a>');
                                                                 ?>
                                                             </small>
                                                         </span>

@@ -1,6 +1,6 @@
 <?php
 include 'dbconfig.php';
-$supid = $_GET['id'];
+
 ?>
 
 <html>
@@ -141,7 +141,7 @@ $supid = $_GET['id'];
                 <section class="content-header">
                     <h1>
                         Search 
-                        <small>Suppliers</small>
+                        <small>Customer Balance Orders</small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -161,22 +161,15 @@ $supid = $_GET['id'];
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="suppname" placeholder="Type Supplier name here">
+                                            <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
                                         </div>
-                                        <div class="col-xs-1">
-                                            OR
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
-                                        </div>
-
                                     </div>
+                                        
 
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="box-footer">
-                                                <button type="submit" name="submit" class="btn btn-primary">Show Suppliers</button>
+                                                <button type="submit" name="submit" class="btn btn-primary">Show List of Customer Orders With Balance Payment</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -196,67 +189,52 @@ $supid = $_GET['id'];
                                             <table id="example2" class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr >
-                                                        <th width="18%" >Supplier Name</th>
-                                                        <th width="13%">Mobile</th>
-                                                        <th width="25%">Address</th>
-                                                        <th width="20%">Action</th>
-                                                    </tr>
+                                                        <th width="18%" >Customer Name</th>
+                                                        <th width="5%">Order ID</th>
+                                                        <th width="8%">Order Date</th>
+                                                        <th width="7%">Product ID</th>
+                                                        <th width="10%">Order Status</th>
+                                                        <th width="10%">Order Bill Date</th>
+                                                        <th width="10%">Order Bill Total</th>
+                                                        <th width="10%">Order Bill Advance</th>
+                                                        <th width="10%">Order Bill Balance</th>
                                                 </thead>
                                                 <tbody link="white">
 
                                                     <?php
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
-                                                    $sql = "SELECT * FROM supplier_master";
-                                                    if ($supid > 0) {
-                                                        $sql = "SELECT * FROM `supplier_master`  WHERE Supplier_ID='$supid'";
-                                                    }
-                                                    if ((!empty($_POST['suppname'])) or ( !empty($_POST['mobileno']))) {
+                                                    $sql = "SELECT customer.Customer_Name,customer.Customer_ID, order.Order_ID, order.Order_DT, order.Product_ID, order.Order_Status, order_billing.Order_Bill_Date, order_billing.Order_Bill_Total, order_billing.Order_Bill_Advance, order_billing.Order_Bill_Balance FROM `order` join customer on customer.Customer_ID=order.Customer_ID join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID where order_billing.Order_Bill_Balance > 0";
+                                                    
+                                                    if ((!empty($_POST['customername'])))  {
                                                         //Show filtered list when form fields are filled in
-                                                        $suppname = $_POST['suppname'];
-                                                        $mobileno = $_POST['mobileno'];
+                                                        $customername = $_POST['customername'];
 
-                                                        $sql = "SELECT * FROM supplier_master WHERE Supplier_Name LIKE '%" . $suppname . "%' AND Supplier_Mobile_No LIKE '%" . $mobileno . "%'";
+                                                        //$sql = "SELECT * FROM supplier_master WHERE Supplier_Name LIKE '%" . $suppname . "%' AND Supplier_Mobile_No LIKE '%" . $mobileno . "%'";
+                                                        $sql = "SELECT customer.Customer_Name,customer.Customer_ID, order.Order_ID, order.Order_DT, order.Product_ID, order.Order_Status, order_billing.Order_Bill_Date, order_billing.Order_Bill_Total, order_billing.Order_Bill_Advance, order_billing.Order_Bill_Balance FROM `order` join customer on customer.Customer_ID=order.Customer_ID join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID where order_billing.Order_Bill_Balance > 0 and customer.Customer_Name LIKE '%" . $customername . "%'";
                                                     }
 
                                                     $result = mysql_query($sql, $conn);
                                                     while ($row = mysql_fetch_array($result)) {
-                                                        $id = $row['Supplier_ID'];
-                                                        $supname = $row['Supplier_Name'];
+                                                        $customername = $row['Customer_Name'];
+                                                        $customerid = $row['Customer_ID'];
+                                                        $orderid = $row['Order_ID'];
+                                                        $prodid = $row['Product_ID'];
                                                         echo "<tr>";
                                                         //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                         //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="update_supplier.php?id=' . $id . '">' . $row['Supplier_Name'] . '</a>' . "</td>");
+                                                        //echo ("<td>" .$row['Supplier_Name']."</td>" );
+                                                         echo ("<td>" . '<a href="edit_customer.php?id=' . $customerid . '">' . $row['Customer_Name'] . '</a>' . "</td>");
+                                                        echo ("<td>" . '<a href="edit_order.php?id=' . $orderid . '">' . $row['Order_ID'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Supplier_Address'] . "</td>";
+                                                        echo "<td>" . $row['Order_DT'] . "</td>";
+                                                        echo ("<td>" . '<a href="update_product.php?id=' . $prodid . '">' . $row['Product_ID'] . '</a>' . "</td>");
+                                                        echo "<td>" . $row['Order_Status'] . "</td>";  
+                                                        echo "<td>" . $row['Order_Bill_Date'] . "</td>";
+                                                        echo "<td>" . $row['Order_Bill_Total'] . "</td>";
+                                                        echo "<td>" . $row['Order_Bill_Advance'] . "</td>";
+                                                        echo "<td>" . $row['Order_Bill_Balance'] . "</td>";
                                                         ?>
-                                                    <td> 
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="supplier_purchase_detail.php?id=' . $id . '">' . "Add Purchase" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="update_supplier.php?id=' . $id . '">' . "Update Supplier" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                        
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="delete_supplier.php?id=' . $id . '">' . "Delete Supplier" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                    </td>
-
-
 
                                                     <?php
                                                 }
@@ -279,10 +257,15 @@ $supid = $_GET['id'];
                                                 </tbody>	
                                                 <tfoot>
                                                     <tr>
-                                                        <th>Supplier Name</th>
-                                                        <th>Mobile</th>
-                                                        <th>Address</th>
-                                                        <th>Action</th>
+                                                        <th width="18%" >Customer Name</th>
+                                                        <th width="5%">Order ID</th>
+                                                        <th width="8%">Order Date</th>
+                                                        <th width="7%">Product ID</th>
+                                                        <th width="10%">Order Status</th>
+                                                        <th width="10%">Order Bill Date</th>
+                                                        <th width="10%">Order Bill Total</th>
+                                                        <th width="10%">Order Bill Advance</th>
+                                                        <th width="10%">Order Bill Balance</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>

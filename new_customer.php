@@ -6,6 +6,9 @@ if (isset($_POST['submit'])) {
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
     $customeraddress = $_POST['customeraddress'];
+    $age = $_POST['age'];
+    $comment = $_POST['comment'];
+    $lastvisit = $_POST['lastvisit'];
 
 
 // To protect MySQL injection for Security purpose
@@ -21,7 +24,7 @@ if (isset($_POST['submit'])) {
     $mobileno = mysql_real_escape_string($mobileno);
     $customeraddress = mysql_real_escape_string($customeraddress);
 
-    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`) VALUES (NULL, '$customername', '$dob', '$gender', '$mobileno','$customeraddress','')";
+    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dob', '$gender', '$mobileno','$customeraddress','','','$lastvisit','$age','$comment')";
 
 
     mysql_select_db('optic_db');
@@ -31,10 +34,8 @@ if (isset($_POST['submit'])) {
         die('Could not enter data: ' . mysql_error());
     }
 
-    echo "Entered data successfully\n";
-} else {
-    echo "Issue with insertion";
-}
+    header("Location:show_customers.php");
+} 
 ?>
 <html>
     <head>
@@ -56,11 +57,7 @@ if (isset($_POST['submit'])) {
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-        <script type="text/javascript"
-        src="dist/jpeg_camera_with_dependencies.min.js"></script>
-        <script type="text/javascript" src="dist/jpegcam/demo.js"></script>
-
-        <link href="dist/jpegcam/demo.css" media="all" rel="stylesheet" type="text/css" /></link>
+       
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -96,7 +93,7 @@ if (isset($_POST['submit'])) {
                             </li>
                             <!-- Control Sidebar Toggle Button -->
                             <li>
-                                <a href="#" >Logout</a>
+                                <a href="logout.php" >Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -163,19 +160,23 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="add_customer.php" method="post">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF']?>" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer Name</label>
-                                            <input type="text" class="form-control" id="customer-name" name="customername" placeholder="Customer Name">
+                                            <input type="text" class="form-control" id="customer-name" name="customername" placeholder="First Name Last Name">
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
                                             <input type="text" class="form-control" id="c" name="dob" placeholder="DD/MM/YYYY">
                                         </div>
                                         <div class="form-group">
+                                            <label>Age</label>
+                                            <input type="text" class="form-control" id="c" name="age" placeholder="Age">
+                                        </div>
+                                        <div class="form-group">
                                             <label>Gender</label>
-                                            <input type="text" class="form-control" id="customer-gender" name="gender" placeholder="Gender">
+                                            <input type="text" class="form-control" id="customer-gender" name="gender" placeholder="Male/Female/Other">
                                         </div>
                                         <div class="form-group">
                                             <label>Mobile Number</label>
@@ -185,6 +186,14 @@ if (isset($_POST['submit'])) {
                                             <label>Address</label>
                                             <input type="text" class="form-control" id="customeraddress" name="customeraddress" placeholder="Address">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Date of Last Visit</label>
+                                            <input type="text" class="form-control" id="lastvisit" name="lastvisit" placeholder="DD/MM/YYYY">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Notes</label>
+                                            <input type="text" class="form-control" id="comment" name="comment" placeholder="Comment if any..">
+                                        </div>
 
                                     </div>
 
@@ -193,7 +202,7 @@ if (isset($_POST['submit'])) {
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancel</button>
-                                <button type="submit" class="btn btn-info pull-right">Submit</button>
+                                <button type="submit" name="submit" class="btn btn-info pull-right">Submit</button>
                             </div>
                             </form>
                         </div>
