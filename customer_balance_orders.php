@@ -1,6 +1,5 @@
 <?php
 include 'dbconfig.php';
-
 ?>
 
 <html>
@@ -50,7 +49,7 @@ include 'dbconfig.php';
                             <!-- Control Sidebar Toggle Button -->
                             <li>
                                 <a href="dashboard.php" >Dashboard</a>
- </li>
+                            </li>
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -101,13 +100,13 @@ include 'dbconfig.php';
                                     <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li class="treeview">
                                     <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
@@ -121,10 +120,10 @@ include 'dbconfig.php';
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                 <li class="treeview active">
+                                <li class="treeview active">
                                     <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
@@ -165,7 +164,7 @@ include 'dbconfig.php';
                                             <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
                                         </div>
                                     </div>
-                                        
+
 
                                     <div class="row">
                                         <div class="col-md-3">
@@ -195,7 +194,7 @@ include 'dbconfig.php';
                                                         <th width="8%">Order Date</th>
                                                         <th width="7%">Product ID</th>
                                                         <th width="10%">Order Status</th>
-                                                        <th width="10%">Order Bill Date</th>
+
                                                         <th width="10%">Order Bill Total</th>
                                                         <th width="10%">Order Bill Advance</th>
                                                         <th width="10%">Order Bill Balance</th>
@@ -206,8 +205,8 @@ include 'dbconfig.php';
                                                     //form is empty show all customers code
                                                     //check if submit button is pressed	
                                                     $sql = "SELECT customer.Customer_Name,customer.Customer_ID, order.Order_ID, order.Order_DT, order.Product_ID, order.Order_Status, order_billing.Order_Bill_Date, order_billing.Order_Bill_Total, order_billing.Order_Bill_Advance, order_billing.Order_Bill_Balance FROM `order` join customer on customer.Customer_ID=order.Customer_ID join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID where order_billing.Order_Bill_Balance > 0";
-                                                    
-                                                    if ((!empty($_POST['customername'])))  {
+
+                                                    if ((!empty($_POST['customername']))) {
                                                         //Show filtered list when form fields are filled in
                                                         $customername = $_POST['customername'];
 
@@ -221,25 +220,27 @@ include 'dbconfig.php';
                                                         $customerid = $row['Customer_ID'];
                                                         $orderid = $row['Order_ID'];
                                                         $prodid = $row['Product_ID'];
+                                                        $obdt = $row['Order_Bill_Date'];
+                                                        $obdtphp = date("d-m-Y", strtotime($obdt));
                                                         echo "<tr>";
                                                         //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                         //echo "<td>" . $row['Customer_ID'] . "</td>";
                                                         //echo ("<td>" .$row['Supplier_Name']."</td>" );
-                                                         echo ("<td>" . '<a href="edit_customer.php?id=' . $customerid . '">' . $row['Customer_Name'] . '</a>' . "</td>");
+                                                        echo ("<td>" . '<a href="edit_customer.php?id=' . $customerid . '">' . $row['Customer_Name'] . '</a>' . "</td>");
                                                         echo ("<td>" . '<a href="edit_order.php?id=' . $orderid . '">' . $row['Order_ID'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Order_DT'] . "</td>";
+                                                        echo "<td>" . $obdtphp . "</td>";
                                                         echo ("<td>" . '<a href="update_product.php?id=' . $prodid . '">' . $row['Product_ID'] . '</a>' . "</td>");
-                                                        echo "<td>" . $row['Order_Status'] . "</td>";  
-                                                        echo "<td>" . $row['Order_Bill_Date'] . "</td>";
+                                                        echo "<td>" . $row['Order_Status'] . "</td>";
+
                                                         echo "<td>" . $row['Order_Bill_Total'] . "</td>";
                                                         echo "<td>" . $row['Order_Bill_Advance'] . "</td>";
                                                         echo "<td>" . $row['Order_Bill_Balance'] . "</td>";
                                                         ?>
 
-                                                    <?php
-                                                }
-                                                ?>
+                                                        <?php
+                                                    }
+                                                    ?>
 <!--<td> 
 <span class="pull-l-container">
 <small class="label pull-middle bg-green">
@@ -263,7 +264,7 @@ include 'dbconfig.php';
                                                         <th width="8%">Order Date</th>
                                                         <th width="7%">Product ID</th>
                                                         <th width="10%">Order Status</th>
-                                                        <th width="10%">Order Bill Date</th>
+
                                                         <th width="10%">Order Bill Total</th>
                                                         <th width="10%">Order Bill Advance</th>
                                                         <th width="10%">Order Bill Balance</th>

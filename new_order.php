@@ -69,7 +69,10 @@ if (isset($_POST['submit'])) {
     $customerid = $_POST['customerid'];
     $orderstatus = $_POST['orderstatus'];
     $orderdate = $_POST['orderdate'];
+    $orderdt = date('Y-m-d', strtotime($orderdate));
     $deliverydate = $_POST['deliverydate'];
+    $deldt = date('Y-m-d', strtotime($deliverydate));
+
     $comment = $_POST['comment'];
 
     //Get Eye number details
@@ -151,7 +154,7 @@ if (isset($_POST['submit'])) {
         if ($output2 > 0) {
             echo 'dude customer id is' . $customerid;
             //Insert into Order
-            $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`,`Order_Status`,`Delivery_Date`,`Comment`) VALUES (NULL, '$customerid', '$orderdate', '', '$output','','$quantity','$orderstatus','$deliverydate','$comment')";
+            $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`,`Order_Status`,`Delivery_Date`,`Comment`) VALUES (NULL, '$customerid', '$orderdt', '', '$output','','$quantity','$orderstatus','$deldt','$comment')";
 
             mysql_select_db('optic_db');
             $insert_into_order_res = mysql_query($insert_into_order, $conn);
@@ -351,7 +354,7 @@ if (isset($_POST['submit'])) {
                                 <ul class="sidebar-menu>
                                     <li class="treeview active">
                                     &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <a href="javascript:window.location.href=window.location.href"><i class="fa fa-caret-right text-green"></i>  New Order</a>
-                                 </li>
+                                    </li>
                                 </ul>
 
                                 <li class="treeview">
@@ -480,17 +483,17 @@ if (isset($_POST['submit'])) {
                                             <label>Order Status</label>
                                             <select class="form-control select2" id="orderstatus" name="orderstatus">
                                                 <option value="">Select Order status</option>
-                                                <option value="active">Active</option>
-                                                <option value="fulfilled">Fulfilled</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Fulfilled">Fulfilled</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Order Date</label>
-                                            <input type="text" class="form-control" id="orderdate" name="orderdate" placeholder="Order Date">
+                                            <input type="text" class="form-control" id="orderdate" name="orderdate" placeholder="DD-MM-YYYY" value="<?php echo date("d-m-Y", time());?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Delivery Date</label>
-                                            <input type="text" class="form-control" id="deliverydate" name="deliverydate" placeholder="Delivery Date">
+                                            <input type="text" class="form-control" id="deliverydate" name="deliverydate" placeholder="DD-MM-YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Comment</label>
@@ -701,6 +704,19 @@ if (isset($_POST['submit'])) {
                 document.form1.submit();
             }
         </script>
+        <script>
+            $(document).ready(function () {
+                $("#orderdate").keyup(function () {
+                    if ($(this).val().length == 2) {
+                        $(this).val($(this).val() + "-");
+                    } else if ($(this).val().length == 5) {
+                        $(this).val($(this).val() + "-");
+                    }
+                });
+              
+            });
+        </script>
+
 
     </body>
 </html>

@@ -60,6 +60,7 @@ if (isset($_POST['submit'])) {
     $quantity = $_POST['quantity'];
     $suppid = $_POST['suppid'];
     $dop = $_POST['dop'];
+    $dopmysql = date("Y-m-d", strtotime($dop));
     $ppi = $_POST['ppi'];
 
 
@@ -120,7 +121,7 @@ if (isset($_POST['submit'])) {
 
         //Insert into Supplier Purchase Detail
 
-        $supp_purhcase = "INSERT INTO `optic_db`.`supplier_purchase_detail` (`Purchase_ID`, `Supplier_ID`, `Product_ID`, `DOP`, `Qty`, `PPI`, `Total`, `Advance`, `Discount`, `Balance`) VALUES (NULL, '$suppid', '$prodid', '$dop', '$quantity', '$ppi', '$total', '$advance', '$discount', '$balance')";
+        $supp_purhcase = "INSERT INTO `optic_db`.`supplier_purchase_detail` (`Purchase_ID`, `Supplier_ID`, `Product_ID`, `DOP`, `Qty`, `PPI`, `Total`, `Advance`, `Discount`, `Balance`) VALUES (NULL, '$suppid', '$prodid', '$dopmysql', '$quantity', '$ppi', '$total', '$advance', '$discount', '$balance')";
 
         $supp_purhcase_res = mysql_query($supp_purhcase, $conn);
 
@@ -346,7 +347,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Purchase</label>
-                                            <input type="text" class="form-control" id="dop" name="dop" placeholder="DD/MM/YYYY">
+                                            <input type="text" class="form-control" id="dop" name="dop" placeholder="DD-MM-YYYY" value="<?php echo date("d-m-Y", time());?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Quantity</label>

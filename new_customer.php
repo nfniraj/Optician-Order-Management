@@ -3,6 +3,7 @@ include 'dbconfig.php';
 if (isset($_POST['submit'])) {
     $customername = $_POST['customername'];
     $dob = $_POST['dob'];
+    $dobmysql = date('Y-m-d',strtotime($dob));
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
     $customeraddress = $_POST['customeraddress'];
@@ -13,18 +14,18 @@ if (isset($_POST['submit'])) {
 
 // To protect MySQL injection for Security purpose
     $customername = stripslashes($customername);
-    $dob = stripslashes($dob);
+    $dobmysql = stripslashes($dobmysql);
     $gender = stripslashes($gender);
     $mobileno = stripslashes($mobileno);
     $customeraddress = stripslashes($customeraddress);
 
     $customername = mysql_real_escape_string($customername);
-    $dob = mysql_real_escape_string($dob);
+    $dobmysql = mysql_real_escape_string($dobmysql);
     $gender = mysql_real_escape_string($gender);
     $mobileno = mysql_real_escape_string($mobileno);
     $customeraddress = mysql_real_escape_string($customeraddress);
 
-    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dob', '$gender', '$mobileno','$customeraddress','','','$lastvisit','$age','$comment')";
+    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dobmysql', '$gender', '$mobileno','$customeraddress','','','$lastvisit','$age','$comment')";
 
 
     mysql_select_db('optic_db');
@@ -139,13 +140,13 @@ if (isset($_POST['submit'])) {
                                     <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li class="treeview">
                                     <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
@@ -159,10 +160,10 @@ if (isset($_POST['submit'])) {
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
@@ -208,7 +209,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD/MM/YYYY">
+                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD-MM-YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
@@ -228,7 +229,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Last Visit</label>
-                                            <input type="text" class="form-control" id="lastvisit" name="lastvisit" placeholder="DD/MM/YYYY">
+                                            <input type="text" class="form-control" id="lastvisit" name="lastvisit" placeholder="DD-MM-YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Notes</label>
@@ -269,7 +270,7 @@ if (isset($_POST['submit'])) {
         <script src="dist/js/demo.js"></script>
         <script>
             $(document).ready(function () {
-                $("#txtDOB").keyup(function () {
+                $("#dob").keyup(function () {
                     if ($(this).val().length == 2) {
                         $(this).val($(this).val() + "/");
                     } else if ($(this).val().length == 5) {

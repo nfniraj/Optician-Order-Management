@@ -4,13 +4,15 @@ $customerid = $_GET['id'];
 //$customerid = 1;
 if (isset($_POST['submit'])) {
     $customername = $_POST['customername'];
-    $dob = $_POST['dob'];
+    $dob1 = $_POST['dob'];
+    $dobmysql = date('Y-m-d',strtotime($dob1));
+    
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
     $address = $_POST['address'];
-    $photourl = $_POST['photourl'];
+    //$photourl = $_POST['photourl'];
 
-    $sql = "UPDATE `optic_db`.`customer` SET `Customer_Name` = '$customername', `Customer_DOB` = '$dob', `Customer_Gender` = '$gender', `Customer_Mobile_No` = '$mobileno', `Customer_Address` = '$address' WHERE `customer`.`Customer_ID` = '$customerid'";
+    $sql = "UPDATE `optic_db`.`customer` SET `Customer_Name` = '$customername', `Customer_DOB` = '$dobmysql', `Customer_Gender` = '$gender', `Customer_Mobile_No` = '$mobileno', `Customer_Address` = '$address' WHERE `customer`.`Customer_ID` = '$customerid'";
 
     $result1 = mysql_query($sql, $conn);
 
@@ -27,6 +29,8 @@ if (isset($_POST['submit'])) {
         $customerid = $row['Customer_ID'];
         $customername = $row['Customer_Name'];
         $dob = $row['Customer_DOB'];
+        $dobphp = date("d-m-Y", strtotime($dob));
+       
         $gender = $row['Customer_Gender'];
         $mobileno = $row['Customer_Mobile_No'];
         $address = $row['Customer_Address'];
@@ -204,19 +208,19 @@ if (isset($_POST['submit'])) {
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer Name</label>
-                                            <input type="text" class="form-control" id="customer-name" name="customername" value="<?php echo $customername; ?>">
+                                            <input type="text" class="form-control" id="customername" name="customername" value="<?php echo $customername; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="customer-dob" name="dob" value="<?php echo $dob; ?>">
+                                            <input type="text" class="form-control" id="dob" name="dob" value="<?php echo $dobphp; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
-                                            <input type="text" class="form-control" id="customer-gender" name="gender" value="<?php echo $gender; ?>">
+                                            <input type="text" class="form-control" id="gender" name="gender" value="<?php echo $gender; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Mobile Number</label>
-                                            <input type="text" class="form-control" id="mobile-no" name="mobileno" value="<?php echo $mobileno; ?>">
+                                            <input type="text" class="form-control" id="mobileno" name="mobileno" value="<?php echo $mobileno; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>

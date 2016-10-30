@@ -229,13 +229,15 @@ include 'dbconfig.php';
                                                     while ($row = mysql_fetch_array($result)) {
 
                                                         $id = $row['Customer_ID'];
+                                                        $dob = $row['Customer_DOB'];
+                                                        $dobphp = date("d-m-Y", strtotime($dob));
 
                                                         echo "<tr>";
                                                         //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                         //echo "<td>" . $row['Customer_ID'] . "</td>";
                                                         echo ("<td>" . '<a href="edit_customer.php?id=' . $id . '">' . $row['Customer_Name'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Customer_DOB'] . "</td>";
+                                                        echo "<td>" . $dobphp . "</td>";
                                                         echo "<td>" . $row['Customer_Mobile_No'] . "</td>";
                                                         echo "<td>" . $row['Customer_Address'] . "</td>";
                                                         ?>
