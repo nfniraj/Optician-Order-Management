@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD/MM/YYYY">
+                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD-MM-YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
@@ -232,9 +232,9 @@ if (isset($_POST['submit'])) {
             $(document).ready(function () {
                 $("#txtDOB").keyup(function () {
                     if ($(this).val().length == 2) {
-                        $(this).val($(this).val() + "/");
+                        $(this).val($(this).val() + "-");
                     } else if ($(this).val().length == 5) {
-                        $(this).val($(this).val() + "/");
+                        $(this).val($(this).val() + "-");
                     }
                 });
             });

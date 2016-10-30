@@ -6,7 +6,7 @@ include 'dbconfig.php';
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Search Customers - Ambaji Optics</title>
+        <title>Dashboard - Ambaji Optics</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -91,7 +91,7 @@ include 'dbconfig.php';
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
                                 <li>
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-                                  <li>
+                                <li>
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-green active"></i> <span>View Supplier Purchase</span></li>
                                 <li>
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
@@ -138,8 +138,8 @@ include 'dbconfig.php';
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Customers
-                        <small>..</small>
+                        Dashboard
+                        <small></small>
                     </h1>
                     <ol class="breadcrumb">
 
@@ -148,138 +148,96 @@ include 'dbconfig.php';
 
                 <!-- Main content -->
                 <section class="content">
-                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main">
-                        <div class="box-body">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Search</h3>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-2 col-xs-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-user"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Hello!!</span>
+                                    <br>
+                                    <span class="info-box-number"><?php
+                                        date_default_timezone_set('Asia/Calcutta');
+
+                                        $Hour = date('G');
+
+                                        if ($Hour >= 5 && $Hour <= 11) {
+                                            $morning = "Have a wonderful morning :)";
+                                            echo $morning;
+                                        } else if ($Hour >= 12 && $Hour <= 18) {
+                                            echo "Good Afternoon :)";
+                                        } else if ($Hour >= 19 || $Hour <= 4) {
+                                            echo "Good Evening :)";
+                                        }
+                                        ?><small></small></span>
+
                                 </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-xs-5">
-                                            <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
-                                        </div>
-                                        <div class="col-xs-1">
-                                            OR
-                                        </div>
-
-                                        <div class="col-xs-4">
-                                            <input type="text" class="form-control" name="mobileno" placeholder="Type Mobile No here">
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-1">
-                                            <div class="box-footer" align="center">
-                                                <button type="submit" name="submit" class="btn btn-primary">Search Customers</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.box-body -->
+                                <!-- /.info-box-content -->
                             </div>
+                            <!-- /.info-box -->
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-success btn-lg" onclick="window.location.href = 'new_customer.php'">Add New Customer</button>
+                        </div>
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-success btn-lg" onclick="window.location.href = 'show_customers.php'">Show All Customers</button>
+                        </div>
+                    </div>
+                    <br>
 
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="box">
-                                        <div class="box-header">
-                                            <h3 class="box-title">Search results..</h3>
-                                        </div>
-                                        <!-- /.box-header -->
-                                        <div class="box-body table-responsive no-padding">
-                                            <table id="example2" class="table table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="20%">Customer Name</th>
-                                                        <th width="10%">DOB</th>
-                                                        <th width="15%">Mobile No</th>
-                                                        <th width="30%">Address</th>
-                                                        <th width="20%">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody link="white">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-primary btn-lg" onclick="window.location.href = 'new_supplier.php'">Add New Supplier</button>
+                        </div>
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-primary btn-lg" onclick="window.location.href = 'show_suppliers.php'">Show All Suppliers</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-default btn-lg" onclick="window.location.href = 'customer_balance_orders.php'">See Customers with Balance due</button>
+                        </div>
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-default btn-lg" onclick="window.location.href = 'show_outstanding_suppliers.php'">See outstanding Suppliers</button>
+                        </div>
+                    </div>
+                    <hr>
+<!--                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Total Sales</h3>
 
-                                                    <?php
-                                                    //form is empty show all customers code
-                                                    //check if submit button is pressed	
-                                                    if ((!empty($_POST['customername'])) or ( !empty($_POST['mobileno'])) or ( !empty($_POST['fromdate'])) or ( !empty($_POST['todate']))) {
-                                                        //Show filtered list when form fields are filled in
-                                                        $customername = $_POST['customername'];
-                                                        $mobileno = $_POST['mobileno'];
-                                                        //$fromdate = $_POST['fromdate'];
-                                                        //$todate = $_POST['todate'];
-                                                        //To protect MySQL injection for Security purpose
-                                                        $customername = stripslashes($customername);
-                                                        $mobileno = stripslashes($mobileno);
-                                                        //$fromdate = stripslashes($fromdate);
-                                                        //$todate = stripslashes($todate);
-                                                        //$sql="SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' OR Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
-                                                        //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
-
-                                                        $sql = "SELECT * FROM customer WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno . "%'";
-                                                    } else {
-                                                        $sql = "SELECT * FROM customer";
-                                                    }
-
-                                                    $result = mysql_query($sql, $conn);
-                                                    while ($row = mysql_fetch_array($result)) {
-
-                                                        $id = $row['Customer_ID'];
-
-                                                        echo "<tr>";
-                                                        //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
-                                                        //echo "<td>" . $row['Customer_ID'] . "</td>";
-                                                        echo ("<td>" . '<a href="edit_customer.php?id=' . $id . '">' . $row['Customer_Name'] . '</a>' . "</td>");
-                                                        //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Customer_DOB'] . "</td>";
-                                                        echo "<td>" . $row['Customer_Mobile_No'] . "</td>";
-                                                        echo "<td>" . $row['Customer_Address'] . "</td>";
-                                                        ?>
-                                                    <td> 
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="new_order.php?id=' . $row['Customer_ID'] . '">' . "New Order" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="customer_order_view.php?id=' . $row['Customer_ID'] . '">' . "View Orders" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                    </td>
-                                                    <?php
-                                                    //echo "<td>" . $row['nooforders'] . "</td>";
-                                                    echo "</tr>";
-                                                }
-                                                ?>
-
-                                                </tbody>	
-                                                <tfoot>
-                                                    <tr>
-                                                        <th>Customer Name</th>
-                                                        <th>DOB</th>
-                                                        <th>Mobile No</th>
-                                                        <th>Address</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                        <!-- /.box-body -->
-                                    </div>
-                                    <!-- /.box -->
                                 </div>
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
+                                 /.box-header 
+                                <div class="box-body no-padding">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
 
-                        </div>  
+                                                <th>Last 7 days</th>
+                                                <th>This Week</th>
+                                                <th>This Month</th>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                 /.box-body 
+                            </div>
+                             /.box 
+
+                             /.box 
+                        </div>
+                    </div>-->
+
                 </section>
                 <!-- /.content -->
             </div>
@@ -321,16 +279,16 @@ include 'dbconfig.php';
         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
         <script>
-            $(function () {
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                //Datemask dd/mm/yyyy
-                $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-                //Datemask2 mm/dd/yyyy
-                $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-                //Money Euro
-                $("[data-mask]").inputmask();
-            });
+                                $(function () {
+                                    //Initialize Select2 Elements
+                                    $(".select2").select2();
+                                    //Datemask dd/mm/yyyy
+                                    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+                                    //Datemask2 mm/dd/yyyy
+                                    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+                                    //Money Euro
+                                    $("[data-mask]").inputmask();
+                                });
         </script>
     </body>
 </html>
