@@ -32,7 +32,7 @@ $suppid = $_GET['id'];
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
-    <body class="hold-transition skin-blue fixed sidebar-mini">
+    <body class="hold-transition skin-blue-light fixed sidebar-mini">
         <!-- Site wrapper -->
         <div class="wrapper">
 
@@ -50,6 +50,9 @@ $suppid = $_GET['id'];
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             <li>
+                                <a href="dashboard.php" >Dashboard</a>
+                            </li>
+                            <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
                         </ul>
@@ -62,71 +65,71 @@ $suppid = $_GET['id'];
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-
+               <section class="sidebar">
                     <ul class="sidebar-menu">
-                        <li class="header">OPERATIONS</li>
                         <li class="treeview">
-                            <a href="new_customer.php">
-                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
-                        </li>
-                        <li class="treeview active">
-                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
-                        </li>
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>CUSTOMER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">                            
+                                <li class="treeview">
+                                    <a href="new_customer.php">
+                                        <i class="fa fa-circle-o text-green"  ></i>New Customer</a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
+                                </li>
 
+                                <li class="treeview">
+                                    <a href="customer_order_view.php"><i class="fa fa-circle-o text-green"></i>Search Orders</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="treeview active">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>STOCK</span>
+                                <i class="fa fa-plus-circle"></i>   
+                                <span>SUPPLIER</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                <li>
-                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
-                                <li>
-                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-
-                                <li>
-                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
-                                <li>
-                                    <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>New Product</span></a></li>
-                                <li>
-                                    <a href="show_product.php"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
+                                 <li class="treeview">
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
+                                 <li class="treeview">
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
+                                 <li class="treeview active">
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
+                                 <li class="treeview">
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
                         </li>
-                        <li class="treeview active">
+                        <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>REPORTING</span>
+                                <i class="fa fa-newspaper-o"></i>
+                                <span>REPORTS</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                 <li class="treeview">
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                 <li class="treeview">
+                                    <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -139,8 +142,8 @@ $suppid = $_GET['id'];
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Search 
-                        <small>Supplier Purchase</small>
+                        Search Supplier Purchase
+                        <small></small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -167,7 +170,7 @@ $suppid = $_GET['id'];
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-1">
                                             <div class="box-footer">
                                                 <button type="submit" name="submit" class="btn btn-primary">Show all Purchases for the Supplier</button>
                                                 </form>
@@ -258,7 +261,7 @@ WHERE supplier_purchase_detail.Purchase_ID = '$suppid'";
                                                         $advance = $row['Advance'];
                                                         $balance = $row['Balance'];
                                                         $purchaseid = $row['Purchase_ID'];
-                                                    
+
                                                         // $suppid = $row['Supplier_ID'];
                                                         //  $purchaseid = $row['Purchase_ID'];
 
@@ -279,24 +282,16 @@ WHERE supplier_purchase_detail.Purchase_ID = '$suppid'";
                                                         echo "<td>" . $balance . "</td>";
                                                         ?>
                                                     <td> 
-                                                        |
+                                                       
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="edit_purchase.php?id=' . $purchaseid . '">' . "Edit Purhcase" . '</a>');
-                                                                ?>
-                                                            </small>
-                                                        </span>
-                                                        |
-                                                        <span class="pull-l-container">
-                                                            <small class="label pull-middle bg-white">
-                                                                
+
                                                                 <?php
                                                                 echo ('<a href="cancel_purchase.php?id=' . $purchaseid . '">' . "Cancel Purchase" . '</a>');
                                                                 ?>
                                                             </small>
                                                         </span>
-                                                        |
+                                                        
                                                     </td>
                                                     </td>
                                                     <?php

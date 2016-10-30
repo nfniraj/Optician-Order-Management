@@ -1,8 +1,8 @@
 <?php
 include 'dbconfig.php';
 $customerid = $_GET['id'];
-//$customerid = '1';
 
+//$customerid = '1';
 //functions to populate product type, model, brand and detail
 function fill_product_type($conn) {
     $output = '';
@@ -53,11 +53,11 @@ function fill_product_detail($conn) {
 
 //get customer name
 
-$get_customer_name ="select * from `customer` where Customer_ID ='$customerid'";
+$get_customer_name = "select * from `customer` where Customer_ID ='$customerid'";
 $get_customer_name_res = mysql_query($get_customer_name, $conn);
-    while ($row = mysql_fetch_array($get_customer_name_res)) {
-        $customername = $row["Customer_Name"];
-    }
+while ($row = mysql_fetch_array($get_customer_name_res)) {
+    $customername = $row["Customer_Name"];
+}
 
 //check if submit is pressed
 if (isset($_POST['submit'])) {
@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
         }
         echo ' qty of product found' . $output2;
         if ($output2 > 0) {
-            echo 'dude customer id is'. $customerid;
+            echo 'dude customer id is' . $customerid;
             //Insert into Order
             $insert_into_order = "INSERT INTO `optic_db`.`order` (`Order_ID`, `Customer_ID`, `Order_DT`, `Order_Bill_ID`, `Product_ID`, `Order_GL_Detail_ID`,`Order_Quantity`,`Order_Status`,`Delivery_Date`,`Comment`) VALUES (NULL, '$customerid', '$orderdate', '', '$output','','$quantity','$orderstatus','$deliverydate','$comment')";
 
@@ -241,8 +241,8 @@ if (isset($_POST['submit'])) {
             }
             echo '<script language="javascript">';
             echo 'alert("Super! Order successfully added! \nRedirecting you to check orders page.")';
-     
-            echo  'windows.location = "customer_order_view.php"';
+
+            echo 'windows.location = "customer_order_view.php"';
             echo '</script>';
             header("Location: customer_order_view.php");
             //End stock
@@ -283,7 +283,7 @@ if (isset($_POST['submit'])) {
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
-    <body class="hold-transition skin-blue fixed sidebar-mini">
+    <body class="hold-transition skin-blue-light fixed sidebar-mini">
         <!-- Site wrapper -->
         <div class="wrapper">
 
@@ -315,6 +315,9 @@ if (isset($_POST['submit'])) {
 
                             <!-- Control Sidebar Toggle Button -->
                             <li>
+                                <a href="dashboard.php" >Dashboard</a>
+                            </li>
+                            <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
                         </ul>
@@ -327,73 +330,76 @@ if (isset($_POST['submit'])) {
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                        <section class="sidebar">
-
+                <section class="sidebar">
                     <ul class="sidebar-menu">
-                        <li class="header">OPERATIONS</li>
                         <li class="treeview">
-                            <a href="new_customer.php">
-                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
-                        </li>
-                        <li class="treeview active">
-                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
-                        </li>
-
-                        <li class="treeview active">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>STOCK</span>
+                                <i class="fa fa-user"></i>
+                                <span>CUSTOMER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">                            
+                                <li class="treeview">
+                                    <a href="new_customer.php">
+                                        <i class="fa fa-circle-o text-green"  ></i>New Customer</a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
+                                </li>
+                                <ul class="sidebar-menu>
+                                    <li class="treeview active">
+                                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <a href="javascript:window.location.href=window.location.href"><i class="fa fa-caret-right text-green"></i>  New Order</a>
+                                 </li>
+                                </ul>
+
+                                <li class="treeview">
+                                    <a href="customer_order_view.php"><i class="fa fa-circle-o text-green"></i>Search Orders</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-plus-circle"></i>   
+                                <span>SUPPLIER</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                <li>
-                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
-                                <li>
-                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
-                                <li>
-                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
+                                <li class="treeview">
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
+                                <li class="treeview">
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
+                                <li class="treeview">
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
+                                <li class="treeview">
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
                         </li>
-                        <li class="treeview active">
+                        <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>REPORTING</span>
+                                <i class="fa fa-newspaper-o"></i>
+                                <span>REPORTS</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                <li class="treeview">
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                <li class="treeview">
+                                    <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
                         </li>
-                      
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -437,7 +443,7 @@ if (isset($_POST['submit'])) {
                                             <label>Customer Name</label>
                                             <input type="text" class="form-control" id="customername" name="customername" value="<?php echo $customername ?>">
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label>Product Type</label>
                                             <select class="form-control select2" id="producttype" name="producttype">
@@ -490,7 +496,7 @@ if (isset($_POST['submit'])) {
                                             <label>Comment</label>
                                             <input type="text" class="form-control" id="comment" name="comment" placeholder="Any specific comment related to the order">
                                         </div>
-                                             
+
 
                                     </div>
                                     <hr>
@@ -577,9 +583,8 @@ if (isset($_POST['submit'])) {
 
                                         <!-- /.box-body -->
 
-                                        <div class="box-footer">
-                                            <button type="submit" class="btn btn-default">Cancel</button>
-                                            <button type="submit" name="submit" class="btn btn-info pull-right">Submit</button>
+                                        <div class="box-footer" style="text-align:center;">  
+                                            <button type="submit" name="submit" class="btn btn-primary">Add New Order</button>
                                         </div>
 
                                 </form>
@@ -633,15 +638,15 @@ if (isset($_POST['submit'])) {
                                                                     data: {producttype_id: producttype_id},
                                                                     success: function (data)
                                                                     {
-                                                                        $('#productbrand').html(data);                                                               
+                                                                        $('#productbrand').html(data);
                                                                         $(".product-brand").show();
-                                                                       
+
                                                                     }
                                                                 });
 
 
                                                             });
-                                                             
+
                                                             $('#productbrand').on('change', function () {
                                                                 var productbrand_id = $(this).val();
                                                                 $.ajax({
@@ -673,7 +678,7 @@ if (isset($_POST['submit'])) {
                                                             });
                                                         });
         </script>
-      
+
         <script>
             $(function () {
                 //Initialize Select2 Elements

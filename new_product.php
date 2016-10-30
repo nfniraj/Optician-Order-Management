@@ -2,49 +2,44 @@
 include 'dbconfig.php';
 if (isset($_POST['submit'])) {
 //insert into db
-$newtype = $_POST['newtype'];
-$newmodel = $_POST['newmodel'];
-$newbrand = $_POST['newbrand'];
-$newdetail = $_POST['newdetail'];
+    $newtype = $_POST['newtype'];
+    $newmodel = $_POST['newmodel'];
+    $newbrand = $_POST['newbrand'];
+    $newdetail = $_POST['newdetail'];
 
-$oldtype = $_POST['oldtype'];
-$oldmodel = $_POST['oldmodel'];
-$oldbrand = $_POST['oldbrand'];
-$olddetail = $_POST['olddetail'];
+    $oldtype = $_POST['oldtype'];
+    $oldmodel = $_POST['oldmodel'];
+    $oldbrand = $_POST['oldbrand'];
+    $olddetail = $_POST['olddetail'];
 
-if ($newtype != '')
-{
-    $type =$newtype;
-}else{
-    $type=$oldtype;
-}
-if ($newmodel != '')
-{
-    $model =$newmodel;
-}else{
-    $model=$oldmodel;
-}
-if ($newbrand != '')
-{
-    $brand =$newbrand;
-}else{
-    $brand=$oldbrand;
-}
-if ($newdetail != '')
-{
-    $detail =$newdetail;
-}else{
-    $detail=$olddetail;
-}
+    if ($newtype != '') {
+        $type = $newtype;
+    } else {
+        $type = $oldtype;
+    }
+    if ($newmodel != '') {
+        $model = $newmodel;
+    } else {
+        $model = $oldmodel;
+    }
+    if ($newbrand != '') {
+        $brand = $newbrand;
+    } else {
+        $brand = $oldbrand;
+    }
+    if ($newdetail != '') {
+        $detail = $newdetail;
+    } else {
+        $detail = $olddetail;
+    }
 
-$sql = "INSERT INTO `optic_db`.`product_master` (`Product_ID`, `Product_Type`, `Product_Model`, `Product_Brand`, `Product_Detail`) VALUES ('', '$type', '$model', '$brand', '$detail')";
- mysql_select_db('optic_db');
+    $sql = "INSERT INTO `optic_db`.`product_master` (`Product_ID`, `Product_Type`, `Product_Model`, `Product_Brand`, `Product_Detail`) VALUES ('', '$type', '$model', '$brand', '$detail')";
+    mysql_select_db('optic_db');
     $retval = mysql_query($sql, $conn);
     if (!$retval) {
         die('Could not enter data: ' . mysql_error());
     }
 }
-
 
 //functions to populate product type, model, brand and detail
 function fill_product_type($conn) {
@@ -93,7 +88,6 @@ function fill_product_detail($conn) {
     }
     return $output;
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -120,7 +114,7 @@ function fill_product_detail($conn) {
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
-    <body class="hold-transition skin-blue fixed sidebar-mini">
+    <body class="hold-transition skin-blue-light fixed sidebar-mini">
         <!-- Site wrapper -->
         <div class="wrapper">
 
@@ -152,6 +146,9 @@ function fill_product_detail($conn) {
 
                             <!-- Control Sidebar Toggle Button -->
                             <li>
+                                <a href="dashboard.php" >Dashboard</a>
+                            </li>
+                            <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
                         </ul>
@@ -164,72 +161,72 @@ function fill_product_detail($conn) {
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-                  <section class="sidebar">
-    
-      <ul class="sidebar-menu">
-        <li class="header">OPERATIONS</li>
-        <li class="treeview">
-			<a href="new_customer.php">
-			<i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
-		 </li>
-		<li class="treeview active">
-			<a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
-        </li>
-         <li class="treeview">
-			<a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-        </li>
-		 <li class="treeview">
-			<a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
-        </li>
-      
-        <li class="treeview active">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>STOCK</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-        <ul class="treeview-menu menu-open" style="display: block;">
-            <li>
-				<a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
-            <li>
-				<a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
-            <li>
-				<a href="#"><i class="fa fa-circle-o text-red active"></i> <span>Add Inventory</span></a></li>
-            <li>
-				<a href="#"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
-            <li>
-				<a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>Add Product</span></a></li>
-            <li>
-				<a href="#"><i class="fa fa-circle-o text-orange"></i> <span>Show Product</span></a></li>
-          </ul>
-        </li>
-		</li>
-		 <li class="treeview active">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>REPORTING</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-        <ul class="treeview-menu menu-open" style="display: block;">
-         	<li>
-			<a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
-		</li>
-		<li>
-			<a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
-		</li>
-		<li>
-			<a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
-		</li>
-		<li>
-			<a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
-		</li>
-          </ul>
-        </li>
-		</ul>
+                <section class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>CUSTOMER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">                            
+                                <li class="treeview">
+                                    <a href="new_customer.php">
+                                        <i class="fa fa-circle-o text-green"  ></i>New Customer</a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
+                                </li>
+
+                                <li class="treeview">
+                                    <a href="customer_order_view.php"><i class="fa fa-circle-o text-green"></i>Search Orders</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-plus-circle"></i>   
+                                <span>SUPPLIER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li class="treeview active">
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
+                                <li class="treeview">
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
+                                <li class="treeview">
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
+                                <li class="treeview">
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
+                                <li class="treeview">
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
+                            </ul>
+                        </li>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-newspaper-o"></i>
+                                <span>REPORTS</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li class="treeview">
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </section>
                 <!-- /.sidebar -->
             </aside>
@@ -269,7 +266,7 @@ function fill_product_detail($conn) {
                                             <label>New Product Type</label>
                                             <input type="text" class="form-control select2" id="newtype" name="newtype">
                                         </div> Or choose from database<br><br/>
-                                        
+
                                         <div class="form-group">
                                             <label>Product Type</label>
                                             <select class="form-control select2" id="oldtype" name="oldtype">
@@ -281,7 +278,7 @@ function fill_product_detail($conn) {
                                             <label>New Product Brand</label>
                                             <input type="text" class="form-control select2" id="newbrand" name="newbrand">
                                         </div> Or choose from database<br><br/>
-                                        
+
                                         <div class="product-brand">
                                             <label>Product Brand</label>
                                             <select class="form-control select2" id="oldbrand" name="oldbrand">
@@ -293,7 +290,7 @@ function fill_product_detail($conn) {
                                             <label>New Product Model</label>
                                             <input type="text" class="form-control select2" id="newmodel" name="newmodel">
                                         </div> Or choose from database<br><br/>
-                                       
+
                                         <div class="product-model">
                                             <label>Product Model</label>
                                             <select class="form-control select2" id="oldmodel" name="oldmodel">
@@ -301,7 +298,7 @@ function fill_product_detail($conn) {
                                                 <?php echo fill_product_model($conn); ?>
                                             </select>
                                         </div> <hr>
-                                        
+
                                         <div class="form-group">
                                             <label>New Product Detail</label>
                                             <input type="text" class="form-control select2" id="newdetail" name="newdetail">
@@ -322,9 +319,8 @@ function fill_product_detail($conn) {
 
                                         <!-- /.box-body -->
 
-                                        <div class="box-footer">
-                                            <button type="submit" class="btn btn-default">Cancel</button>
-                                            <button type="submit" name="submit" class="btn btn-info pull-right">Submit</button>
+                                        <div class="box-footer" style="text-align:center;">  
+                                            <button type="submit" name="submit" class="btn btn-primary">Add New Product</button>
                                         </div>
 
                                 </form>

@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
     }
 
     header("Location:show_customers.php");
-} 
+}
 ?>
 <html>
     <head>
@@ -57,11 +57,11 @@ if (isset($_POST['submit'])) {
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-       
+
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
-    <body class="hold-transition skin-blue fixed sidebar-mini">
+    <body class="hold-transition skin-blue-light fixed sidebar-mini">
         <!-- Site wrapper -->
         <div class="wrapper">
 
@@ -84,14 +84,11 @@ if (isset($_POST['submit'])) {
 
 
                             <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">Ambaji Optics</span>
-                                </a>
 
-                            </li>
                             <!-- Control Sidebar Toggle Button -->
+                            <li>
+                                <a href="dashboard.php" >Dashboard</a>
+                            </li>
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -106,27 +103,70 @@ if (isset($_POST['submit'])) {
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-
                     <ul class="sidebar-menu">
-                        <li class="header">OPERATIONS</li>
-                        <li class="treeview">
-                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a></li>
                         <li class="treeview active">
-                            <a href="new_customer.php"><i class="fa fa-circle-o text-red"></i>Add New Customer</a>
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>CUSTOMER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">                            
+                                <li class="treeview active">
+                                    <a href="new_customer.php ">
+                                        <i class="fa fa-circle-o text-green active"  ></i>New Customer</a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
+                                </li>
 
+                                <li class="treeview">
+                                    <a href="customer_order_view.php"><i class="fa fa-circle-o text-green"></i>Search Orders</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-circle-o text-orange"></i>New Order</a>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-plus-circle"></i>   
+                                <span>SUPPLIER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                <li class="treeview">
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
+                                <li class="treeview">
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
+                                 <li class="treeview">
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
+                                 <li class="treeview">
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
+                                 <li class="treeview">
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
+                                 <li class="treeview">
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
+                            </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#"><i class="fa fa-circle-o text-green"></i>Inventory</a>
                         </li>
-
-
-                        <li class="header">STOCK</li>
-                        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>New Supplier</span></a></li>
-                        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Supplier Purchase</span></a></li>
-                        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Outstanding</span></a></li>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-newspaper-o"></i>
+                                <span>REPORTS</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">
+                                 <li class="treeview">
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
+                                </li>
+                                 <li class="treeview">
+                                    <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -160,7 +200,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?php $_SERVER['PHP_SELF']?>" method="post">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer Name</label>
@@ -168,7 +208,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD-MM-YYYY">
+                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD/MM/YYYY">
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
@@ -200,9 +240,8 @@ if (isset($_POST['submit'])) {
                             </div>
                             <!-- /.box-body -->
 
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancel</button>
-                                <button type="submit" name="submit" class="btn btn-info pull-right">Submit</button>
+                            <div class="box-footer" style="text-align:center;">  
+                                <button type="submit" name="submit" class="btn btn-primary">Add New Customer</button>
                             </div>
                             </form>
                         </div>
@@ -232,9 +271,9 @@ if (isset($_POST['submit'])) {
             $(document).ready(function () {
                 $("#txtDOB").keyup(function () {
                     if ($(this).val().length == 2) {
-                        $(this).val($(this).val() + "-");
+                        $(this).val($(this).val() + "/");
                     } else if ($(this).val().length == 5) {
-                        $(this).val($(this).val() + "-");
+                        $(this).val($(this).val() + "/");
                     }
                 });
             });

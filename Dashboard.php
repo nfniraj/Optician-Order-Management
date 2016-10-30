@@ -47,6 +47,7 @@ include 'dbconfig.php';
                             <!-- User Account: style can be found in dropdown.less -->
 
                             <!-- Control Sidebar Toggle Button -->
+                           
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -61,71 +62,70 @@ include 'dbconfig.php';
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
-
                     <ul class="sidebar-menu">
-                        <li class="header">OPERATIONS</li>
                         <li class="treeview">
-                            <a href="new_customer.php">
-                                <i class="fa fa-circle-o text-purple"  ></i>Add New Customer</a>
-                        </li>
-                        <li class="treeview active">
-                            <a href="show_customers.php"><i class="fa fa-circle-o text-red"></i>Search Customers</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="new_order.php"><i class="fa fa-circle-o text-orange"></i>New Order</a>
-                        </li>
-                        <li class="treeview">
-                            <a href="customer_order_view.php"><i class="fa fa-circle-o text-orange"></i>Search Order</a>
-                        </li>
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span>CUSTOMER</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu menu-open" style="display: block;">                            
+                                <li class="treeview">
+                                    <a href="new_customer.php">
+                                        <i class="fa fa-circle-o text-green"  ></i>New Customer</a>
+                                </li>
+                                <li class="treeview">
+                                    <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
+                                </li>
 
+                                <li class="treeview">
+                                    <a href="customer_order_view.php"><i class="fa fa-circle-o text-green"></i>Search Orders</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="treeview active">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>STOCK</span>
+                                <i class="fa fa-plus-circle"></i>   
+                                <span>SUPPLIER</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
                                 <li>
-                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-yellow active"></i> <span>Add Supplier</span></a></li>
+                                    <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li>
-                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-green active"></i> <span>Show Suppliers</span></li>
+                                    <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
                                 <li>
-                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-green active"></i> <span>View Supplier Purchase</span></li>
+                                    <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
                                 <li>
-                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-purple active"></i> <span>Show Inventory</span></a></li>
+                                    <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
                                 <li>
-                                    <a href="new_product.php"><i class="fa fa-circle-o text-white active"></i> <span>New Product</span></a></li>
+                                    <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
                                 <li>
-                                    <a href="view_products.php"><i class="fa fa-circle-o text-orange"></i> <span>View All Products</span></a></li>
+                                    <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
                         </li>
                         <li class="treeview active">
                             <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>REPORTING</span>
+                                <i class="fa fa-newspaper-o"></i>
+                                <span>REPORTS</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-red"></i> <span>Supplier's Outstanding</span></a>
+                                    <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Customer with Balance</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-green"></i> <span>Monthly Sales</span></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-circle-o text-white"></i> <span>Top Products</span></a>
+                                    <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -205,38 +205,38 @@ include 'dbconfig.php';
                         </div>
                     </div>
                     <hr>
-<!--                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="box">
-                                <div class="box-header">
-                                    <h3 class="box-title">Total Sales</h3>
-
-                                </div>
-                                 /.box-header 
-                                <div class="box-body no-padding">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-
-                                                <th>Last 7 days</th>
-                                                <th>This Week</th>
-                                                <th>This Month</th>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                 /.box-body 
-                            </div>
-                             /.box 
-
-                             /.box 
-                        </div>
-                    </div>-->
+                    <!--                    <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="box">
+                                                    <div class="box-header">
+                                                        <h3 class="box-title">Total Sales</h3>
+                    
+                                                    </div>
+                                                     /.box-header 
+                                                    <div class="box-body no-padding">
+                                                        <table class="table">
+                                                            <tbody>
+                                                                <tr>
+                    
+                                                                    <th>Last 7 days</th>
+                                                                    <th>This Week</th>
+                                                                    <th>This Month</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                     /.box-body 
+                                                </div>
+                                                 /.box 
+                    
+                                                 /.box 
+                                            </div>
+                                        </div>-->
 
                 </section>
                 <!-- /.content -->

@@ -37,11 +37,7 @@
 <?php
 include('dbconfig.php'); // Includes Login Script
 session_start(); // Starting Session
-if(isset($_SESSION['login'])){
-header("location: dashboard.php");
-}
-else
-{
+
 	if (isset($_POST['submit'])) {
 		if (empty($_POST['username']) || empty($_POST['password'])) {
 		?>
@@ -75,7 +71,7 @@ else
 				}
 			}
 	}
-}
+
 ?>
 
       <div class="row">
