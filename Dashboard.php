@@ -47,7 +47,7 @@ include 'dbconfig.php';
                             <!-- User Account: style can be found in dropdown.less -->
 
                             <!-- Control Sidebar Toggle Button -->
-                           
+
                             <li>
                                 <a href="logout.php" >Logout</a>
                             </li>
@@ -205,38 +205,103 @@ include 'dbconfig.php';
                         </div>
                     </div>
                     <hr>
-                    <!--                    <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="box">
-                                                    <div class="box-header">
-                                                        <h3 class="box-title">Total Sales</h3>
-                    
-                                                    </div>
-                                                     /.box-header 
-                                                    <div class="box-body no-padding">
-                                                        <table class="table">
-                                                            <tbody>
-                                                                <tr>
-                    
-                                                                    <th>Last 7 days</th>
-                                                                    <th>This Week</th>
-                                                                    <th>This Month</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                     /.box-body 
-                                                </div>
-                                                 /.box 
-                    
-                                                 /.box 
-                                            </div>
-                                        </div>-->
+
+                    <?php
+                    //no of orders this week
+                    $lastweek = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                    $lastweek_res = mysql_query($lastweek, $conn);
+                    while ($row = mysql_fetch_array($lastweek_res)) {
+                        $lastweek_display = $row['q1'];
+                    }
+
+                    //no of orders this month
+                    $lasmonth = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 31 DAY)";
+                    $lasmonth_res = mysql_query($lasmonth, $conn);
+                    while ($row = mysql_fetch_array($lasmonth_res)) {
+                        $lastmonth_display = $row['q1'];
+                    }
+
+                    //no of orders this year
+                    $thisyear = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 365 DAY)";
+                    $thisyear_res = mysql_query($thisyear, $conn);
+                    while ($row = mysql_fetch_array($thisyear_res)) {
+                        $thisyear_display = $row['q1'];
+                    }
+                    ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">No of Orders</h3>
+                                </div>
+                                <div class="box-body no-padding">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Last 7 days</th>
+                                                <th>This Month</th>
+                                                <th>This Year</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong><?php echo $lastweek_display; ?>      </strong> </td>
+                                                <td><strong><?php echo $lastmonth_display; ?>      </strong>    </td>
+                                                <td><strong><?php echo $thisyear_display; ?>      </strong>    </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    //total sales this week
+                    $lastweeksales = "SELECT sum(`order_billing`.`Order_Bill_Total`) as q1 FROM `order` join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                    $lastweeksales_res = mysql_query($lastweeksales, $conn);
+                    while ($row = mysql_fetch_array($lastweeksales_res)) {
+                        $lastweeksales_display = $row['q1'];
+                    }
+
+                    //total sales this month
+                    $lasmonthsales = "SELECT sum(`order_billing`.`Order_Bill_Total`) as q1 FROM `order` join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 31 DAY)";
+                    $lasmonthsales_res = mysql_query($lasmonthsales, $conn);
+                    while ($row = mysql_fetch_array($lasmonthsales_res)) {
+                        $lastmonthsales_display = $row['q1'];
+                    }
+
+                    //total sales this year
+                    $thisyearsales = "SELECT sum(`order_billing`.`Order_Bill_Total`) as q1 FROM `order` join order_billing on order.Order_Bill_ID=order_billing.Order_Bill_ID WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 365 DAY)";
+                    $thisyearsales_res = mysql_query($thisyearsales, $conn);
+                    while ($row = mysql_fetch_array($thisyearsales_res)) {
+                        $thisyearsales_display = $row['q1'];
+                    }
+                    ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Total Sales</h3>
+                                </div>
+                                <div class="box-body no-padding">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Last 7 days</th>
+                                                <th>This Month</th>
+                                                <th>This Year</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Rs.<?php echo $lastweeksales_display; ?>      </strong> </td>
+                                                <td><strong>Rs.<?php echo $lastmonthsales_display; ?>      </strong>    </td>
+                                                <td><strong>Rs.<?php echo $thisyearsales_display; ?>      </strong>    </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </section>
                 <!-- /.content -->

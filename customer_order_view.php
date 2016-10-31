@@ -167,17 +167,27 @@ $customerid = $_GET['id'];
                                         <div class="col-xs-5">
                                             <input type="text" class="form-control" name="customername" placeholder="Type Customer name here">
                                         </div>
-                                        <div class="col-xs-5">
+                                        <div class="col-xs-3">
                                             <div class="form-group">
                                                 <div class="input-group date">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
-                                                    <input type="text" class="form-control pull-right" id="datepicker">
+                                                    <input type="text" class="form-control pull-right" name="fromdate" id="fromdate" placeholder="Select From Date">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
-
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="form-group">
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control pull-right" name="todate" id="todate" placeholder="Select To Date">
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
                                         </div>
 
                                         <div class="row">
@@ -221,7 +231,7 @@ $customerid = $_GET['id'];
                                                         if ((!empty($_POST['customername']))) {
                                                             //Show filtered list when form fields are filled in
                                                             $customername = $_POST['customername'];
-
+                                                            
                                                             //To protect MySQL injection for Security purpose
                                                             $customername = stripslashes($customername);
 
@@ -229,7 +239,16 @@ $customerid = $_GET['id'];
                                                             //$sql="SELECT * FROM customer WHERE Customer_Name Like '%".$customername."%'";
                                                             //$sql="SELECT * FROM order WHERE Customer_Name LIKE '%" . $customername . "%' AND Customer_Mobile_No LIKE '%" . $mobileno  ."%'";
                                                             $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_Name like '%" . $customername . "%'";
-                                                        } else {
+                                                        }elseif (!empty($_POST['fromdate']) or (!empty($_POST['todate'])))
+                                                        {
+                                                            $fromdate = $_POST['fromdate'];
+                                                            $fromdatemysql = date('Y-m-d', strtotime($fromdate));
+                                                            $todate = $_POST['todate'];
+                                                            $todatemysql = date('Y-m-d', strtotime($todate));
+                                                            $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE `Order_DT` BETWEEN '$fromdatemysql' and '$todatemysql'";
+                                                        }
+                                                        
+                                                        else {
                                                             if ((!empty($_GET['id']))) {
                                                                 $sql = "SELECT * FROM `customer` inner JOIN `optic_db`.`order` ON `customer`.`Customer_ID` = `order`.`Customer_ID` WHERE customer.Customer_ID='$customerid'";
                                                             }
@@ -364,7 +383,7 @@ $customerid = $_GET['id'];
                         <script src="plugins/input-mask/jquery.inputmask.js"></script>
                         <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
                         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
-                                <!-- AdminLTE App -->
+                        <!-- AdminLTE App -->
                         <script src="dist/js/app.min.js"></script>
                         <!-- AdminLTE for demo purposes -->
                         <script src="dist/js/demo.js"></script>
@@ -376,83 +395,22 @@ $customerid = $_GET['id'];
                         <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
                         <!-- bootstrap datepicker -->
                         <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-             <script>
-             $(function () {
-                 //Initialize Select2 Elements
-                 $(".select2").select2();
-                 //Datemask dd/mm/yyyy
-                 $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-        //Datemask2 mm/dd/yyyy
-        $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-        //Money Euro
-        $("[data-mask]").inputmask();
-        });
-        </script>
-        <script>
-        $(function () {
-                         //Initialize Select2 Elements
-                         $(".select2").select2();
-                 //Datemask dd/mm/yyyy
-                 $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-    //Datemask2 mm/dd/yyyy
-    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-    //Money Euro
-    $("[data-mask]").inputmask();
-    
-    //Date range picker
-        $('#reservation').daterangepicker();
-        //Date range picker with time picker
-                $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
-                    //Date range as a button
-                    $('#daterange-btn').daterangepicker(
-                    {
-                         ranges: {
-                         'Today': [moment(), moment()],
-                                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                                 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    },
-                    startDate: moment().subtract(29, 'days'),
-            endDate: moment()
-            },
-            function (start, end) {
-                                 $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                }
-                );
-                
-                //Date picker
-                    $('#datepicker').datepicker({
-                                 autoclose: true
-                            });
-                            
-                                //iCheck for checkbox and radio inputs
-                                $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                                 checkboxClass: 'icheckbox_minimal-blue',
-                                 radioClass: 'iradio_minimal-blue'
-                            });
-                            //Red color scheme for iCheck
-                            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                                 checkboxClass: 'icheckbox_minimal-red',
-                                 radioClass: 'iradio_minimal-red'
+
+                        <script>
+                            $(function () {
+
+
+                                //Date picker
+                                $('#fromdate').datepicker({
+                                    autoclose: true
                                 });
-                                //Flat red color scheme for iCheck
-                                    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                                 checkboxClass: 'icheckbox_flat-green',
-                                 radioClass: 'iradio_flat-green'
-                                    });
-                                    
-                                    //Colorpicker
-                            $(".my-colorpicker1").colorpicker();
-                        //color picker with addon
-                            $(".my-colorpicker2").colorpicker();
-                                
-                                //Timepicker
-                                $(".timepicker").timepicker({
-                                 showInputs: false
-                                    });
-                                    });
-                                </script>
+                                //Date picker
+                                $('#todate').datepicker({
+                                    autoclose: true
+                                });
+                            });
+
+
+                        </script>
                         </body>
                         </html>
