@@ -1,7 +1,7 @@
 <?php
 include 'dbconfig.php';
 $suppid = $_GET['id'];
-$suppid = '1';
+//$suppid = '1';
 
 //functions to populate product type, model, brand and detail
 function fill_product_type($conn) {
@@ -113,11 +113,11 @@ if (isset($_POST['submit'])) {
 
         //find inventory for the matching productid		
         $searchinventory = "update `inventory` set qty = qty + '$quantity' where Product_ID = '$prodid'";
-        $result = mysql_query($searchinventory, $conn);
-        if (!$result) {
+        $searchinventory_res = mysql_query($searchinventory, $conn);
+        if (!$searchinventory_res) {
             die('Invalid query: ' . mysql_error());
         }
-
+        echo 'Inventory updated';
 
         //Insert into Supplier Purchase Detail
 
@@ -311,7 +311,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" id="main">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" id="main" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Supplier ID</label>

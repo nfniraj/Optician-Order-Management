@@ -198,11 +198,12 @@ include 'dbconfig.php';
                     <hr>
                     <div class="row">
                         <div class="col-md-3 col-sm-2 col-xs-6">
-                            <button type="button" class="btn btn-block btn-default btn-lg" onclick="window.location.href = 'customer_balance_orders.php'">See Customers with Balance due</button>
-                        </div>
-                        <div class="col-md-3 col-sm-2 col-xs-6">
                             <button type="button" class="btn btn-block btn-default btn-lg" onclick="window.location.href = 'show_outstanding_suppliers.php'">See outstanding Suppliers</button>
                         </div>
+                        <div class="col-md-3 col-sm-2 col-xs-6">
+                            <button type="button" class="btn btn-block btn-default btn-lg" onclick="window.location.href = 'customer_balance_orders.php'">See Customers with Balance due</button>
+                        </div>
+
                     </div>
                     <hr>
 

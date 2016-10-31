@@ -436,7 +436,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="new_order.php" method="post" id="main">
+                                <form role="form" action="new_order.php" method="post" id="main" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer ID</label>

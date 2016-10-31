@@ -3,15 +3,19 @@ include 'dbconfig.php';
 if (isset($_POST['submit'])) {
     $customername = $_POST['customername'];
     $dob = $_POST['dob'];
-    $dobmysql = date('Y-m-d',strtotime($dob));
+    $dobmysql = date('Y-m-d', strtotime($dob));
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
     $customeraddress = $_POST['customeraddress'];
     $age = $_POST['age'];
     $comment = $_POST['comment'];
     $lastvisit = $_POST['lastvisit'];
+    $lastvisitmysql = date('Y-m-d', strtotime($lastvisit));
+   // $photourl = $_POST['customerphoto'];
+    //echo $photourl;
 
-
+  
+    //move_uploaded_file($_FILES["file"]["tmp_name"],"/customer/logo.jpg");
 // To protect MySQL injection for Security purpose
     $customername = stripslashes($customername);
     $dobmysql = stripslashes($dobmysql);
@@ -25,7 +29,7 @@ if (isset($_POST['submit'])) {
     $mobileno = mysql_real_escape_string($mobileno);
     $customeraddress = mysql_real_escape_string($customeraddress);
 
-    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dobmysql', '$gender', '$mobileno','$customeraddress','','','$lastvisit','$age','$comment')";
+    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dobmysql', '$gender', '$mobileno','$customeraddress','','','$lastvisitmysql','$age','$comment')";
 
 
     mysql_select_db('optic_db');
@@ -201,7 +205,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer Name</label>
@@ -231,6 +235,10 @@ if (isset($_POST['submit'])) {
                                             <label>Date of Last Visit</label>
                                             <input type="text" class="form-control" id="lastvisit" name="lastvisit" placeholder="DD-MM-YYYY">
                                         </div>
+<!--                                        <div class="form-group">
+                                            <label>Customer Photo</label>
+                                            <input type="file" class="form-control" id="customerphoto" name="customerphoto" placeholder="Only .jpg" onchange="readURL(this);">
+                                        </div>-->
                                         <div class="form-group">
                                             <label>Notes</label>
                                             <input type="text" class="form-control" id="comment" name="comment" placeholder="Comment if any..">
@@ -246,7 +254,16 @@ if (isset($_POST['submit'])) {
                             </div>
                             </form>
                         </div>
-                    </div>  
+<!--                        <div class="col-md-4">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h2 class="box-title">Customer Photo</h2>
+                                </div>
+                                <div id="customerimage" style="text-align: center;padding-top: 12px;padding-bottom: 12px;box-shadow: 10px 10px 20px #888888;" >
+                                    <img src="#" id="customer-pic" style="box-shadow: 1px 1px 11px 1px #BBBBBB;">
+                                </div>
+                            </div>
+                        </div>  -->
                 </section>
                 <!-- /.content -->
             </div>
@@ -269,15 +286,30 @@ if (isset($_POST['submit'])) {
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
         <script>
-            $(document).ready(function () {
-                $("#dob").keyup(function () {
-                    if ($(this).val().length == 2) {
-                        $(this).val($(this).val() + "/");
-                    } else if ($(this).val().length == 5) {
-                        $(this).val($(this).val() + "/");
-                    }
-                });
-            });
+                                                $(document).ready(function () {
+                                                    $("#dob").keyup(function () {
+                                                        if ($(this).val().length == 2) {
+                                                            $(this).val($(this).val() + "/");
+                                                        } else if ($(this).val().length == 5) {
+                                                            $(this).val($(this).val() + "/");
+                                                        }
+                                                    });
+                                                });
+
+                                                function readURL(input) {
+                                                    if (input.files && input.files[0]) {
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function (e) {
+                                                            $('#customer-pic')
+                                                                    .attr('src', e.target.result)
+                                                                    .width(310)
+                                                                    .height(228);
+                                                        };
+
+                                                        reader.readAsDataURL(input.files[0]);
+                                                    }
+                                                }
         </script>
 
     </body>

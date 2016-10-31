@@ -20,7 +20,8 @@ if (isset($_POST['submit'])) {
     echo '<script language="javascript">';
     echo 'alert("Record successfully updated!!")';
     echo '</script>';
-    //header('location:view_products.php');
+   // echo 'window.location.href = "view_products.php";';
+    header('location:view_products.php');
 } else {
     $sql = "select * from product_master where Product_ID = '$prodid'";
     $result = mysql_query($sql, $conn);
@@ -210,7 +211,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+                                <form role="form" action="<?php $_SERVER['PHP_SELF'] ?>" method="post" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Product ID</label>
@@ -218,7 +219,7 @@ if (isset($_POST['submit'])) {
                                         </div> 
                                         <div class="form-group">
                                             <label>Product Type</label>
-                                            <input type="text" class="form-control select2" id="newtype" name="newtype" value="<?php echo $type; ?>">
+                                            <input type="text" class="form-control select2" id="newtype" name="newtype" value="<?php echo $type; ?>" >
                                         </div> 
                                         <div class="form-group">
                                             <label>Product Brand</label>

@@ -10,7 +10,8 @@ if (isset($_POST['submit'])) {
     $prmodel = $_POST['productmodel'];
     $prdetail = $_POST['details'];
     $orderqty = $_POST['quantity'];
-
+    $orderid = $_POST['orderid'];
+    
     //Get Eye number details
     $rdsph = $_POST['rdsph'];
     $rdcyl = $_POST['rdcyl'];
@@ -149,6 +150,8 @@ if (isset($_POST['submit'])) {
             if (!$insert_bill_res) {
                 die('Could not enter data: ' . mysql_error());
             }
+            echo 'Billing updated';
+            echo 'order id is '.$orderid;
             //Get latest Bill ID
             /* $order_bill ='';
               $getbillid = "SELECT max(Order_Bill_ID) as bl1 FROM order_billing";
@@ -175,12 +178,31 @@ if (isset($_POST['submit'])) {
               //End Insert into Billing
              */
             //Reduce stock logic
+            //first update old inventory cound then update the new one
+            $existintqty = "select `order`.`Order_Quantity` from `order` where `Order_ID` = '$orderid'";
+            $existintqty_res = mysql_query($existintqty, $conn);
+            if (!$existintqty_res) {
+                die('Could not enter data: ' . mysql_error());
+            }
+            $exqty ='';
+            while ($exrow = mysql_fetch_array($existintqty_res)) {
+                $exqty = $exrow["Order_Quantity"];
+            }
+            echo 'extqy found from db is'.$exqty;
+            //add the qty back to inventory
+            $update_old = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty`+ '$exqty' WHERE `inventory`.`Product_ID` = '$output'";
+            $update_old_res = mysql_query($update_old, $conn);
+            if (!$update_old_res) {
+                die('Could not enter data: ' . mysql_error());
+            }
+            echo 'added to inventory' . $exqty;
+            //reduce the new quantity
             $updateinventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty`- '$orderqty' WHERE `inventory`.`Product_ID` = '$output'";
             $updateinventory_res = mysql_query($updateinventory, $conn);
             if (!$updateinventory_res) {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo 'Stock reduce';
+            echo 'reduced from inventory'.$orderqty;
             //End stock
         } else {
             echo "no stock available";
@@ -485,11 +507,12 @@ function fill_product_detail($conn) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="edit_order.php" method="post" id="main">
+                                <form role="form" action="edit_order.php" method="post" id="main" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer ID</label>
                                             <input type="text" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid; ?>">
+                                            <input type="hidden" class="form-control" id="orderid" name="orderid" value="<?php echo $orderid; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Product Type</label>

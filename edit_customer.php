@@ -6,6 +6,7 @@ if (isset($_POST['submit'])) {
     $customername = $_POST['customername'];
     $dob1 = $_POST['dob'];
     $dobmysql = date('Y-m-d',strtotime($dob1));
+    $customerid = $_POST['customerid'];
     
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
@@ -22,6 +23,7 @@ if (isset($_POST['submit'])) {
     echo '<script language="javascript">';
     echo 'alert("Record successfully updated!!")';
     echo '</script>';
+    header("Location:show_customers.php");
 } else {
     $sql = "select * from Customer where Customer_ID = '$customerid'";
     $result = mysql_query($sql, $conn);
@@ -183,8 +185,8 @@ if (isset($_POST['submit'])) {
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Customer 
-                        <small>...</small>
+                        Edit Customer 
+                        <small></small>
                     </h1>
                     <ol class="breadcrumb">
                       <!--<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -204,11 +206,12 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="edit_customer.php" method="post">
+                                <form role="form" action="edit_customer.php" method="post" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer Name</label>
                                             <input type="text" class="form-control" id="customername" name="customername" value="<?php echo $customername; ?>">
+                                            <input type="hidden" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>

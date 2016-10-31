@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post">
+                                <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" autocomplete="off">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Supplier Name</label>

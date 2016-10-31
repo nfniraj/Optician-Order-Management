@@ -156,7 +156,7 @@ $customerid = $_GET['id'];
 
                 <!-- Main content -->
                 <section class="content">
-                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main">
+                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main" autocomplete="off">
                         <div class="box-body">
                             <div class="box box-primary">
                                 <div class="box-header with-border">

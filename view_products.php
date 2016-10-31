@@ -101,13 +101,13 @@ include 'dbconfig.php';
                                     <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li class="treeview active">
                                     <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
@@ -121,10 +121,10 @@ include 'dbconfig.php';
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
@@ -151,7 +151,7 @@ include 'dbconfig.php';
 
                 <!-- Main content -->
                 <section class="content">
-                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main">
+                    <form role="form" action="<?= $_SERVER['PHP_SELF']; ?>" method="post" id="main" autocomplete="off">
                         <div class="box-body">
                             <div class="box box-primary">
                                 <div class="box-header with-border">
@@ -192,9 +192,9 @@ include 'dbconfig.php';
                                                         <th width="10%">Product ID</th>
                                                         <th width="10%">Product</th>
                                                         <th width="20%">Model</th>
-                                                        <th width="20%">Brand</th>
+                                                        <th width="10%">Brand</th>
                                                         <th width="20%">Detail</th>
-                                                        <th width="25%">Action</th>
+                                                        <th width="30%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody link="white">
@@ -247,25 +247,32 @@ include 'dbconfig.php';
                                                     <td> 
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-    <?php
-    echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
-    ?>
+                                                                <?php
+                                                                echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
+                                                                ?>
                                                             </small>
                                                         </span>
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-    <?php
-    echo ('<a href="delete_product.php?id=' . $row['Product_ID'] . '">' . "Delete Product" . '</a>');
-    ?>
+                                                                <?php
+                                                                echo ('<a href="delete_product.php?id=' . $row['Product_ID'] . '">' . "Delete Product" . '</a>');
+                                                                ?>
+                                                            </small>
+                                                        </span>
+                                                        <span class="pull-l-container">
+                                                            <small class="label pull-middle bg-white">
+                                                                <?php
+                                                                echo ('<a href="update_inventory.php?id=' . $row['Product_ID'] . '">' . "Update Inventory" . '</a>');
+                                                                ?>
                                                             </small>
                                                         </span>
 
                                                     </td>
-    <?php
-    //echo "<td>" . $row['nooforders'] . "</td>";
-    echo "</tr>";
-}
-?>
+                                                    <?php
+                                                    //echo "<td>" . $row['nooforders'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                                ?>
 
                                                 </tbody>	
                                                 <tfoot>

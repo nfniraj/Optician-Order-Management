@@ -39,6 +39,7 @@ if (isset($_POST['submit'])) {
     if (!$retval) {
         die('Could not enter data: ' . mysql_error());
     }
+    header("Location:view_products.php");
 }
 
 //functions to populate product type, model, brand and detail
@@ -259,7 +260,7 @@ function fill_product_detail($conn) {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="new_product.php" method="post" id="main">
+                                <form role="form" action="new_product.php" method="post" id="main" autocomplete="off">
                                     <div class="box-body">
 
                                         <div class="form-group">
