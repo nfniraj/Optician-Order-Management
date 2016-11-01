@@ -1,7 +1,6 @@
 <?php
 include 'dbconfig.php';
 $orderid = $_GET['id'];
-//$orderid = 15;
 
 if (isset($_POST['submit'])) {
     $customerid = $_POST['customerid'];
@@ -11,7 +10,14 @@ if (isset($_POST['submit'])) {
     $prdetail = $_POST['details'];
     $orderqty = $_POST['quantity'];
     $orderid = $_POST['orderid'];
-    
+    $preqty = $_POST['ogqty'];
+    $orderstatus = $_POST['orderstatus'];
+    $orderdate = $_POST['orderdate'];
+    $orderdt = date('Y-m-d', strtotime($orderdate));
+    $deliverydate = $_POST['deliverydate'];
+    $deldt = date('Y-m-d', strtotime($deliverydate));
+    $comment = $_POST['comment'];
+
     //Get Eye number details
     $rdsph = $_POST['rdsph'];
     $rdcyl = $_POST['rdcyl'];
@@ -35,36 +41,19 @@ if (isset($_POST['submit'])) {
     $discount = $_POST['discount'];
     $balance = $_POST['balance'];
 
-
-    // To protect MySQL injection for Security purpose
-    $customerid = stripslashes($customerid);
-    $prtype = stripslashes($prtype);
-    $prbrand = stripslashes($prbrand);
-    $prmodel = stripslashes($prmodel);
-    $prdetail = stripslashes($prdetail);
-    $orderqty = stripslashes($orderqty);
-
-    $customerid = mysql_real_escape_string($customerid);
-    $prtype = mysql_real_escape_string($prtype);
-    $prbrand = mysql_real_escape_string($prbrand);
-    $prmodel = mysql_real_escape_string($prmodel);
-    $prdetail = mysql_real_escape_string($prdetail);
-    $orderqty = mysql_real_escape_string($orderqty);
-
     //look for productid			
     $sql = "SELECT COUNT(*) as total FROM product_master WHERE Product_Type='$prtype' and Product_Model='$prmodel' and Product_Brand = '$prbrand' and Product_Detail = '$prdetail'";
-    mysql_select_db('optic_db');
-    $check_qry = mysql_query($sql, $conn);
-    if (!$check_qry) {
+    $getprodid_res = mysql_query($sql, $conn);
+    if (!$getprodid_res) {
         die('Could not enter data: ' . mysql_error());
     }
-    while ($check_row = mysql_fetch_array($check_qry)) {
-        $check_output = $check_row["total"];
+    while ($check_row = mysql_fetch_array($getprodid_res)) {
+        $noofprodid = $check_row["total"];
     }
-    echo 'Check output- total product id found ' . $check_output;
+    echo 'Check output- total product id found ' . $noofprodid;
 
     //if matching product is found, get productid	
-    if ($check_output > 0) {
+    if ($noofprodid > 0) {
 
         $sql2 = "SELECT Product_ID,Product_Type FROM product_master WHERE Product_Type='$prtype' and Product_Model='$prmodel' and Product_Brand = '$prbrand' and Product_Detail = '$prdetail'";
         $productid = mysql_query($sql2, $conn);
@@ -72,47 +61,35 @@ if (isset($_POST['submit'])) {
             die('Invalid query: ' . mysql_error());
         }
         while ($row = mysql_fetch_array($productid)) {
-            $output = $row["Product_ID"];
+            $prodid = $row["Product_ID"];
             $output_prd_name = $row["Product_Type"];
         }
-        echo '  name of matching product ' . $output_prd_name . $output;
+        echo '  name of matching product ' . $output_prd_name . $prodid;
 
         //find inventory for the matching productid		
-        $searchinventory = "select * from Inventory where Product_ID = '$output'";
-        $result = mysql_query($searchinventory, $conn);
-        if (!$result) {
+        $searchinventory = "select * from Inventory where Product_ID = '$prodid'";
+        $searchinventory_res = mysql_query($searchinventory, $conn);
+        if (!$searchinventory_res) {
             die('Invalid query: ' . mysql_error());
         }
         $output2 = '';
-        while ($row2 = mysql_fetch_array($result)) {
-            $output2 = $row2["Qty"];
+        while ($row2 = mysql_fetch_array($searchinventory_res)) {
+            $oginventory = $row2["Qty"];
         }
-        echo ' qty of product found' . $output2;
-        if ($output2 > 0) {
+        echo ' qty of product found' . $oginventory;
+        if ($oginventory > 0) {
 
             //Insert into Order
-            $insert_into_order = "update `optic_db`.`order` set `Product_ID`='$output',`Order_Quantity`='$orderqty' where order_id ='$orderid' ";
+            $insert_into_order = "update `optic_db`.`order` set `order`.`Product_ID`='$prodid',`order`.`Order_DT`='$orderdt',`order`.`Order_Quantity`='$orderqty',`order`.`Order_Status`='$orderstatus', `order`.`Delivery_Date`='$deldt', `order`.`Comment`='$comment' where order_id ='$orderid' ";
 
-            mysql_select_db('optic_db');
             $insert_into_order_res = mysql_query($insert_into_order, $conn);
 
             if (!$insert_into_order_res) {
                 die('Could not enter data: ' . mysql_error());
             }
             echo 'Order updated';
-            //$orderid_op ='';
-            //$getorderid = "SELECT MAX(Order_ID) as or1 FROM `order`";
-            //$getorderid_res = mysql_query( $getorderid, $conn );
-            //if(! $getorderid_res ) {
-            //      die('Could not enter data: ' . mysql_error());
-            //  }
-            //while ($orderid = mysql_fetch_array($getorderid_res))
-            //{
-            //current Order ID
-            //	$orderid_op = $orderid["or1"];
-            //}
-            //echo '  Last order ID fetched.';
-            //Insert into Order GL detail
+
+            //insert into GL
             $insert_into_gl_detail = "update `optic_db`.`order_gl_detail` set `gl_re_dist_sph`='$rdsph', `gl_re_dist_cyl`='$rdcyl', `gl_re_dist_axis`='$rdaxis', `gl_re_near_sph`='$rnsph', `gl_re_near_cyl`='$rncyl', `gl_re_near_axis`='$rnaxis', `gl_le_dist_sph`='$ldsph', `gl_le_dist_cyl`='$ldcyl', `gl_le_dist_axis`='$ldaxis', `gl_le_near_sph`='$lnsph', `gl_le_near_cyl`='$lncyl', `gl_le_near_axis`='$lnaxis' where Order_ID = '$orderid'";
 
             $insert_into_GL_res = mysql_query($insert_into_gl_detail, $conn);
@@ -121,29 +98,9 @@ if (isset($_POST['submit'])) {
                 die('Could not enter data: ' . mysql_error());
             }
             echo 'GL updated';
-            //Get latest GL Detail ID
-            //$order_gl ='';
-            //$getglid = "SELECT max(Order_GL_Detail_ID) as gl1 FROM `order_gl_detail`";
-            //$getglid_res = mysql_query( $getglid, $conn );
-            //if(! $getglid_res ) {
-            //       die('Could not enter data: ' . mysql_error());
-            // }
-            //while ($glid = mysql_fetch_array($getglid_res))
-            //{
-            //	//current Order ID
-            //	$order_gl = $glid["gl1"];
-            //}
-            //Insert GL ID into Order ID
-            //$reinsert_gl_into_order = "UPDATE `optic_db`.`order` SET `Order_GL_Detail_ID` = '$order_gl' WHERE `order`.`Order_ID` = $orderid_op";
-            //$reinsert_gl_into_order_res = mysql_query( $reinsert_gl_into_order, $conn );
-            //if(! $reinsert_gl_into_order_res ) {
-            //  die('Could not enter data: ' . mysql_error());
-            //}
-            //echo 'GL ID back to Order';
-            //End Insert GL ID into Order ID
-            //Insert into Billing
 
-            $insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Order_Bill_Balance`='$balance', `Order_Discount`='$discount' where `Order_Id`='$orderid'";
+            //insert into bill id
+            $insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Order_Bill_Balance`='$balance', `Order_Discount`='$discount' where `order_billing`.`Order_Id`='$orderid'";
 
             $insert_bill_res = mysql_query($insert_bill, $conn);
 
@@ -151,58 +108,24 @@ if (isset($_POST['submit'])) {
                 die('Could not enter data: ' . mysql_error());
             }
             echo 'Billing updated';
-            echo 'order id is '.$orderid;
-            //Get latest Bill ID
-            /* $order_bill ='';
-              $getbillid = "SELECT max(Order_Bill_ID) as bl1 FROM order_billing";
-              $getbillid_res = mysql_query( $getbillid, $conn );
-              if(! $getbillid_res ) {
-              die('Could not enter data: ' . mysql_error());
-              }
-              while ($blid = mysql_fetch_array($getbillid_res))
-              {
-              //current Order ID
-              $order_bill = $blid["bl1"];
-              }
-              echo 'Billing inserted';
+            echo 'order id is ' . $orderid;
 
-              //Insert GL ID into Order ID
-              $reinsert_bill_into_order = "UPDATE `optic_db`.`order` SET `Order_Bill_ID` = '$order_bill' WHERE `order`.`Order_ID` = $orderid_op";
 
-              $reinsert_bill_into_order_res = mysql_query( $reinsert_bill_into_order, $conn );
-
-              if(! $reinsert_bill_into_order_res ) {
-              die('Could not enter data: ' . mysql_error());
-              }
-              echo 'Billing updated in order';
-              //End Insert into Billing
-             */
-            //Reduce stock logic
-            //first update old inventory cound then update the new one
-            $existintqty = "select `order`.`Order_Quantity` from `order` where `Order_ID` = '$orderid'";
-            $existintqty_res = mysql_query($existintqty, $conn);
-            if (!$existintqty_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            $exqty ='';
-            while ($exrow = mysql_fetch_array($existintqty_res)) {
-                $exqty = $exrow["Order_Quantity"];
-            }
-            echo 'extqy found from db is'.$exqty;
             //add the qty back to inventory
-            $update_old = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty`+ '$exqty' WHERE `inventory`.`Product_ID` = '$output'";
+            $update_old = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`+ '$preqty' WHERE `inventory`.`Product_ID` = '$prodid'";
             $update_old_res = mysql_query($update_old, $conn);
             if (!$update_old_res) {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo 'added to inventory' . $exqty;
+            echo 'added to inventory' . $preqty;
+
             //reduce the new quantity
-            $updateinventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty`- '$orderqty' WHERE `inventory`.`Product_ID` = '$output'";
+            $updateinventory = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`- '$orderqty' WHERE `inventory`.`Product_ID` = '$prodid'";
             $updateinventory_res = mysql_query($updateinventory, $conn);
             if (!$updateinventory_res) {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo 'reduced from inventory'.$orderqty;
+            echo 'reduced from inventory' . $orderqty;
             //End stock
         } else {
             echo "no stock available";
@@ -213,6 +136,7 @@ if (isset($_POST['submit'])) {
     echo '<script language="javascript">';
     echo 'alert("Record successfully updated!!")';
     echo '</script>';
+  header("Location:customer_order_view.php");
 } else {
     //Fetch order details from order table
     $sql = "SELECT * FROM `order` where Order_ID = '$orderid'";
@@ -226,6 +150,12 @@ if (isset($_POST['submit'])) {
         $billid = $row['Order_Bill_ID'];
         $glid = $row['Order_GL_Detail_ID'];
         $orderqty = $row['Order_Quantity'];
+        $orderstatus = $row['Order_Status'];
+        $orderdate = $row['Order_DT'];
+        $orderdatephp = date('d-m-Y', strtotime($orderdate));
+        $deliverydate = $row['Delivery_Date'];
+        $deliverydatephp = date('d-m-Y', strtotime($deliverydate));
+        $comment = $row['Comment'];
     }
     //end order details
     //fetch order details
@@ -345,13 +275,8 @@ function fill_product_detail($conn) {
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
 
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
@@ -549,7 +474,53 @@ function fill_product_detail($conn) {
                                         <div class="form-group">
                                             <label>Quantity</label>
                                             <input type="text" class="form-control" id="quantity" name="quantity" value="<?php echo $orderqty; ?>">
+                                            <input type="hidden" class="form-control" id="ogqty" name="ogqty" value="<?php
+                                            //get quantity
+                                            $existintqty = "select `order`.`Order_Quantity` from `order` where `order`.`Order_ID` = '$orderid'";
+                                            $existintqty_res = mysql_query($existintqty, $conn);
+                                            if (!$existintqty_res) {
+                                                die('Could not enter data: ' . mysql_error());
+                                            }
+                                            $exqty = '';
+                                            while ($exrow = mysql_fetch_array($existintqty_res)) {
+                                                $exqty = $exrow["Order_Quantity"];
+                                            }
+                                            echo $exqty;
+                                            ?>">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Order Status</label>
+                                            <select class="form-control select2" id="orderstatus" name="orderstatus">
+                                                <option selected="selected"><?php echo $orderstatus; ?></option>
+                                                <option value="">Select Order status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Fulfilled">Fulfilled</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+
+                                            <label>Order Date</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="orderdate" name="orderdate"  value="<?php echo $orderdatephp; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Delivery Date</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="deliverydate" name="deliverydate" value="<?php echo $deliverydatephp; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Comment</label>
+                                            <input type="text" class="form-control" id="comment" name="comment" placeholder="Any specific comment related to the order" value="<?php echo $comment; ?>">
+                                        </div>
+
 
                                     </div>
                                     <hr>
@@ -625,7 +596,7 @@ function fill_product_detail($conn) {
                                                 </div>
                                                 <div class="Discount">
                                                     <label>Discount</label>
-                                                    <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $discount; ?>">
+                                                    <input type="text" class="form-control" id="discount" name="discount" value="<?php echo $discount; ?>" onblur='Calculate();'>
                                                 </div>
                                                 <div class="Balance">
                                                     <label>Balance</label>
@@ -678,6 +649,20 @@ function fill_product_detail($conn) {
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+
+        <script>
+                                                        $(function () {
+                                                            //Date picker
+                                                            $('#orderdate').datepicker({
+                                                                autoclose: true
+                                                            });
+                                                            //Date picker
+                                                            $('#deliverydate').datepicker({
+                                                                autoclose: true
+                                                            });
+                                                        });
+        </script>
         <script>
             $(document).ready(function () {
                 $('#producttype').change(function () {
@@ -719,7 +704,16 @@ function fill_product_detail($conn) {
                 });
             });
         </script>
-
-
+        <script>
+            function Calculate()
+            {
+                var total = document.getElementById('total').value;
+                var advance = document.getElementById('advance').value;
+                var discount = document.getElementById('discount').value;
+                var balance = parseInt(total) - parseInt(advance) - parseInt(discount);
+                document.getElementById('balance').value = balance;
+                document.form1.submit();
+            }
+        </script>
     </body>
 </html>

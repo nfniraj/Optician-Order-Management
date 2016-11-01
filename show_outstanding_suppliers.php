@@ -227,7 +227,6 @@ include 'dbconfig.php';
                                                         echo ("<td>" . $row['Supplier_Name'] . "</td>" );
                                                         echo ("<td>" . '<a href="supplier_purchase_view.php?id=' . $prid . '">' . $row['Purchase_ID'] . '</a>' . "</td>");
                                                         //echo "<td>" . $row['Customer_Name'] . "</td>";
-                                                        echo "<td>" . $row['Purchase_ID'] . "</td>";
                                                         echo "<td>" . $dopphp. "</td>";
                                                         echo "<td>" . $row['Qty'] . "</td>";
                                                         echo "<td>" . $row['Total'] . "</td>";

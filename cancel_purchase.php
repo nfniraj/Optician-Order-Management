@@ -20,7 +20,7 @@ $prodid = $row["Product_ID"];
 
 // return the Quantity to inventory 
 
-$ret_inventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty` + '$qty' where `inventory`.`product_id` = '$prodid'";
+$ret_inventory = "UPDATE `optic_db`.`inventory` SET `Qty` = `Qty` - '$qty' where `inventory`.`product_id` = '$prodid'";
 $ret_inventory_res = mysql_query($ret_inventory, $conn);
 if (!$ret_inventory_res)
     {

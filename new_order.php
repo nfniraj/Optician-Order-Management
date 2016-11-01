@@ -253,6 +253,7 @@ if (isset($_POST['submit'])) {
             echo '<script language="javascript">';
             echo 'alert("Sorry, Item not available in inventory! \n\nTry to add inventory for the product or select other product.")';
             echo '</script>';
+            
         }
     } else {
         echo '<script language="javascript">';
@@ -282,6 +283,8 @@ if (isset($_POST['submit'])) {
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
 
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
@@ -489,11 +492,21 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Order Date</label>
-                                            <input type="text" class="form-control" id="orderdate" name="orderdate" placeholder="DD-MM-YYYY" value="<?php echo date("d-m-Y", time());?>">
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="orderdate" name="orderdate" >
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Delivery Date</label>
-                                            <input type="text" class="form-control" id="deliverydate" name="deliverydate" placeholder="DD-MM-YYYY">
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="deliverydate" name="deliverydate">
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label>Comment</label>
@@ -627,6 +640,7 @@ if (isset($_POST['submit'])) {
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
         <script>
                                                         $(document).ready(function () {
                                                             $(".product-brand").hide();
@@ -684,12 +698,13 @@ if (isset($_POST['submit'])) {
 
         <script>
             $(function () {
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                //iCheck for checkbox and radio inputs
-                $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                    checkboxClass: 'icheckbox_minimal-blue',
-                    radioClass: 'iradio_minimal-blue'
+                //Date picker
+                $('#orderdate').datepicker({
+                    autoclose: true
+                });
+                //Date picker
+                $('#deliverydate').datepicker({
+                    autoclose: true
                 });
             });
         </script>
@@ -704,19 +719,6 @@ if (isset($_POST['submit'])) {
                 document.form1.submit();
             }
         </script>
-        <script>
-            $(document).ready(function () {
-                $("#orderdate").keyup(function () {
-                    if ($(this).val().length == 2) {
-                        $(this).val($(this).val() + "-");
-                    } else if ($(this).val().length == 5) {
-                        $(this).val($(this).val() + "-");
-                    }
-                });
-              
-            });
-        </script>
-
-
+        
     </body>
 </html>

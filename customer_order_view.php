@@ -25,12 +25,6 @@ $customerid = $_GET['id'];
         <!-- bootstrap datepicker -->
         <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
     <!-- the fixed layout is not compatible with sidebar-mini -->
@@ -219,6 +213,7 @@ $customerid = $_GET['id'];
                                                             <th width="10%">Order Status</th>
                                                             <th width="10%">Order  Date</th>
                                                             <th width="8%">Quantity</th>
+                                                            <th width="8%">Price</th>
                                                             <th width="20%">Action</th>
                                                         </tr>
                                                     </thead>
@@ -254,8 +249,6 @@ $customerid = $_GET['id'];
                                                             }
                                                         }
 
-
-
                                                         $result = '';
                                                         $result = mysql_query($sql, $conn);
                                                         while ($row = mysql_fetch_array($result)) {
@@ -264,6 +257,7 @@ $customerid = $_GET['id'];
                                                             $orderstatus = $row['Order_Status'];
                                                             $orderdt = $row['Order_DT'];
                                                             $orderdtphp = date("d-m-Y", strtotime($orderdt));
+                                                            $orderqty = $row['Order_Quantity'];
 
                                                             //get product type from product id
                                                             $product_id = "SELECT * FROM `product_master` inner join `optic_db`.`order` ON `product_master`.`Product_ID` = order.Product_ID where `product_master`.`product_id` = '$prid'";
@@ -273,7 +267,7 @@ $customerid = $_GET['id'];
                                                             }
                                                             while ($row1 = mysql_fetch_array($prid_res)) {
                                                                 $prodtype = $row1['Product_Type'];
-
+                                                            }
                                                                 //end get product type
                                                                 //get order total amount
                                                                 $order_id = "SELECT * FROM `order_billing` inner join `optic_db`.`order` ON `order_billing`.`Order_ID` = Order.Order_ID where `Order_billing`.`order_id` = '$orid'";
@@ -282,11 +276,13 @@ $customerid = $_GET['id'];
                                                                     die('Could not enter data: ' . mysql_error());
                                                                 }
                                                                 while ($row2 = mysql_fetch_array($orid_res)) {
-                                                                    $orderqty = $row2['Order_Bill_Total'];
-
+                                                                 
+                                                                    $price = $row2['Order_Bill_Total'];
+                                                                    $id = $row['Order_ID'];
+                                                                }
                                                                     //end order total amount
 
-                                                                    $id = $row['Order_ID'];
+                                                                    
                                                                     echo "<tr>";
                                                                     //echo ("<td>" . '<a href="show_customers.php?id=' . $id . '">' . $row['Customer_ID'] . '</a>'. "</td>");
                                                                     echo "<td>" . $row['Customer_Name'] . "</td>";
@@ -296,6 +292,7 @@ $customerid = $_GET['id'];
                                                                     echo "<td>" . $orderstatus . "</td>";
                                                                     echo "<td>" . $orderdtphp . "</td>";
                                                                     echo "<td>" . $orderqty . "</td>";
+                                                                    echo "<td>" . $price . "</td>";
                                                                     ?>
                                                                 <td> 
                                                                     |
@@ -321,8 +318,7 @@ $customerid = $_GET['id'];
                                                                 //echo "<td>" . $row['nooforders'] . "</td>";
                                                                 echo "</tr>";
                                                             }
-                                                        }
-                                                    }
+                    
                                                     ?>
                                                     </tbody>	
                                                     <tfoot>
@@ -398,8 +394,6 @@ $customerid = $_GET['id'];
 
                         <script>
                             $(function () {
-
-
                                 //Date picker
                                 $('#fromdate').datepicker({
                                     autoclose: true
@@ -409,8 +403,6 @@ $customerid = $_GET['id'];
                                     autoclose: true
                                 });
                             });
-
-
                         </script>
                         </body>
                         </html>

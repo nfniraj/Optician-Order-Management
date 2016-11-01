@@ -1,8 +1,8 @@
 <?php
 include 'dbconfig.php';
 $suppid = $_GET['id'];
-//$suppid = '1';
 
+//$suppid = '1';
 //functions to populate product type, model, brand and detail
 function fill_product_type($conn) {
     $output = '';
@@ -208,7 +208,7 @@ if (isset($_POST['submit'])) {
             <!-- Left side column. contains the sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
-               <section class="sidebar">
+                <section class="sidebar">
                     <ul class="sidebar-menu">
                         <li class="treeview">
                             <a href="#">
@@ -245,18 +245,18 @@ if (isset($_POST['submit'])) {
                                     <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li class="treeview">
                                     <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
-                                                                 <ul class="sidebar-menu>
+                                <ul class="sidebar-menu>
                                     <li class="treeview active">
                                     &nbsp;&nbsp;   <a href="javascript:window.location.href=window.location.href"><i class="fa fa-caret-right text-green"></i> &nbsp; Add Purchase</a>
-                                 </li>
+                                    </li>
                                 </ul>
-                                    <li class="treeview">
+                                <li class="treeview">
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
@@ -270,10 +270,10 @@ if (isset($_POST['submit'])) {
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
@@ -347,7 +347,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Purchase</label>
-                                            <input type="text" class="form-control" id="dop" name="dop" placeholder="DD-MM-YYYY" value="<?php echo date("d-m-Y", time());?>">
+                                            <input type="text" class="form-control" id="dop" name="dop" placeholder="DD-MM-YYYY" value="<?php echo date("d-m-Y", time()); ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Quantity</label>
@@ -368,7 +368,7 @@ if (isset($_POST['submit'])) {
                                                 <hr>
                                                 <div class="form-group">
                                                     <label>Price Per Item</label>
-                                                    <input type="text" class="form-control" id="ppi" name="ppi" placeholder="Price Per Item">
+                                                    <input type="text" class="form-control" id="ppi" name="ppi" placeholder="Price Per Item" onblur='caltotal();'>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Total</label>
@@ -392,9 +392,9 @@ if (isset($_POST['submit'])) {
 
                                         <!-- /.box-body -->
 
-                                         <div class="box-footer" style="text-align:center;">  
-                                <button type="submit" name="submit" class="btn btn-primary">Add Purchase</button>
-</div>
+                                        <div class="box-footer" style="text-align:center;">  
+                                            <button type="submit" name="submit" class="btn btn-primary">Add Purchase</button>
+                                        </div>
 
                                 </form>
                             </div>
@@ -510,11 +510,23 @@ if (isset($_POST['submit'])) {
             });
         </script>
         <script>
+            function caltotal()
+            {
+                var qty = document.getElementById('quantity').value;
+                var ppi = document.getElementById('ppi').value;
+                var caltotal = parseInt(qty) * parseInt(ppi);
+                document.getElementById('total').value = caltotal;
+
+                document.form1.submit();
+            }
+
             function Calculate()
             {
+
                 var total = document.getElementById('total').value;
                 var advance = document.getElementById('advance').value;
                 var discount = document.getElementById('discount').value;
+
                 var balance = parseInt(total) - parseInt(advance) - parseInt(discount);
                 document.getElementById('balance').value = balance;
                 document.form1.submit();

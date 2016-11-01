@@ -209,21 +209,21 @@ include 'dbconfig.php';
 
                     <?php
                     //no of orders this week
-                    $lastweek = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 7 DAY)";
+                    $lastweek = "SELECT COUNT(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 7 DAY)";
                     $lastweek_res = mysql_query($lastweek, $conn);
                     while ($row = mysql_fetch_array($lastweek_res)) {
                         $lastweek_display = $row['q1'];
                     }
 
                     //no of orders this month
-                    $lasmonth = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 31 DAY)";
+                    $lasmonth = "SELECT COUNT(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 31 DAY)";
                     $lasmonth_res = mysql_query($lasmonth, $conn);
                     while ($row = mysql_fetch_array($lasmonth_res)) {
                         $lastmonth_display = $row['q1'];
                     }
 
                     //no of orders this year
-                    $thisyear = "SELECT SUM(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 365 DAY)";
+                    $thisyear = "SELECT COUNT(`Order_Quantity`) as q1 FROM `order` WHERE `ORDER_DT` > DATE_SUB(NOW(), INTERVAL 365 DAY)";
                     $thisyear_res = mysql_query($thisyear, $conn);
                     while ($row = mysql_fetch_array($thisyear_res)) {
                         $thisyear_display = $row['q1'];
