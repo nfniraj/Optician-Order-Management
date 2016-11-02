@@ -39,6 +39,21 @@ if (isset($_POST['submit'])) {
     if (!$retval) {
         die('Could not enter data: ' . mysql_error());
     }
+    $get_prodid = "select max(Product_ID) as productid from Product_Master;";
+
+    $get_prodid_res = mysql_query($get_prodid, $conn);
+    if (!$get_prodid_res) {
+        die('Could not enter data: ' . mysql_error());
+    }    
+    while ($row = mysql_fetch_array($get_prodid_res))
+    {
+        $prodid = $row['productid'];
+    }
+    $fill_inventory = "INSERT INTO `optic_db`.`inventory` (`Inventory_ID`, `Product_ID`, `Qty`, `Inventory_Last_Update`) VALUES ('', '$prodid', 0, '')";
+    $fill_inventory_res = mysql_query($fill_inventory, $conn);
+    if (!$fill_inventory_res) {
+        die('Could not enter data: ' . mysql_error());
+    }
     header("Location:view_products.php");
 }
 

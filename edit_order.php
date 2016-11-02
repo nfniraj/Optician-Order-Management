@@ -67,76 +67,75 @@ if (isset($_POST['submit'])) {
         echo '  name of matching product ' . $output_prd_name . $prodid;
 
         //find inventory for the matching productid		
-        $searchinventory = "select * from Inventory where Product_ID = '$prodid'";
-        $searchinventory_res = mysql_query($searchinventory, $conn);
-        if (!$searchinventory_res) {
-            die('Invalid query: ' . mysql_error());
+//        $searchinventory = "select * from Inventory where Product_ID = '$prodid'";
+//        $searchinventory_res = mysql_query($searchinventory, $conn);
+//        if (!$searchinventory_res) {
+//            die('Invalid query: ' . mysql_error());
+//        }
+//        $output2 = '';
+//        while ($row2 = mysql_fetch_array($searchinventory_res)) {
+//            $oginventory = $row2["Qty"];
+//        }
+//        echo ' qty of product found' . $oginventory;
+//        if ($oginventory > 0) {
+        //Insert into Order
+        $insert_into_order = "update `optic_db`.`order` set `order`.`Product_ID`='$prodid',`order`.`Order_DT`='$orderdt',`order`.`Order_Quantity`='$orderqty',`order`.`Order_Status`='$orderstatus', `order`.`Delivery_Date`='$deldt', `order`.`Comment`='$comment' where order_id ='$orderid' ";
+
+        $insert_into_order_res = mysql_query($insert_into_order, $conn);
+
+        if (!$insert_into_order_res) {
+            die('Could not enter data: ' . mysql_error());
         }
-        $output2 = '';
-        while ($row2 = mysql_fetch_array($searchinventory_res)) {
-            $oginventory = $row2["Qty"];
+        echo 'Order updated';
+
+        //insert into GL
+        $insert_into_gl_detail = "update `optic_db`.`order_gl_detail` set `gl_re_dist_sph`='$rdsph', `gl_re_dist_cyl`='$rdcyl', `gl_re_dist_axis`='$rdaxis', `gl_re_near_sph`='$rnsph', `gl_re_near_cyl`='$rncyl', `gl_re_near_axis`='$rnaxis', `gl_le_dist_sph`='$ldsph', `gl_le_dist_cyl`='$ldcyl', `gl_le_dist_axis`='$ldaxis', `gl_le_near_sph`='$lnsph', `gl_le_near_cyl`='$lncyl', `gl_le_near_axis`='$lnaxis' where Order_ID = '$orderid'";
+
+        $insert_into_GL_res = mysql_query($insert_into_gl_detail, $conn);
+
+        if (!$insert_into_GL_res) {
+            die('Could not enter data: ' . mysql_error());
         }
-        echo ' qty of product found' . $oginventory;
-        if ($oginventory > 0) {
+        echo 'GL updated';
 
-            //Insert into Order
-            $insert_into_order = "update `optic_db`.`order` set `order`.`Product_ID`='$prodid',`order`.`Order_DT`='$orderdt',`order`.`Order_Quantity`='$orderqty',`order`.`Order_Status`='$orderstatus', `order`.`Delivery_Date`='$deldt', `order`.`Comment`='$comment' where order_id ='$orderid' ";
+        //insert into bill id
+        $insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Order_Bill_Balance`='$balance', `Order_Discount`='$discount' where `order_billing`.`Order_Id`='$orderid'";
 
-            $insert_into_order_res = mysql_query($insert_into_order, $conn);
+        $insert_bill_res = mysql_query($insert_bill, $conn);
 
-            if (!$insert_into_order_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'Order updated';
-
-            //insert into GL
-            $insert_into_gl_detail = "update `optic_db`.`order_gl_detail` set `gl_re_dist_sph`='$rdsph', `gl_re_dist_cyl`='$rdcyl', `gl_re_dist_axis`='$rdaxis', `gl_re_near_sph`='$rnsph', `gl_re_near_cyl`='$rncyl', `gl_re_near_axis`='$rnaxis', `gl_le_dist_sph`='$ldsph', `gl_le_dist_cyl`='$ldcyl', `gl_le_dist_axis`='$ldaxis', `gl_le_near_sph`='$lnsph', `gl_le_near_cyl`='$lncyl', `gl_le_near_axis`='$lnaxis' where Order_ID = '$orderid'";
-
-            $insert_into_GL_res = mysql_query($insert_into_gl_detail, $conn);
-
-            if (!$insert_into_GL_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'GL updated';
-
-            //insert into bill id
-            $insert_bill = "update `optic_db`.`order_billing` set `Order_Bill_Total`='$total', `Order_Bill_Advance`='$advance', `Order_Bill_Balance`='$balance', `Order_Discount`='$discount' where `order_billing`.`Order_Id`='$orderid'";
-
-            $insert_bill_res = mysql_query($insert_bill, $conn);
-
-            if (!$insert_bill_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'Billing updated';
-            echo 'order id is ' . $orderid;
-
-
-            //add the qty back to inventory
-            $update_old = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`+ '$preqty' WHERE `inventory`.`Product_ID` = '$prodid'";
-            $update_old_res = mysql_query($update_old, $conn);
-            if (!$update_old_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'added to inventory' . $preqty;
-
-            //reduce the new quantity
-            $updateinventory = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`- '$orderqty' WHERE `inventory`.`Product_ID` = '$prodid'";
-            $updateinventory_res = mysql_query($updateinventory, $conn);
-            if (!$updateinventory_res) {
-                die('Could not enter data: ' . mysql_error());
-            }
-            echo 'reduced from inventory' . $orderqty;
-            //End stock
-        } else {
-            echo "no stock available";
+        if (!$insert_bill_res) {
+            die('Could not enter data: ' . mysql_error());
         }
+        echo 'Billing updated';
+        echo 'order id is ' . $orderid;
+
+
+        //add the qty back to inventory
+        $update_old = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`+ '$preqty' WHERE `inventory`.`Product_ID` = '$prodid'";
+        $update_old_res = mysql_query($update_old, $conn);
+        if (!$update_old_res) {
+            die('Could not enter data: ' . mysql_error());
+        }
+        echo 'added to inventory' . $preqty;
+
+        //reduce the new quantity
+//            $updateinventory = "UPDATE `optic_db`.`inventory` SET `inventory`.`Qty` = `inventory`.`Qty`- '$orderqty' WHERE `inventory`.`Product_ID` = '$prodid'";
+//            $updateinventory_res = mysql_query($updateinventory, $conn);
+//            if (!$updateinventory_res) {
+//                die('Could not enter data: ' . mysql_error());
+//            }
+//            echo 'reduced from inventory' . $orderqty;
+        //End stock
+//        } else {
+//            echo "no stock available";
+//        }
     } else {
         echo 'No matching product found';
     }
     echo '<script language="javascript">';
     echo 'alert("Record successfully updated!!")';
     echo '</script>';
-  header("Location:customer_order_view.php");
+    header("Location:customer_order_view.php");
 } else {
     //Fetch order details from order table
     $sql = "SELECT * FROM `order` where Order_ID = '$orderid'";
@@ -652,55 +651,73 @@ function fill_product_detail($conn) {
         <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
 
         <script>
-                                                        $(function () {
-                                                            //Date picker
-                                                            $('#orderdate').datepicker({
-                                                                autoclose: true
+                                                        $(document).ready(function () {
+                                                            $(".product-brand").hide();
+                                                            $(".product-model").hide();
+                                                            $(".product-detail").hide();
+
+                                                            $('#producttype').on('change', function () {
+                                                                var producttype_id = $(this).val();
+                                                                $.ajax({
+                                                                    url: "get_product_details.php",
+                                                                    method: "POST",
+                                                                    data: {producttype_id: producttype_id},
+                                                                    success: function (data)
+                                                                    {
+                                                                        $('#productbrand').html(data);
+                                                                        $(".product-brand").show();
+
+                                                                    }
+                                                                });
+
+
                                                             });
-                                                            //Date picker
-                                                            $('#deliverydate').datepicker({
-                                                                autoclose: true
+
+                                                            $('#productbrand').on('change', function () {
+                                                                var productbrand_id = $(this).val();
+                                                                var producttype_id2 = $('#producttype').val();
+                                                                $.ajax({
+                                                                    url: "get_product_details.php",
+                                                                    method: "POST",
+                                                                    data: {productbrand_id: productbrand_id, producttype_id2: producttype_id2},
+                                                                    success: function (data)
+                                                                    {
+                                                                        $(".product-model").show();
+                                                                        $('#productmodel').html(data);
+                                                                    }
+
+                                                                });
+                                                            });
+
+                                                            $('#productmodel').on('change', function () {
+                                                                var productmodel_id = $(this).val();
+                                                                var productbrand_id2 = $('#productbrand').val();
+                                                                var producttype_id3 = $('#producttype').val();
+
+                                                                $.ajax({
+                                                                    url: "get_product_details.php",
+                                                                    method: "POST",
+                                                                    data: {productmodel_id: productmodel_id, productbrand_id2: productbrand_id2, producttype_id3: producttype_id3},
+                                                                    success: function (data)
+                                                                    {
+                                                                        $(".product-detail").show();
+                                                                        $('#details').html(data);
+                                                                    }
+
+                                                                });
                                                             });
                                                         });
         </script>
-        <script>
-            $(document).ready(function () {
-                $('#producttype').change(function () {
-                    var producttype_id = $(this).val();
-                    $.ajax({
-                        url: "get_product_brand.php",
-                        method: "POST",
-                        data: {producttype_id: producttype_id},
-                        success: function (data)
-                        {
-                            $('#productbrand').html(data);
-                        }
 
-                    });
-                });
-                $('#productbrand').change(function () {
-                    var productbrand_id = $(this).val();
-                    $.ajax({
-                        url: "get_product_model.php",
-                        method: "POST",
-                        data: {productbrand_id: productbrand_id},
-                        success: function (data)
-                        {
-                            $('#productmodel').html(data);
-                        }
-
-                    });
-                });
-            });
-        </script>
         <script>
             $(function () {
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                //iCheck for checkbox and radio inputs
-                $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                    checkboxClass: 'icheckbox_minimal-blue',
-                    radioClass: 'iradio_minimal-blue'
+                //Date picker
+                $('#orderdate').datepicker({
+                    autoclose: true
+                });
+                //Date picker
+                $('#deliverydate').datepicker({
+                    autoclose: true
                 });
             });
         </script>

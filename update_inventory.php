@@ -4,7 +4,7 @@ $prodid = $_GET['id'];
 
 
 //check if user is coming from show inventory page
-if ($prodid) {
+if ($prodid !=0 ) {
     $sql = "SELECT product_master.Product_ID,product_master.Product_Type,product_master.Product_Model, product_master.Product_Brand, product_master.Product_Detail, inventory.Qty from product_master inner join inventory on product_master.Product_ID=inventory.Product_ID where product_master.Product_ID = '$prodid'";
     $result = '';
     $result = mysql_query($sql, $conn);

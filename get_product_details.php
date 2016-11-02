@@ -30,18 +30,19 @@ if (isset($_POST['producttype_id'])) {
 ////check for product brand
 if (isset($_POST['productbrand_id'])) {
     if ($_POST["productbrand_id"] != '') {
-        $sql = "SELECT distinct Product_Model FROM Product_Master WHERE Product_Brand = '" . $_POST["productbrand_id"] . "'";
+        $sql = "SELECT Product_Model FROM Product_Master WHERE Product_Type = '" . $_POST["producttype_id2"] . "' AND Product_Brand = '" . $_POST["productbrand_id"] . "'";
     } else {
         $sql = "SELECT * FROM Product_Master";
     }
 
     mysql_select_db('optic_db');
     $retval = mysql_query($sql, $conn);
-    $output .= '<option value="">Select Product Brand</option>';
+    
+    $output .= '<option value="">Select Product Model</option>';
 
     while ($row = mysql_fetch_array($retval)) {
         $output .= '<option value="' . $row["Product_Model"] . '">' . $row["Product_Model"] . '</option>';
-    }
+        }
     echo $output;
     if (!$retval) {
         die('Could not enter data: ' . mysql_error());
@@ -51,7 +52,7 @@ if (isset($_POST['productbrand_id'])) {
 ////check for product detail
 if (isset($_POST['productmodel_id'])) {
     if ($_POST["productmodel_id"] != '') {
-        $sql = "SELECT distinct Product_Detail FROM Product_Master WHERE Product_Model = '" . $_POST["productmodel_id"] . "'";
+        $sql = "SELECT distinct Product_Detail FROM Product_Master WHERE Product_Type = '" . $_POST["producttype_id3"] . "' AND Product_Brand = '" . $_POST["productbrand_id2"] . "' AND Product_Model = '" . $_POST["productmodel_id"] . "'";
     } else {
         $sql = "SELECT * FROM Product_Master";
     }
