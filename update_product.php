@@ -215,7 +215,7 @@ if (isset($_POST['submit'])) {
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Product ID</label>
-                                            <input type="text" class="form-control select2" id="prodid" name="prodid" value="<?php echo $prodid; ?>">
+                                            <input type="text" class="form-control select2" id="prodid" name="prodid" value="<?php echo $prodid; ?>" disabled="">
                                         </div> 
                                         <div class="form-group">
                                             <label>Product Type</label>

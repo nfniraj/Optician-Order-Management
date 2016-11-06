@@ -435,7 +435,7 @@ function fill_product_detail($conn) {
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Customer ID</label>
-                                            <input type="text" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid; ?>">
+                                            <input type="text" class="form-control" id="customerid" name="customerid" value="<?php echo $customerid; ?>" disabled="">
                                             <input type="hidden" class="form-control" id="orderid" name="orderid" value="<?php echo $orderid; ?>">
                                         </div>
                                         <div class="form-group">
@@ -498,22 +498,22 @@ function fill_product_detail($conn) {
                                         </div>
                                         <div class="form-group">
 
-                                            <label>Order Date</label>
-                                            <div class="input-group date">
+                                            <label>Order Date</label><sup>(DD-MM-YYY)</sup>
+<!--                                            <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
-                                                </div>
+                                                </div>-->
                                                 <input type="text" class="form-control pull-right" id="orderdate" name="orderdate"  value="<?php echo $orderdatephp; ?>">
-                                            </div>
+<!--                                            </div>-->
                                         </div>
                                         <div class="form-group">
-                                            <label>Delivery Date</label>
-                                            <div class="input-group date">
+                                            <label>Delivery Date</label> <sup>(DD-MM-YYY)</sup>
+<!--                                            <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
-                                                </div>
+                                                </div>-->
                                                 <input type="text" class="form-control pull-right" id="deliverydate" name="deliverydate" value="<?php echo $deliverydatephp; ?>">
-                                            </div>
+<!--                                            </div>-->
                                         </div>
                                         <div class="form-group">
                                             <label>Comment</label>
@@ -709,7 +709,7 @@ function fill_product_detail($conn) {
                                                         });
         </script>
 
-        <script>
+<!--        <script>
             $(function () {
                 //Date picker
                 $('#orderdate').datepicker({
@@ -720,7 +720,7 @@ function fill_product_detail($conn) {
                     autoclose: true
                 });
             });
-        </script>
+        </script>-->
         <script>
             function Calculate()
             {

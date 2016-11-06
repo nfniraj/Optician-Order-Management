@@ -4,16 +4,20 @@ $customerid = $_GET['id'];
 //$customerid = 1;
 if (isset($_POST['submit'])) {
     $customername = $_POST['customername'];
-    $dob1 = $_POST['dob'];
-    $dobmysql = date('Y-m-d',strtotime($dob1));
-    $customerid = $_POST['customerid'];
-    
+    $dob = $_POST['dob'];
+    $dobmysql = date('Y-m-d', strtotime($dob));
+    echo $dobmysql;
     $gender = $_POST['gender'];
     $mobileno = $_POST['mobileno'];
     $address = $_POST['address'];
+    $age = $_POST['age'];
+    $comment = $_POST['comment'];
+    $customerid = $_POST['customerid'];
+   // $lastvisit = $_POST['lastvisit'];
+    //$lastvisitmysql = date('Y-m-d', strtotime($lastvisit));
     //$photourl = $_POST['photourl'];
 
-    $sql = "UPDATE `optic_db`.`customer` SET `Customer_Name` = '$customername', `Customer_DOB` = '$dobmysql', `Customer_Gender` = '$gender', `Customer_Mobile_No` = '$mobileno', `Customer_Address` = '$address' WHERE `customer`.`Customer_ID` = '$customerid'";
+    $sql = "UPDATE `optic_db`.`customer` SET `Customer_Name` = '$customername', `Customer_DOB` = '$dobmysql', `Customer_Gender` = '$gender', `Customer_Mobile_No` = '$mobileno', `Customer_Address` = '$address', `Age` = '$age', `Comment` = '$comment' WHERE `Customer_ID` = '$customerid'";
 
     $result1 = mysql_query($sql, $conn);
 
@@ -32,10 +36,12 @@ if (isset($_POST['submit'])) {
         $customername = $row['Customer_Name'];
         $dob = $row['Customer_DOB'];
         $dobphp = date("d-m-Y", strtotime($dob));
-       
+        $age = $row['Age'];
         $gender = $row['Customer_Gender'];
         $mobileno = $row['Customer_Mobile_No'];
         $address = $row['Customer_Address'];
+        //$lastvisit = $row['Last_Visit'];
+        $notes = $row['Comment'];
     }
 }
 ?>
@@ -57,6 +63,8 @@ if (isset($_POST['submit'])) {
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
 
     </head>
     <!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
@@ -120,11 +128,11 @@ if (isset($_POST['submit'])) {
                                 <li class="treeview">
                                     <a href="show_customers.php"><i class="fa fa-circle-o text-green"></i>Search Customers</a>
                                 </li>
-                                
+
                                 <ul class="sidebar-menu>
                                     <li class="treeview active">
-                                      &nbsp;&nbsp;   <a href="javascript:window.location.href=window.location.href"><i class="fa fa-caret-right text-green"></i>  Edit Customer</a>
-                                 </li>
+                                    &nbsp;&nbsp;   <a href="javascript:window.location.href=window.location.href"><i class="fa fa-caret-right text-green"></i>  Edit Customer</a>
+                                    </li>
                                 </ul>
 
                                 <li class="treeview">
@@ -145,13 +153,13 @@ if (isset($_POST['submit'])) {
                                     <a href="new_product.php"><i class="fa fa-circle-o text-blue"></i> <span>New Product</span></a></li>
                                 <li class="treeview">
                                     <a href="view_products.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Products</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="new_supplier.php"><i class="fa fa-circle-o text-blue"></i> <span>New Supplier</span></a></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_suppliers.php"><i class="fa fa-circle-o text-blue"></i> <span>Search Suppliers</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="supplier_purchase_view.php"><i class="fa fa-circle-o text-blue"></i> <span>Supplier Purchase</span></li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_inventory.php"><i class="fa fa-circle-o text-blue"></i> <span>View Inventory</span></a></li>
                             </ul>
                         </li>
@@ -165,10 +173,10 @@ if (isset($_POST['submit'])) {
                                 </span>
                             </a>
                             <ul class="treeview-menu menu-open" style="display: block;">
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="show_outstanding_suppliers.php"><i class="fa fa-circle-o text-orange"></i> <span>Supplier's Outstanding</span></a>
                                 </li>
-                                 <li class="treeview">
+                                <li class="treeview">
                                     <a href="customer_balance_orders.php"><i class="fa fa-circle-o text-orange"></i> <span>Balance Customers</span></a>
                                 </li>
                             </ul>
@@ -215,7 +223,16 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="dob" name="dob" value="<?php echo $dobphp; ?>">
+<!--                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>-->
+                                                <input type="text" class="form-control pull-right" id="dob" name="dob" value="<?php echo $dobphp; ?>" >
+<!--                                            </div>-->
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Age</label>
+                                            <input type="text" class="form-control" id="c" name="age" value="<?php echo $age; ?>">
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
@@ -229,15 +246,33 @@ if (isset($_POST['submit'])) {
                                             <label>Address</label>
                                             <input type="text" class="form-control" id="address" name="address" value="<?php echo $address; ?>">
                                         </div>
+<!--                                        <div class="form-group">
+                                            <label>Date of Last Visit</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="lastvisit" name="lastvisit" value="<?php echo $lastvisit; ?>" >
+                                            </div>
+
+                                        </div>-->
+                                        <!--                                        <div class="form-group">
+                                                                                    <label>Customer Photo</label>
+                                                                                    <input type="file" class="form-control" id="customerphoto" name="customerphoto" placeholder="Only .jpg" onchange="readURL(this);">
+                                                                                </div>-->
+                                        <div class="form-group">
+                                            <label>Notes</label>
+                                            <input type="text" class="form-control" id="comment" name="comment" value="<?php echo $notes; ?>">
+                                        </div>
 
                                     </div>
 
                             </div>
                             <!-- /.box-body -->
 
-                           <div class="box-footer" style="text-align:center;">  
+                            <div class="box-footer" style="text-align:center;">  
                                 <button type="submit" name="submit" class="btn btn-primary">Update Customer Record</button>
-</div>
+                            </div>
                             </form>
                         </div>
                     </div>  
@@ -275,5 +310,18 @@ if (isset($_POST['submit'])) {
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
+        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<!--        <script>
+            $(function () {
+                //Date picker
+                $('#dob').datepicker({
+                    autoclose: true
+                });
+                //Date picker
+                $('#lastvisit').datepicker({
+                    autoclose: true
+                });
+            });
+        </script>-->
     </body>
 </html>

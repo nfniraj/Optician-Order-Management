@@ -245,13 +245,13 @@ include 'dbconfig.php';
                                                         echo "<td>" . $row['Product_Detail'] . "</td>";
                                                         ?>
                                                     <td> 
-                                                        <span class="pull-l-container">
+<!--                                                        <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
-                                                                <?php
-                                                                echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
-                                                                ?>
+                                                                //<?php
+//                                                                echo ('<a href="update_product.php?id=' . $row['Product_ID'] . '">' . "Update Product" . '</a>');
+//                                                                ?>
                                                             </small>
-                                                        </span>
+                                                        </span>-->
                                                         <span class="pull-l-container">
                                                             <small class="label pull-middle bg-white">
                                                                 <?php

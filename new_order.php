@@ -490,22 +490,22 @@ if (isset($_POST['submit'])) {
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label>Order Date</label>
-                                            <div class="input-group date">
+                                            <label>Order Date</label><sup>(DD-MM-YYY)</sup>
+<!--                                            <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
-                                                </div>
+                                                </div>-->
                                                 <input type="text" class="form-control pull-right" id="orderdate" name="orderdate" >
-                                            </div>
+<!--                                            </div>-->
                                         </div>
                                         <div class="form-group">
-                                            <label>Delivery Date</label>
-                                            <div class="input-group date">
+                                            <label>Delivery Date</label> <sup>(DD-MM-YYY)</sup>
+<!--                                            <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
-                                                </div>
+                                                </div>-->
                                                 <input type="text" class="form-control pull-right" id="deliverydate" name="deliverydate">
-                                            </div>
+<!--                                            </div>-->
                                         </div>
                                         <div class="form-group">
                                             <label>Comment</label>
@@ -699,7 +699,7 @@ if (isset($_POST['submit'])) {
                                                         });
         </script>
 
-        <script>
+<!--        <script>
             $(function () {
                 //Date picker
                 $('#orderdate').datepicker({
@@ -710,7 +710,7 @@ if (isset($_POST['submit'])) {
                     autoclose: true
                 });
             });
-        </script>
+        </script>-->
         <script>
             function Calculate()
             {

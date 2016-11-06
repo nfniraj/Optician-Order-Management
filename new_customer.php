@@ -9,12 +9,10 @@ if (isset($_POST['submit'])) {
     $customeraddress = $_POST['customeraddress'];
     $age = $_POST['age'];
     $comment = $_POST['comment'];
-    $lastvisit = $_POST['lastvisit'];
-    $lastvisitmysql = date('Y-m-d', strtotime($lastvisit));
-   // $photourl = $_POST['customerphoto'];
+    //$lastvisit = $_POST['lastvisit'];
+   // $lastvisitmysql = date('Y-m-d', strtotime($lastvisit));
+    // $photourl = $_POST['customerphoto'];
     //echo $photourl;
-
-  
     //move_uploaded_file($_FILES["file"]["tmp_name"],"/customer/logo.jpg");
 // To protect MySQL injection for Security purpose
     $customername = stripslashes($customername);
@@ -29,7 +27,7 @@ if (isset($_POST['submit'])) {
     $mobileno = mysql_real_escape_string($mobileno);
     $customeraddress = mysql_real_escape_string($customeraddress);
 
-    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dobmysql', '$gender', '$mobileno','$customeraddress','','','$lastvisitmysql','$age','$comment')";
+    $sql = "INSERT INTO `optic_db`.`customer` (`Customer_ID`, `Customer_Name`, `Customer_DOB`, `Customer_Gender`, `Customer_Mobile_No`, `Customer_Address`, `Customer_Creation_DT`,`Photo_Addr`,`Last_Visit`,`Age`,`Comment`) VALUES (NULL, '$customername', '$dobmysql', '$gender', '$mobileno','$customeraddress','','','','$age','$comment')";
 
 
     mysql_select_db('optic_db');
@@ -60,7 +58,8 @@ if (isset($_POST['submit'])) {
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-
+        <!-- bootstrap datepicker -->
+        <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 
     </head>
@@ -213,11 +212,17 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="text" class="form-control" id="c" name="dob" placeholder="DD-MM-YYYY">
+<!--                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>-->
+                                                <input type="text" class="form-control pull-right" id="dob" name="dob" placeholder="DD-MM-YYYY">
+<!--                                            </div>-->
+
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
-                                            <input type="text" class="form-control" id="c" name="age" placeholder="Age">
+                                            <input type="text" class="form-control" id="age" name="age" placeholder="Age">
                                         </div>
                                         <div class="form-group">
                                             <label>Gender</label>
@@ -231,14 +236,20 @@ if (isset($_POST['submit'])) {
                                             <label>Address</label>
                                             <input type="text" class="form-control" id="customeraddress" name="customeraddress" placeholder="Address">
                                         </div>
-                                        <div class="form-group">
-                                            <label>Date of Last Visit</label>
-                                            <input type="text" class="form-control" id="lastvisit" name="lastvisit" placeholder="DD-MM-YYYY">
-                                        </div>
 <!--                                        <div class="form-group">
-                                            <label>Customer Photo</label>
-                                            <input type="file" class="form-control" id="customerphoto" name="customerphoto" placeholder="Only .jpg" onchange="readURL(this);">
+                                            <label>Date of Last Visit</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" id="lastvisit" name="lastvisit" placeholder="Select Delivery Date" >
+                                            </div>
+
                                         </div>-->
+                                        <!--                                        <div class="form-group">
+                                                                                    <label>Customer Photo</label>
+                                                                                    <input type="file" class="form-control" id="customerphoto" name="customerphoto" placeholder="Only .jpg" onchange="readURL(this);">
+                                                                                </div>-->
                                         <div class="form-group">
                                             <label>Notes</label>
                                             <input type="text" class="form-control" id="comment" name="comment" placeholder="Comment if any..">
@@ -254,16 +265,16 @@ if (isset($_POST['submit'])) {
                             </div>
                             </form>
                         </div>
-<!--                        <div class="col-md-4">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h2 class="box-title">Customer Photo</h2>
-                                </div>
-                                <div id="customerimage" style="text-align: center;padding-top: 12px;padding-bottom: 12px;box-shadow: 10px 10px 20px #888888;" >
-                                    <img src="#" id="customer-pic" style="box-shadow: 1px 1px 11px 1px #BBBBBB;">
-                                </div>
-                            </div>
-                        </div>  -->
+                        <!--                        <div class="col-md-4">
+                                                    <div class="box box-primary">
+                                                        <div class="box-header with-border">
+                                                            <h2 class="box-title">Customer Photo</h2>
+                                                        </div>
+                                                        <div id="customerimage" style="text-align: center;padding-top: 12px;padding-bottom: 12px;box-shadow: 10px 10px 20px #888888;" >
+                                                            <img src="#" id="customer-pic" style="box-shadow: 1px 1px 11px 1px #BBBBBB;">
+                                                        </div>
+                                                    </div>
+                                                </div>  -->
                 </section>
                 <!-- /.content -->
             </div>
@@ -285,32 +296,32 @@ if (isset($_POST['submit'])) {
         <script src="dist/js/app.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="dist/js/demo.js"></script>
-        <script>
-                                                $(document).ready(function () {
-                                                    $("#dob").keyup(function () {
-                                                        if ($(this).val().length == 2) {
-                                                            $(this).val($(this).val() + "/");
-                                                        } else if ($(this).val().length == 5) {
-                                                            $(this).val($(this).val() + "/");
-                                                        }
+        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<!--        <script>
+                                                    $(function () {
+                                                        //Date picker
+                                                        $('#dob').datepicker({
+                                                            autoclose: true
+                                                        });
+                                                        //Date picker
+                                                        $('#lastvisit').datepicker({
+                                                            autoclose: true
+                                                        });
                                                     });
-                                                });
+        </script>-->
+<!--        <script >
+            function calage()
+            {
+                var age = getAge(new Date($("#dob").value()));
+                var getAge = function (birthYear) {
+                    var d = new Date();
+                    var presentYear = d.getFullYear();
+                    return presentYear - birthYear;
+                    $("#dob").bind("blur", function () {
+                        $("#age").value(age)
+                    });
 
-                                                function readURL(input) {
-                                                    if (input.files && input.files[0]) {
-                                                        var reader = new FileReader();
-
-                                                        reader.onload = function (e) {
-                                                            $('#customer-pic')
-                                                                    .attr('src', e.target.result)
-                                                                    .width(310)
-                                                                    .height(228);
-                                                        };
-
-                                                        reader.readAsDataURL(input.files[0]);
-                                                    }
-                                                }
-        </script>
-
+                }
+        </script>-->
     </body>
 </html>

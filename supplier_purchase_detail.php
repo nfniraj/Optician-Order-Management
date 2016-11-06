@@ -56,9 +56,10 @@ if (isset($_POST['submit'])) {
     $producttype = $_POST['producttype'];
     $productbrand = $_POST['productbrand'];
     $modelno = $_POST['productmodel'];
-    $details = $_POST['productdetail'];
+    $details = $_POST['details'];
     $quantity = $_POST['quantity'];
-    $suppid = $_POST['suppid'];
+    //$supplierid = $_POST['supplierid'];
+   
     $dop = $_POST['dop'];
     $dopmysql = date("Y-m-d", strtotime($dop));
     $ppi = $_POST['ppi'];
@@ -120,7 +121,7 @@ if (isset($_POST['submit'])) {
         echo 'Inventory updated';
 
         //Insert into Supplier Purchase Detail
-
+           
         $supp_purhcase = "INSERT INTO `optic_db`.`supplier_purchase_detail` (`Purchase_ID`, `Supplier_ID`, `Product_ID`, `DOP`, `Qty`, `PPI`, `Total`, `Advance`, `Discount`, `Balance`) VALUES (NULL, '$suppid', '$prodid', '$dopmysql', '$quantity', '$ppi', '$total', '$advance', '$discount', '$balance')";
 
         $supp_purhcase_res = mysql_query($supp_purhcase, $conn);
@@ -315,7 +316,7 @@ if (isset($_POST['submit'])) {
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Supplier ID</label>
-                                            <input type="text" class="form-control" id="suppid" name="suppid" value="<?php echo $suppid ?>">
+                                            <input type="text" class="form-control" id="supplierid" name="supplierid" value="<?php echo $suppid ?>" disabled="">
                                         </div>
                                         <div class="form-group">
                                             <label>Product Type</label>
@@ -340,7 +341,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="product-detail">
                                             <label>Details</label>
-                                            <select class="form-control select2" id="productdetail" name="productdetail">
+                                            <select class="form-control select2" id="details" name="details">
                                                 <option value="">Product Detail</option>
                                                 <?php echo fill_product_detail($conn); ?>
                                             </select>
@@ -458,10 +459,11 @@ if (isset($_POST['submit'])) {
 
                                                             $('#productbrand').on('change', function () {
                                                                 var productbrand_id = $(this).val();
+                                                                var producttype_id2 = $('#producttype').val();
                                                                 $.ajax({
                                                                     url: "get_product_details.php",
                                                                     method: "POST",
-                                                                    data: {productbrand_id: productbrand_id},
+                                                                    data: {productbrand_id: productbrand_id, producttype_id2: producttype_id2},
                                                                     success: function (data)
                                                                     {
                                                                         $(".product-model").show();
@@ -473,30 +475,24 @@ if (isset($_POST['submit'])) {
 
                                                             $('#productmodel').on('change', function () {
                                                                 var productmodel_id = $(this).val();
+                                                                var productbrand_id2 = $('#productbrand').val();
+                                                                var producttype_id3 = $('#producttype').val();
+
                                                                 $.ajax({
                                                                     url: "get_product_details.php",
                                                                     method: "POST",
-                                                                    data: {productmodel_id: productmodel_id},
+                                                                    data: {productmodel_id: productmodel_id, productbrand_id2: productbrand_id2, producttype_id3: producttype_id3},
                                                                     success: function (data)
                                                                     {
                                                                         $(".product-detail").show();
-                                                                        $('#productdetail').html(data);
+                                                                        $('#details').html(data);
                                                                     }
 
                                                                 });
                                                             });
-
-
-                                                            $("#dop").keyup(function () {
-                                                                if ($(this).val().length == 2) {
-                                                                    $(this).val($(this).val() + "/");
-                                                                } else if ($(this).val().length == 5) {
-                                                                    $(this).val($(this).val() + "/");
-                                                                }
-                                                            });
-
                                                         });
         </script>
+
 
         <script>
             $(function () {

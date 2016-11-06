@@ -225,26 +225,26 @@ if (isset($_POST['submit'])) {
 
                                         <div class="form-group">
                                             <label>Product Type</label>
-                                            <select class="form-control select2" id="producttype" name="producttype">
+                                            <select class="form-control select2" id="producttype" name="producttype" disabled="">
                                                 <option value="<?php echo $type; ?>" selected><?php echo $type; ?></option>
 
                                             </select>
                                         </div>
                                         <div class="product-brand">
                                             <label>Product Brand</label>
-                                            <select class="form-control select2" id="productbrand" name="productbrand">
+                                            <select class="form-control select2" id="productbrand" name="productbrand" disabled="">
                                                 <option value="<?php echo $brand; ?>" selected><?php echo $brand; ?></option>   	
                                             </select>
                                         </div>
                                         <div class="product-model">
                                             <label>Product Model</label>
-                                            <select class="form-control select2" id="productmodel" name="productmodel">
+                                            <select class="form-control select2" id="productmodel" name="productmodel" disabled="">
                                                 <option value="<?php echo $model; ?>" selected><?php echo $model; ?></option>
                                             </select>
                                         </div>
                                         <div class="product-detail">
                                             <label>Details</label>
-                                            <select class="form-control select2" id="productdetail" name="productdetail">
+                                            <select class="form-control select2" id="productdetail" name="productdetail" disabled="">
                                                 <option value="<?php echo $detail; ?>" selected><?php echo $detail; ?></option> 
                                             </select>
                                         </div>
